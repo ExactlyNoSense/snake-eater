@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>idea.snakeskin.snake-eater</id>
+    <name>Snake Eater</name>
+    <vendor>ExactlyNoSense</vendor>
+
+    <description><![CDATA[
+    Snakeskin template language support
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
