@@ -1,0 +1,65 @@
+{
+	parserClass="idea.snakeskin.lang.parser.SnakeskinParser"
+
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+	psiClassPrefix="Ss"
+	psiImplClassSuffix="Impl"
+	psiPackage="idea.snakeskin.lang.psi"
+	psiImplPackage="idea.snakeskin.lang.psi.impl"
+
+	elementTypeHolderClass="idea.snakeskin.lang.psi.SsElementTypes"
+
+	elementTypeClass="idea.snakeskin.lang.psi.SsElementType"
+	tokenTypeClass="idea.snakeskin.lang.psi.SsTokenType"
+
+	tokens=[
+		BRACE_OPEN  = '{'
+		BRACE_CLOSE = '}'
+		BRACK_OPEN  = '['
+		BRACK_CLOSE = ']'
+		PAREN_OPEN  = '('
+		PAREN_CLOSE = ')'
+		COLON       = ':'
+		SEMICOLON   = ';'
+		COMMA       = ','
+		DOT         = '.'
+		EQ          = '='
+		NOT_EQ      = '!='
+		EQ_EQ       = '=='
+		SHARP       = '#'
+		EXCLAMATION = '!'
+		PLUS_EQ     = '+='
+		PLUS        = '+'
+		MINUS_EQ    = '-='
+		MINUS       = '-'
+		PIPE_EQ     = '|='
+		PIPE        = '|'
+		PIPE_PIPE   = '||'
+		AMP_EQ      = '&='
+		AMP         = '&'
+		AMP_AMP     = '&&'
+		LT_EQ       = '<='
+		LT          = '<'
+		CARET_EQ    = '^='
+		CARET       = '^'
+		ASTERISK_EQ = '*='
+		ASTERISK    = '*'
+		SLASH_EQ    = '/='
+		SLASH       = '/'
+		PERCENT_EQ  = '%='
+		PERCENT     = '%'
+		GT_EQ       = '>='
+		GT          = '>'
+		ARROW       = '->'
+		QUESTION    = '?'
+		AT          = '@'
+		UNDERSCORE  = '_'
+		DOLLAR      = '$'
+	]
+}
+
+Snakeskin ::= Statement*
+Statement ::= VariableStatement | NamespaceStatement
+VariableStatement ::= s
+NamespaceStatement ::= a
