@@ -5,6 +5,6 @@ import idea.snakeskin.lang.SsLanguage
 
 class SsTokenType(debugName: String) : IElementType(debugName, SsLanguage.INSTANCE) {
 	override fun toString(): String {
-		return "SsTokenType" + super.toString()
+		return "SsTokenType." + super.toString()
 	}
 }
