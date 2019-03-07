@@ -2,7 +2,7 @@ package idea.snakeskin.lang
 
 import com.intellij.openapi.util.IconLoader
 
-class SnakeIcons {
+class SsIcons {
 	companion object {
 	    val FILE = IconLoader.getIcon("/icons/icon.svg")
 	}

@@ -12,7 +12,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-		<fileTypeFactory implementation="idea.snakeskin.lang.SnakeFileTypeFactory"/>
+		<fileTypeFactory implementation="idea.snakeskin.lang.SsFileTypeFactory"/>
     </extensions>
 
     <actions>

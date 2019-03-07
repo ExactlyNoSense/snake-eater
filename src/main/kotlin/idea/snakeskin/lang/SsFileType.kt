@@ -3,13 +3,13 @@ package idea.snakeskin.lang
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
-class SnakeFileType : LanguageFileType(SnakeLanguage.INSTANCE) {
+class SsFileType : LanguageFileType(SsLanguage.INSTANCE) {
 	companion object {
-	    val INSTANCE = SnakeFileType()
+	    val INSTANCE = SsFileType()
 	}
 
 	override fun getIcon(): Icon? {
-		return SnakeIcons.FILE
+		return SsIcons.FILE
 	}
 
 	override fun getName(): String {
