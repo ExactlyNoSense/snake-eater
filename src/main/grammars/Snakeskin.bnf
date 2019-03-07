@@ -13,6 +13,8 @@
 	elementTypeClass="idea.snakeskin.lang.psi.SsElementType"
 	tokenTypeClass="idea.snakeskin.lang.psi.SsTokenType"
 
+	extends(".*Expression")=Expression
+
 	tokens=[
 		BRACE_OPEN  = '{'
 		BRACE_CLOSE = '}'
@@ -65,6 +67,73 @@
 }
 
 Snakeskin ::= Statement*
-Statement ::= VariableStatement | NamespaceStatement
-VariableStatement ::= s
-NamespaceStatement ::= a
+Statement ::= VariableStatement | COMMENT_BLOCK
+
+// Variables
+VariableStatement ::= ('-' var | ':') VariableDeclarationsList
+VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
+VariableDeclaration ::= identifier '=' Expression
+
+// Expressions
+Expression ::= AssignmentExpression
+	| IndexExpression
+	| DotExpression
+	| RelationExpression
+	| EqualityExpression
+	| AddGroup
+	| BooleanGroup
+	| MulGroup
+	| UnaryGroup
+	| PrimaryGroup
+
+AssignmentExpression ::= Expression '=' Expression { rightAssociative=true }
+
+IndexExpression ::= Expression '[' Expression ']'
+
+DotExpression ::= Expression '.' identifier
+
+RelationExpression ::= Expression RelationOperators Expression
+RelationOperators ::= '<' | '>' | '<=' | '>='
+
+EqualityExpression ::= Expression EqualityOperators Expression
+EqualityOperators ::= '==' | '!=' | '===' | '!=='
+
+private AddGroup ::= PlusExpression | MinusExpression
+private BooleanGroup ::= IsNotExpression | XorExpression | AndExpression | OrExpression
+private MulGroup ::= MulExpression | DivExpression | RemainderExpression
+private UnaryGroup ::= UnaryPlusExpression | UnaryMinusExpression
+private PrimaryGroup ::= LiteralExpression
+	| ArrayLiteralExpression
+	| ObjectLiteralExpression
+	| ParenthesesExpression
+
+PlusExpression ::= Expression '+' Expression
+MinusExpression ::= Expression '-' Expression
+
+IsNotExpression ::= '!' Expression
+XorExpression ::= Expression '^' Expression
+AndExpression ::= Expression '&&' Expression
+OrExpression ::= Expression '||' Expression
+
+MulExpression ::= Expression '*' Expression
+DivExpression ::= Expression '/' Expression
+RemainderExpression ::= Expression '%' Expression
+
+UnaryPlusExpression ::= '+' Expression
+UnaryMinusExpression ::= '-' Expression
+
+LiteralExpression ::= NULL_LITERAL
+	| UNDEFINED_LITERAL
+	| BOOLEAN_LITERAL
+	| STRING_LITERAL
+	| NUMERIC_LITERAL
+	| IDENTIFIER
+
+ArrayLiteralExpression ::= '[' ElementsList ']'
+ElementsList ::= Expression (',' Expression)*
+
+ObjectLiteralExpression ::= '{' PropertyAssignmentExpression '}'
+PropertyAssignmentExpression ::= PropertyName ':' Expression
+PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
+
+ParenthesesExpression ::= '(' Expression ')'
