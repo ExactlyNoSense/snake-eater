@@ -13,6 +13,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
 		<fileTypeFactory implementation="idea.snakeskin.lang.SsFileTypeFactory"/>
+		<lang.parserDefinition language="Snakeskin" implementationClass="idea.snakeskin.lang.parser.SnakeskinParserDefinition"/>
     </extensions>
 
     <actions>
