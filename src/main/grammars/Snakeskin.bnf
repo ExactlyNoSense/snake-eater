@@ -72,7 +72,7 @@ Statement ::= VariableStatement | COMMENT_BLOCK
 // Variables
 VariableStatement ::= ('-' var | ':') VariableDeclarationsList
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
-VariableDeclaration ::= identifier '=' Expression
+VariableDeclaration ::= IDENTIFIER '=' Expression
 
 // Expressions
 Expression ::= AssignmentExpression
@@ -90,7 +90,7 @@ AssignmentExpression ::= Expression '=' Expression { rightAssociative=true }
 
 IndexExpression ::= Expression '[' Expression ']'
 
-DotExpression ::= Expression '.' identifier
+DotExpression ::= Expression '.' IDENTIFIER
 
 RelationExpression ::= Expression RelationOperators Expression
 RelationOperators ::= '<' | '>' | '<=' | '>='
