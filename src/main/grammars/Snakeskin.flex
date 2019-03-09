@@ -106,13 +106,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
   "var"                 { return VAR; }
-  {IDENTIFIER}          { return IDENTIFIER; }
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }
   true | false          { return BOOLEAN_LITERAL; }
   {STRING_LITERAL}      { return STRING_LITERAL; }
   {NUMERIC_LITERAL}     { return NUMERIC_LITERAL; }
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
+  {IDENTIFIER}          { return IDENTIFIER; }
 
 
 }
