@@ -34,8 +34,8 @@ IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
 // Number literals
 DECIMAL_INTEGER_LITERAL = 0 | [1-9][0-9]*
 EXPONENT = [Ee] [+-]? [0-9]+
-DECIMAL_LITERAL = {DECIMAL_INTEGER_LITERAL} '.' [0-9]* {EXPONENT}?
- | '.' [0-9]* {EXPONENT}?
+DECIMAL_LITERAL = {DECIMAL_INTEGER_LITERAL} "." [0-9]* {EXPONENT}?
+ | "." [0-9]* {EXPONENT}?
  | {DECIMAL_INTEGER_LITERAL} {EXPONENT}?
 
 HEX_LITERAL = 0 [xX] [0-9a-fA-F]+
