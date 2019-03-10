@@ -67,7 +67,7 @@
 }
 
 Snakeskin ::= Statement*
-Statement ::= VariableStatement | COMMENT_BLOCK
+Statement ::= VariableStatement EOS | COMMENT_BLOCK
 
 // Variables
 VariableStatement ::= ('-' var | ':') VariableDeclarationsList

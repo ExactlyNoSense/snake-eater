@@ -14,19 +14,23 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
   }
 %}
 
+%{
+  private boolean zzIsMultilineMode = false;
+%}
+
 %public
 %class SnakeskinLexer
 %implements FlexLexer
 %function advance
 %type IElementType
 %unicode
+%state LINE_READING, LINE_SPLITTING, END_OF_LINE_SPLITTING
 
 
 // Whitespace
-WHITE_SPACE_EOL = \R
-WHITE_SPACE_LINE = [ \t]
-WHITE_SPACE_CHAR = {WHITE_SPACE_EOL} | {WHITE_SPACE_LINE}
-WHITE_SPACE = {WHITE_SPACE_CHAR}+
+WS_EOL = \R
+WS_LINE = [ \t]
+WS = {WS_EOL} | {WS_LINE}
 
 // Identifier
 IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
@@ -51,12 +55,16 @@ STRING_LITERAL = {DOUBLE_QUOTED_STRING_LITERAL} | {SINGLE_QUOTED_STRING_LITERAL}
 
 
 // Comments
-LINE_COMMENT = "///"[^\r\n]*{WHITE_SPACE_EOL}
+LINE_COMMENT = "///"[^\r\n]*{WS_EOL}
 COMMENT_BLOCK = {LINE_COMMENT}
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}         { return WHITE_SPACE; }
+  {WS}+ { }
+  [^\R \t] { yybegin(LINE_READING); yypushback(1); }
+}
+
+<LINE_READING> {
 
   "{"                   { return BRACE_OPEN; }
   "}"                   { return BRACE_CLOSE; }
@@ -114,7 +122,52 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
   {IDENTIFIER}          { return IDENTIFIER; }
 
+  {WS_LINE}             { return WHITE_SPACE; }
 
+// Multiline declaration
+  {WS_LINE} "&"         { yybegin(LINE_SPLITTING); }
+  {WS} "."              { yybegin(END_OF_LINE_SPLITTING); }
+
+  {WS_EOL}  {
+    if (zzIsMultilineMode) {
+      return WHITE_SPACE;
+    } else {
+      yybegin(YYINITIAL);
+      return EOS;
+    }
+  }
+
+  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+}
+
+<LINE_SPLITTING> {
+  {WS_LINE}+  { return WHITE_SPACE; }
+  {WS_EOL}  {
+    if (!zzIsMultilineMode) {
+      zzIsMultilineMode = true;
+    }
+    yybegin(LINE_READING);
+    yypushback(yylength());
+  }
+
+  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+
+  .  { yybegin(LINE_READING); yypushback(1); return AMP; }
+}
+
+<END_OF_LINE_SPLITTING> {
+  {WS_LINE}+  { return WHITE_SPACE; }
+  {WS_EOL}  {
+    if (zzIsMultilineMode) {
+      zzIsMultilineMode = false;
+    }
+    yybegin(LINE_READING);
+    yypushback(yylength());
+  }
+
+  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+
+  .  { yybegin(LINE_READING); yypushback(1); return DOT; }
 }
 
 [^] { return BAD_CHARACTER; }
