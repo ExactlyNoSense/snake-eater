@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.TokenType.WHITE_SPACE
 import idea.snakeskin.lang.SsLanguage
 import idea.snakeskin.lang.lexer.SsLexer
 import idea.snakeskin.lang.psi.SsElementTypes
@@ -33,6 +34,8 @@ class SnakeskinParserDefinition : ParserDefinition {
 	override fun createElement(node: ASTNode?): PsiElement = SsElementTypes.Factory.createElement(node)
 
 	override fun getCommentTokens(): TokenSet = TokenSet.create(COMMENT_BLOCK)
+
+	override fun getWhitespaceTokens(): TokenSet = TokenSet.create(WHITE_SPACE)
 
 	override fun createParser(project: Project?): PsiParser = SnakeskinParser()
 }
