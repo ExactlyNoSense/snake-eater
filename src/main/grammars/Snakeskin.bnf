@@ -70,9 +70,11 @@ Snakeskin ::= Statement*
 Statement ::= VariableStatement EOS | COMMENT_BLOCK
 
 // Variables
-VariableStatement ::= ('-' var | ':') VariableDeclarationsList
+VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
 VariableDeclaration ::= IDENTIFIER '=' Expression
+
+DeclarationStart ::= SHARP | MINUS
 
 // Expressions
 Expression ::= AssignmentExpression
