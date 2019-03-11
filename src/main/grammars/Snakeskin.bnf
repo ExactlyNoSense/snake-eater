@@ -67,12 +67,22 @@
 }
 
 Snakeskin ::= Statement*
-Statement ::= VariableStatement EOS | COMMENT_BLOCK
+Statement ::= InlineStatement | COMMENT_BLOCK
+InlineStatement ::= InlineDeclarationStatement EOS
+
+InlineDeclarationStatement ::= VariableStatement
+	| GlobalVariableStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
 VariableDeclaration ::= IDENTIFIER '=' Expression
+
+// Global variables
+GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
+GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
+GlobalVariableDeclaration ::= GlobalIdentifier '=' Expression
+GlobalIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
 
 DeclarationStart ::= SHARP | MINUS
 
@@ -130,6 +140,7 @@ LiteralExpression ::= NULL_LITERAL
 	| STRING_LITERAL
 	| NUMERIC_LITERAL
 	| IDENTIFIER
+	| GlobalIdentifier
 
 ArrayLiteralExpression ::= '[' ElementsList ']'
 ElementsList ::= Expression (',' Expression)*

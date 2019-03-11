@@ -113,7 +113,10 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "@"                   { return AT; }
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
+
   "var"                 { return VAR; }
+  "global"              { return GLOBAL; }
+
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }
   true | false          { return BOOLEAN_LITERAL; }
