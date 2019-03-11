@@ -76,12 +76,12 @@ InlineDeclarationStatement ::= VariableStatement
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
-VariableDeclaration ::= IDENTIFIER '=' Expression
+VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 
 // Global variables
 GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
-GlobalVariableDeclaration ::= GlobalIdentifier '=' Expression
+GlobalVariableDeclaration ::= GlobalIdentifier ('=' Expression)?
 GlobalIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
 
 DeclarationStart ::= SHARP | MINUS
