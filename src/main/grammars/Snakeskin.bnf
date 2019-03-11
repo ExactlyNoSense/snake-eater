@@ -81,8 +81,9 @@ VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 // Global variables
 GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
-GlobalVariableDeclaration ::= GlobalIdentifier ('=' Expression)?
-GlobalIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
+GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
+GlobalDeclarationIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
+GlobalIdentifier ::= '@' '@' (IDENTIFIER | '[' Expression ']')
 
 DeclarationStart ::= SHARP | MINUS
 
