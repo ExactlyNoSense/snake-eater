@@ -114,8 +114,12 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
 
+  "as"                  { return AS; }
   "global"              { return GLOBAL; }
+  "include"             { return INCLUDE; }
+  "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }
+  "placeholder"         { return PLACEHOLDER; }
   "var"                 { return VAR; }
 
   "null"                { return NULL_LITERAL; }
