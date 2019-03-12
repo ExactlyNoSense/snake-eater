@@ -114,8 +114,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
 
-  "var"                 { return VAR; }
   "global"              { return GLOBAL; }
+  "namespace"           { return NAMESPACE; }
+  "var"                 { return VAR; }
 
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }

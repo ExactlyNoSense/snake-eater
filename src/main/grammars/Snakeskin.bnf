@@ -72,6 +72,7 @@ InlineStatement ::= InlineDeclarationStatement EOS
 
 InlineDeclarationStatement ::= VariableStatement
 	| GlobalVariableStatement
+	| NamespaceStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
@@ -84,6 +85,11 @@ GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariable
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
 GlobalDeclarationIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
 GlobalIdentifier ::= '@' '@' (IDENTIFIER | '[' Expression ']')
+
+// Namespace
+NamespaceStatement ::= DeclarationStart namespace NamespaceIdentifier
+NamespaceIdentifier ::= (IDENTIFIER | '[' Expression ']') NamespaceIdentifierTail*
+NamespaceIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
 
