@@ -88,13 +88,14 @@ GlobalDeclarationIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
 GlobalIdentifier ::= '@' '@' (IDENTIFIER | '[' Expression ']')
 
 // Namespace
-NamespaceStatement ::= DeclarationStart namespace NamespaceIdentifier
-NamespaceIdentifier ::= (IDENTIFIER | '[' Expression ']') NamespaceIdentifierTail*
-NamespaceIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
+NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier
 
 // Include
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
+
+QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail
+QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
 
