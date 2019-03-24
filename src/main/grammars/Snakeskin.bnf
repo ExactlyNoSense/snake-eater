@@ -67,7 +67,7 @@
 }
 
 Snakeskin ::= Statement*
-Statement ::= InlineStatement | COMMENT_BLOCK
+Statement ::= InlineStatement | TemplateStatement | COMMENT_BLOCK
 InlineStatement ::= InlineDeclarationStatement EOS
 
 InlineDeclarationStatement ::= VariableStatement
@@ -94,7 +94,13 @@ NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
 
-QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail
+// Template
+TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
+TemplateDeclarationStatement ::= async? (template | interface | placeholder) '*'? QualifiedIdentifier
+BlockBodyStatement ::= INDENT BlockBody DEDENT
+BlockBody ::= Statement*
+
+QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail?
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS

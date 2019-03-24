@@ -3,6 +3,7 @@ package idea.snakeskin.lang.lexer;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
+import java.util.*;
 import static com.intellij.psi.TokenType.*;
 import static idea.snakeskin.lang.psi.SsElementTypes.*;
 
@@ -10,12 +11,22 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 
 %{
   public SnakeskinLexer() {
-    this((java.io.Reader)null);
+    this(null);
+    indentionStack.push(0);
   }
 %}
 
 %{
   private boolean zzIsMultilineMode = false;
+
+  private Stack<Integer> indentionStack = new Stack<>();
+  private int currentIndent = 0;
+
+  private IElementType endStatement(boolean isEof) {
+    yybegin(isEof ? DEDENT_EOF : YYINITIAL);
+    currentIndent = 0;
+    return EOS;
+  }
 %}
 
 %public
@@ -24,7 +35,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %function advance
 %type IElementType
 %unicode
-%state LINE_READING, LINE_SPLITTING, END_OF_LINE_SPLITTING
+%state LINE_READING, LINE_SPLITTING, END_OF_LINE_SPLITTING, DEDENT_BLOCK, DEDENT_EOF
 
 
 // Whitespace
@@ -60,8 +71,46 @@ COMMENT_BLOCK = {LINE_COMMENT}
 
 %%
 <YYINITIAL> {
-  {WS}+ { }
-  [^\R \t] { yybegin(LINE_READING); yypushback(1); }
+  {WS_LINE}+  { currentIndent = yylength(); }
+  {WS_EOL}  { currentIndent = 0; }
+  [^\R \t]  {
+    yybegin(LINE_READING);
+    yypushback(1);
+
+    int stackTop = indentionStack.peek();
+    if (stackTop < currentIndent) {
+      indentionStack.push(currentIndent);
+      return INDENT;
+    }
+    else if (stackTop > currentIndent) {
+      yybegin(DEDENT_BLOCK);
+    }
+  }
+}
+
+<DEDENT_BLOCK> {
+  [^]  {
+    yypushback(yylength());
+    if (indentionStack.peek() > currentIndent) {
+      indentionStack.pop();
+      return DEDENT;
+    }
+    else {
+      yybegin(LINE_READING);
+    }
+  }
+}
+
+<DEDENT_EOF> {
+  <<EOF>>  {
+    if (indentionStack.peek() > 0) {
+      indentionStack.pop();
+      return DEDENT;
+    }
+    else {
+      yybegin(YYINITIAL);
+    }
+  }
 }
 
 <LINE_READING> {
@@ -115,11 +164,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "$"                   { return DOLLAR; }
 
   "as"                  { return AS; }
+  "async"               { return ASYNC; }
   "global"              { return GLOBAL; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }
   "placeholder"         { return PLACEHOLDER; }
+  "template"            { return TEMPLATE; }
   "var"                 { return VAR; }
 
   "null"                { return NULL_LITERAL; }
@@ -140,12 +191,11 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (zzIsMultilineMode) {
       return WHITE_SPACE;
     } else {
-      yybegin(YYINITIAL);
-      return EOS;
+    	return endStatement(false);
     }
   }
 
-  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+  <<EOF>>  { return endStatement(true); }
 }
 
 
@@ -162,7 +212,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
     yypushback(yylength());
   }
 
-  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+  <<EOF>>  { return endStatement(true); }
 
   .  { yybegin(LINE_READING); yypushback(1); return AMP; }
 }
@@ -180,7 +230,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
     yypushback(yylength());
   }
 
-  <<EOF>>  { yybegin(YYINITIAL); return EOS; }
+  <<EOF>>  { return endStatement(true); }
 
   .  { yybegin(LINE_READING); yypushback(1); return DOT; }
 }
