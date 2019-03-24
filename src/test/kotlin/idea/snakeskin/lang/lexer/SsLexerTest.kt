@@ -16,7 +16,11 @@ class SsLexerTest : LexerTestCase() {
 		return "src/test/resources/lexer/" + getTestName(true) + extension;
 	}
 
-	public fun testLineSplitting() {
+	fun testLineSplitting() {
+		doFileTest("ss");
+	}
+
+	fun testBlock() {
 		doFileTest("ss");
 	}
 }
