@@ -148,6 +148,10 @@ COMMENT_BLOCK = {LINE_COMMENT}
   <<EOF>>  { yybegin(YYINITIAL); return EOS; }
 }
 
+
+// Checks that there is no a non WS symbol after substring " &".
+// In this case it's a line splitting sequence.
+// If there is a non WS symbol and "&" is just an AMP token.
 <LINE_SPLITTING> {
   {WS_LINE}+  { return WHITE_SPACE; }
   {WS_EOL}  {
@@ -163,6 +167,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
   .  { yybegin(LINE_READING); yypushback(1); return AMP; }
 }
 
+// Checks that there is no a non WS symbol after substring " .".
+// In this case it's the end of line splitting sequence.
+// If there is a non WS symbol and "." is just a DOT token.
 <END_OF_LINE_SPLITTING> {
   {WS_LINE}+  { return WHITE_SPACE; }
   {WS_EOL}  {
