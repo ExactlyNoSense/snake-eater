@@ -96,9 +96,14 @@ RenderAsExpression ::= as (interface | placeholder)
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
-TemplateDeclarationStatement ::= async? (template | interface | placeholder) '*'? QualifiedIdentifier
+TemplateDeclarationStatement ::= async? TemplateType '*'? QualifiedIdentifier ('(' ArgumentDeclarationsList? ')')?
+TemplateType ::= template | interface | placeholder
 BlockBodyStatement ::= INDENT BlockBody DEDENT
 BlockBody ::= Statement*
+
+// Arguments
+ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
+ArgumentDeclaration ::= IDENTIFIER ('?' | '!')? ('=' Expression)?
 
 QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
