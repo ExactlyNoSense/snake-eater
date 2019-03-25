@@ -1,6 +1,6 @@
 package idea.snakeskin.lang.lexer
 
-class SsLexerTest : SsLexerTestCaseBase() {
+class SsLexerTestCase : SsLexerTestCaseBase() {
 
 	fun testLineSplitting() = compare()
 
