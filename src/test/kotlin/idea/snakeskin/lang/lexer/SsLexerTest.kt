@@ -1,26 +1,8 @@
 package idea.snakeskin.lang.lexer
 
-import com.intellij.lexer.Lexer
-import com.intellij.testFramework.LexerTestCase
+class SsLexerTest : SsLexerTestCaseBase() {
 
-class SsLexerTest : LexerTestCase() {
-	override fun getDirPath(): String {
-		return "";
-	}
+	fun testLineSplitting() = compare()
 
-	override fun createLexer(): Lexer {
-		return SsLexer();
-	}
-
-	override fun getPathToTestDataFile(extension: String): String {
-		return "src/test/resources/lexer/" + getTestName(true) + extension;
-	}
-
-	fun testLineSplitting() {
-		doFileTest("ss");
-	}
-
-	fun testBlock() {
-		doFileTest("ss");
-	}
+	fun testBlock() = compare()
 }
