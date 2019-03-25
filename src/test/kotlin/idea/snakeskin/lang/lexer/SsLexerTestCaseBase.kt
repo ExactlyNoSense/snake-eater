@@ -13,7 +13,7 @@ open class SsLexerTestCaseBase : LexerTestCase() {
 	override fun createLexer() = SsLexer()
 
 	override fun getPathToTestDataFile(extension: String): String {
-		return Paths.get(BASE_PATH, getTestName(true), extension).toString()
+		return Paths.get(BASE_PATH, dirPath, getTestName(true) + extension).toString()
 	}
 
 	protected fun getActualFileExtension() = "ss"
