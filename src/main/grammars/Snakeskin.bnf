@@ -100,7 +100,7 @@ TemplateDeclarationStatement ::= async? (template | interface | placeholder) '*'
 BlockBodyStatement ::= INDENT BlockBody DEDENT
 BlockBody ::= Statement*
 
-QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail?
+QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
