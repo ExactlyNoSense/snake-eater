@@ -96,7 +96,9 @@ RenderAsExpression ::= as (interface | placeholder)
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
-TemplateDeclarationStatement ::= async? TemplateType '*'? QualifiedIdentifier ('(' ArgumentDeclarationsList? ')')?
+TemplateDeclarationStatement ::= async? TemplateType '*'? QualifiedIdentifier TemplateDeclarationTail?
+TemplateDeclarationTail ::= ('(' ArgumentDeclarationsList? ')') TemplateInheritance?
+TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 BlockBodyStatement ::= INDENT BlockBody DEDENT
 BlockBody ::= Statement*
