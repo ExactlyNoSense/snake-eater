@@ -67,18 +67,24 @@
 	]
 }
 
-Snakeskin ::= Statement*
-Statement ::= InlineStatement
+Snakeskin ::= GlobalScopeStatement*
+GlobalScopeStatement ::= GlobalScopeInlineStatement
 	| TemplateStatement
-	| InternalBlockStatement
 	| ExternalBlockStatement
 	| COMMENT_BLOCK
-InlineStatement ::= InlineDeclarationStatement EOS
 
-InlineDeclarationStatement ::= VariableStatement
+LocalScopeStatement ::= LocalScopeInlineStatement
+	| InternalBlockStatement
+	| COMMENT_BLOCK
+
+GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
+GlobalScopeInlineDeclarationStatement ::= VariableStatement
 	| GlobalVariableStatement
 	| NamespaceStatement
 	| IncludeStatement
+
+LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
+LocalScopeInlineDeclarationStatement ::= VariableStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
@@ -106,7 +112,7 @@ TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 BlockBodyStatement ::= INDENT BlockBody DEDENT
-BlockBody ::= Statement*
+BlockBody ::= LocalScopeStatement*
 
 // Blocks
 InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BlockBodyStatement?
