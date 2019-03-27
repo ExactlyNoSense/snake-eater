@@ -59,6 +59,7 @@
 		GT          = '>'
 		GT_EQ       = '>='
 		ARROW       = '->'
+		FAT_ARROW   = '=>'
 		QUESTION    = '?'
 		AT          = '@'
 		UNDERSCORE  = '_'
@@ -67,7 +68,11 @@
 }
 
 Snakeskin ::= Statement*
-Statement ::= InlineStatement | TemplateStatement | COMMENT_BLOCK
+Statement ::= InlineStatement
+	| TemplateStatement
+	| InternalBlockStatement
+	| ExternalBlockStatement
+	| COMMENT_BLOCK
 InlineStatement ::= InlineDeclarationStatement EOS
 
 InlineDeclarationStatement ::= VariableStatement
@@ -97,13 +102,22 @@ RenderAsExpression ::= as (interface | placeholder)
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
 TemplateDeclarationStatement ::= async? TemplateType '*'? QualifiedIdentifier TemplateDeclarationTail?
-TemplateDeclarationTail ::= ('(' ArgumentDeclarationsList? ')') TemplateInheritance?
+TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 BlockBodyStatement ::= INDENT BlockBody DEDENT
 BlockBody ::= Statement*
 
+// Blocks
+InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BlockBodyStatement?
+InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
+ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EOS BlockBodyStatement?
+ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
+BlockDeclarationTail ::= Arguments BlockSelfCall?
+BlockSelfCall ::=  ('=>' Expression)
+
 // Arguments
+Arguments ::= '(' ArgumentDeclarationsList? ')'
 ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
 ArgumentDeclaration ::= IDENTIFIER ('?' | '!')? ('=' Expression)?
 

@@ -158,6 +158,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   ">"                   { return GT; }
   ">="                  { return GT_EQ; }
   "->"                  { return ARROW; }
+  "=>"                  { return FAT_ARROW; }
   "?"                   { return QUESTION; }
   "@"                   { return AT; }
   "_"                   { return UNDERSCORE; }
@@ -165,6 +166,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }
+  "block"               { return BLOCK; }
   "extends"             { return EXTENDS; }
   "global"              { return GLOBAL; }
   "include"             { return INCLUDE; }
