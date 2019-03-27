@@ -85,6 +85,7 @@ GlobalScopeInlineDeclarationStatement ::= VariableStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
 LocalScopeInlineDeclarationStatement ::= VariableStatement
+	| OutputStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
@@ -104,6 +105,9 @@ NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier
 // Include
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
+
+// Output
+OutputStatement ::= '{' Expression '}'
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
