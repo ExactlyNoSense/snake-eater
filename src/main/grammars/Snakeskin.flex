@@ -175,6 +175,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "placeholder"         { return PLACEHOLDER; }
   "template"            { return TEMPLATE; }
   "var"                 { return VAR; }
+  "void"                { return VOID; }
 
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }
