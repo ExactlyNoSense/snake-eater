@@ -109,7 +109,7 @@ IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
 
 // Output
-OutputStatement ::= '{' Expression '}'
+OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'
 
 // Void
 VoidStatement ::= (DeclarationStart void | '?') Expression

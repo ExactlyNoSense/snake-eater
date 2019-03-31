@@ -172,6 +172,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }
+  "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "template"            { return TEMPLATE; }
   "var"                 { return VAR; }
