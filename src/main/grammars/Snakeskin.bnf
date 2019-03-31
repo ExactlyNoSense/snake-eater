@@ -69,12 +69,16 @@
 
 Snakeskin ::= GlobalScopeStatement*
 GlobalScopeStatement ::= GlobalScopeInlineStatement
+	| EvalBlockStatement
 	| TemplateStatement
 	| ExternalBlockStatement
 	| COMMENT_BLOCK
 
 LocalScopeStatement ::= LocalScopeInlineStatement
 	| InternalBlockStatement
+	| COMMENT_BLOCK
+
+FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -130,6 +134,10 @@ ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EO
 ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
 BlockDeclarationTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
+
+// Eval
+EvalBlockStatement ::= DeclarationStart eval EOS FunctionalBlockBodyStatement?
+FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement* DEDENT
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
