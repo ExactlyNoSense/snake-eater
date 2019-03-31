@@ -170,6 +170,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
   "global"              { return GLOBAL; }
+  "head"                { return HEAD; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }

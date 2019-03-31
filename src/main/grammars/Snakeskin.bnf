@@ -135,8 +135,8 @@ ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDecl
 BlockDeclarationTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
-// Eval
-EvalBlockStatement ::= DeclarationStart eval EOS FunctionalBlockBodyStatement?
+// Eval&Head
+EvalBlockStatement ::= DeclarationStart (eval | head) EOS FunctionalBlockBodyStatement?
 FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement* DEDENT
 
 // Arguments
