@@ -90,6 +90,7 @@ GlobalScopeInlineDeclarationStatement ::= VariableStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
 LocalScopeInlineDeclarationStatement ::= VariableStatement
+	| ConstStatement
 	| OutputStatement
 	| VoidStatement
 
@@ -104,6 +105,10 @@ GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariable
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
 GlobalDeclarationIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
 GlobalIdentifier ::= '@' '@' (IDENTIFIER | '[' Expression ']')
+
+// Const
+ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
+ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
 NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier

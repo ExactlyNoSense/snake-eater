@@ -167,6 +167,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "as"                  { return AS; }
   "async"               { return ASYNC; }
   "block"               { return BLOCK; }
+  "const"               { return CONST; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
   "global"              { return GLOBAL; }
