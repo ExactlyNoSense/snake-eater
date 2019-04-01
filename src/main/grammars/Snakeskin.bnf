@@ -146,8 +146,8 @@ FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement* DEDENT
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
-MainConditionalStatement ::= DeclarationStart (if | unless) EOS FunctionalBlockBodyStatement?
-SecondaryConditionalStatement ::= DeclarationStart else (if | unless) EOS FunctionalBlockBodyStatement?
+MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS FunctionalBlockBodyStatement?
+SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS FunctionalBlockBodyStatement?
 DefaultConditionalStatement ::= DeclarationStart else EOS FunctionalBlockBodyStatement?
 
 // Arguments
