@@ -74,11 +74,11 @@ GlobalScopeStatement ::= GlobalScopeInlineStatement
 	| ExternalBlockStatement
 	| COMMENT_BLOCK
 
-LocalScopeStatement ::= LocalScopeInlineStatement
+LocalScopeStatement ::= FunctionalScopeStatement
 	| InternalBlockStatement
-	| COMMENT_BLOCK
 
 FunctionalScopeStatement ::= LocalScopeInlineStatement
+	| ConditionalStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -143,6 +143,12 @@ BlockSelfCall ::=  ('=>' Expression)
 // Eval&Head
 EvalBlockStatement ::= DeclarationStart (eval | head) EOS FunctionalBlockBodyStatement?
 FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement* DEDENT
+
+// Conditionals
+ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
+MainConditionalStatement ::= DeclarationStart (if | unless) EOS FunctionalBlockBodyStatement?
+SecondaryConditionalStatement ::= DeclarationStart else (if | unless) EOS FunctionalBlockBodyStatement?
+DefaultConditionalStatement ::= DeclarationStart else EOS FunctionalBlockBodyStatement?
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'

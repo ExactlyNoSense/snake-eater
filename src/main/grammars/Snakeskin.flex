@@ -168,16 +168,19 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "async"               { return ASYNC; }
   "block"               { return BLOCK; }
   "const"               { return CONST; }
+  "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
   "global"              { return GLOBAL; }
   "head"                { return HEAD; }
+  "if"                  { return IF; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "template"            { return TEMPLATE; }
+  "unless"              { return UNLESS; }
   "var"                 { return VAR; }
   "void"                { return VOID; }
 
