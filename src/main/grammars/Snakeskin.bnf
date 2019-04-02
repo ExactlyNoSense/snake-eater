@@ -79,6 +79,7 @@ LocalScopeStatement ::= FunctionalScopeStatement
 
 FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| ConditionalStatement
+	| SwitchStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -142,13 +143,18 @@ BlockSelfCall ::=  ('=>' Expression)
 
 // Eval&Head
 EvalBlockStatement ::= DeclarationStart (eval | head) EOS FunctionalBlockBodyStatement?
-FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement* DEDENT
+FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement+ DEDENT
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
 MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS FunctionalBlockBodyStatement?
 SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS FunctionalBlockBodyStatement?
 DefaultConditionalStatement ::= DeclarationStart else EOS FunctionalBlockBodyStatement?
+
+SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBodyStatement?
+SwitchBodyStatement ::= INDENT CaseStatement+ DefaultStatement? DEDENT
+CaseStatement ::= (DeclarationStart case | '>') Expression EOS FunctionalBlockBodyStatement?
+DefaultStatement ::= DeclarationStart default EOS FunctionalBlockBodyStatement?
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'

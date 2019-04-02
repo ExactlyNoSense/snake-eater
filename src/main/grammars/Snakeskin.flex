@@ -167,7 +167,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "as"                  { return AS; }
   "async"               { return ASYNC; }
   "block"               { return BLOCK; }
+  "case"                { return CASE; }
   "const"               { return CONST; }
+  "default"             { return DEFAULT; }
   "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
@@ -179,6 +181,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "namespace"           { return NAMESPACE; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
+  "switch"              { return SWITCH; }
   "template"            { return TEMPLATE; }
   "unless"              { return UNLESS; }
   "var"                 { return VAR; }
