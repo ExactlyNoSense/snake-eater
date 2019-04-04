@@ -167,15 +167,20 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "as"                  { return AS; }
   "async"               { return ASYNC; }
   "block"               { return BLOCK; }
+  "break"               { return BREAK; }
   "case"                { return CASE; }
   "const"               { return CONST; }
+  "continue"            { return CONTINUE; }
   "default"             { return DEFAULT; }
+  "do"                  { return DO; }
   "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
+  "for"                 { return FOR; }
   "global"              { return GLOBAL; }
   "head"                { return HEAD; }
   "if"                  { return IF; }
+  "in"                  { return IN; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
   "namespace"           { return NAMESPACE; }
@@ -186,6 +191,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "unless"              { return UNLESS; }
   "var"                 { return VAR; }
   "void"                { return VOID; }
+  "while"               { return WHILE; }
 
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }

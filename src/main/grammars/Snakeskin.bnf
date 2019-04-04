@@ -80,6 +80,7 @@ LocalScopeStatement ::= FunctionalScopeStatement
 FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| ConditionalStatement
 	| SwitchStatement
+	| LoopStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -155,6 +156,21 @@ SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBodyStatement?
 SwitchBodyStatement ::= INDENT CaseStatement+ DefaultStatement? DEDENT
 CaseStatement ::= (DeclarationStart case | '>') Expression EOS FunctionalBlockBodyStatement?
 DefaultStatement ::= DeclarationStart default EOS FunctionalBlockBodyStatement?
+
+// Loops
+LoopStatement ::= ForLoopStatement
+	| ForInLoopStatement
+	| WhileLoopStatement
+	| DoWhileLoopStatement
+
+ForLoopStatement ::= DeclarationStart for Expression ';' Expression ';' Expression EOS LoopBodyStatement?
+ForInLoopStatement ::= DeclarationStart for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBodyStatement?
+WhileLoopStatement ::= DeclarationStart while Expression EOS LoopBodyStatement?
+DoWhileLoopStatement ::= DeclarationStart do EOS LoopBodyStatement? (DeclarationStart while EOS)?
+
+LoopBodyStatement ::= INDENT LoopScopeStatement+ DEDENT
+LoopScopeStatement ::= FunctionalScopeStatement | LoopControlStatement
+LoopControlStatement ::= DeclarationStart (break | continue)
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
