@@ -81,6 +81,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| ConditionalStatement
 	| SwitchStatement
 	| LoopStatement
+	| IteratorStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -171,6 +172,13 @@ DoWhileLoopStatement ::= DeclarationStart do EOS LoopBodyStatement? (Declaration
 LoopBodyStatement ::= INDENT LoopScopeStatement+ DEDENT
 LoopScopeStatement ::= FunctionalScopeStatement | LoopControlStatement
 LoopControlStatement ::= DeclarationStart (break | continue)
+
+// Iterators
+IteratorStatement ::= DeclarationStart (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBodyStatement?
+
+// Parameters
+Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
+ParameterDeclaration ::= IDENTIFIER
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'

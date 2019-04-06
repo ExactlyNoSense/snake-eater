@@ -177,6 +177,8 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
   "for"                 { return FOR; }
+  "forEach"             { return FOREACH; }
+  "forIn"               { return FORIN; }
   "global"              { return GLOBAL; }
   "head"                { return HEAD; }
   "if"                  { return IF; }
