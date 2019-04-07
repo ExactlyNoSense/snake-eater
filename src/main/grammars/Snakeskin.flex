@@ -192,6 +192,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "placeholder"         { return PLACEHOLDER; }
   "switch"              { return SWITCH; }
   "template"            { return TEMPLATE; }
+  "throw"               { return THROW; }
   "try"                 { return TRY; }
   "unless"              { return UNLESS; }
   "var"                 { return VAR; }
