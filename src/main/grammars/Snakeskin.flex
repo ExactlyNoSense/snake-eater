@@ -174,6 +174,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "continue"            { return CONTINUE; }
   "default"             { return DEFAULT; }
   "do"                  { return DO; }
+  "doctype"             { return DOCTYPE; }
   "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }

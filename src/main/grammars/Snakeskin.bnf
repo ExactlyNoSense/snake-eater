@@ -98,6 +98,7 @@ LocalScopeInlineDeclarationStatement ::= VariableStatement
 	| OutputStatement
 	| VoidStatement
 	| ThrowStatement
+	| DoctypeStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
@@ -130,6 +131,9 @@ VoidStatement ::= (DeclarationStart void | '?') Expression
 
 // Throw
 ThrowStatement ::= DeclarationStart throw Expression
+
+// Doctype
+DoctypeStatement ::= DeclarationStart doctype IDENTIFIER?
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
