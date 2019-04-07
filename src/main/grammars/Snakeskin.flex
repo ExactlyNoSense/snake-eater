@@ -169,6 +169,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "block"               { return BLOCK; }
   "break"               { return BREAK; }
   "case"                { return CASE; }
+  "catch"               { return CATCH; }
   "const"               { return CONST; }
   "continue"            { return CONTINUE; }
   "default"             { return DEFAULT; }
@@ -176,6 +177,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
+  "finally"             { return FINALLY; }
   "for"                 { return FOR; }
   "forEach"             { return FOREACH; }
   "forIn"               { return FORIN; }
@@ -190,6 +192,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "placeholder"         { return PLACEHOLDER; }
   "switch"              { return SWITCH; }
   "template"            { return TEMPLATE; }
+  "try"                 { return TRY; }
   "unless"              { return UNLESS; }
   "var"                 { return VAR; }
   "void"                { return VOID; }
