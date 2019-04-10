@@ -99,6 +99,7 @@ LocalScopeInlineDeclarationStatement ::= VariableStatement
 	| VoidStatement
 	| ThrowStatement
 	| DoctypeStatement
+	| SuperStatement
 
 // Variables
 VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
@@ -128,6 +129,9 @@ OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'
 
 // Void
 VoidStatement ::= (DeclarationStart void | '?') Expression
+
+// Super
+SuperStatement ::= DeclarationStart super
 
 // Throw
 ThrowStatement ::= DeclarationStart throw Expression

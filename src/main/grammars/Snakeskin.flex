@@ -191,6 +191,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "namespace"           { return NAMESPACE; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
+  "super"               { return SUPER; }
   "switch"              { return SWITCH; }
   "template"            { return TEMPLATE; }
   "throw"               { return THROW; }
