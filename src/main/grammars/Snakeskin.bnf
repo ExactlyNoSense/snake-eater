@@ -90,6 +90,7 @@ GlobalScopeInlineDeclarationStatement ::= VariableStatement
 	| GlobalVariableStatement
 	| NamespaceStatement
 	| IncludeStatement
+	| ImportStatement
 	| VoidStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
@@ -123,6 +124,24 @@ NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier
 // Include
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
+
+// Import
+ImportStatement ::= DeclarationStart ImportDeclaration
+ImportDeclaration ::= import (ImportClause FromClause | ModuleSpecifier)
+
+ImportClause ::= CombinedImport
+	| DefaultImport
+	| NamespaceImport
+	| NamedImportsList
+CombinedImport ::= DefaultImport ',' (NamespaceImport | NamedImportsList)
+DefaultImport ::= IDENTIFIER
+NamespaceImport ::= '*' as IDENTIFIER
+NamedImportsList ::= '{' NamedImport (',' NamedImport)* '}'
+NamedImport ::= IDENTIFIER (as IDENTIFIER)?
+
+FromClause ::= from ModuleSpecifier
+
+ModuleSpecifier ::= STRING_LITERAL
 
 // Output
 OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'

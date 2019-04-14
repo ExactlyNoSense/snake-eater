@@ -178,6 +178,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "else"                { return ELSE; }
   "extends"             { return EXTENDS; }
   "eval"                { return EVAL; }
+  "from"                { return FROM; }
   "finally"             { return FINALLY; }
   "for"                 { return FOR; }
   "forEach"             { return FOREACH; }
@@ -185,6 +186,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "global"              { return GLOBAL; }
   "head"                { return HEAD; }
   "if"                  { return IF; }
+  "import"              { return IMPORT; }
   "in"                  { return IN; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
