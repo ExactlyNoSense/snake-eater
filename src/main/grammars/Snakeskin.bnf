@@ -83,6 +83,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| LoopStatement
 	| IteratorStatement
 	| TryCatchStatement
+	| FuncStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -214,6 +215,10 @@ TryStatement ::= DeclarationStart try EOS FunctionalBlockBodyStatement?
 CatchFinallyStatemnt ::= CatchStatement FinallyStatement?
 CatchStatement ::= DeclarationStart catch IDENTIFIER EOS FunctionalBlockBodyStatement?
 FinallyStatement ::= DeclarationStart finally EOS FunctionalBlockBodyStatement?
+
+// Function
+FuncStatement ::= FuncDeclaration EOS FunctionalBlockBodyStatement?
+FuncDeclaration ::= DeclarationStart func Parameters? | '(' ')' ('=>' Parameters)?
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*

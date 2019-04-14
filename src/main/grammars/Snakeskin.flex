@@ -183,6 +183,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "for"                 { return FOR; }
   "forEach"             { return FOREACH; }
   "forIn"               { return FORIN; }
+  "func"                { return FUNC; }
   "global"              { return GLOBAL; }
   "head"                { return HEAD; }
   "if"                  { return IF; }
