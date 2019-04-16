@@ -106,7 +106,8 @@ LocalScopeInlineDeclarationStatement ::= VariableStatement
 	| SuperStatement
 
 // Variables
-VariableStatement ::= (DeclarationStart var | ':') VariableDeclarationsList
+VariableStatement ::= VarClause VariableDeclarationsList
+VarClause ::= DeclarationStart var | ':'
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
 VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 
@@ -228,7 +229,7 @@ TargetBodyStatement ::= INDENT TargetPropListStatement+ DEDENT
 TargetPropListStatement ::= PutInStatement ('*' PutInStatement)*
 
 // PutIn
-PutInStatement ::= (DeclarationStart PUT_IN | '*') QualifiedIdentifier EOS FunctionalBlockBodyStatement?
+PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier EOS FunctionalBlockBodyStatement?
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
