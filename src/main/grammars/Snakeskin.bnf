@@ -225,7 +225,7 @@ FuncDeclaration ::= DeclarationStart func Parameters? | '(' ')' ('=>' Parameters
 // Target
 TargetStatement ::= DeclarationStart target Expression (as IDENTIFIER)? EOS TargetBodyStatement?
 TargetBodyStatement ::= INDENT TargetPropListStatement+ DEDENT
-TargetPropListStatement ::= '*' IDENTIFIER EOS FunctionalBlockBodyStatement? ('*' IDENTIFIER EOS FunctionalBlockBodyStatement?)*
+TargetPropListStatement ::= PutInStatement ('*' PutInStatement)*
 
 // PutIn
 PutInStatement ::= (DeclarationStart PUT_IN | '*') QualifiedIdentifier EOS FunctionalBlockBodyStatement?
