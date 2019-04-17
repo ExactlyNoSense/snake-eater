@@ -168,6 +168,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "async"               { return ASYNC; }
   "block"               { return BLOCK; }
   "break"               { return BREAK; }
+  "call"                { return CALL; }
   "case"                { return CASE; }
   "catch"               { return CATCH; }
   "const"               { return CONST; }

@@ -86,6 +86,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| FuncStatement
 	| TargetStatement
 	| PutInStatement
+	| CallStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -225,11 +226,15 @@ FuncDeclaration ::= DeclarationStart func Parameters? | '(' ')' ('=>' Parameters
 
 // Target
 TargetStatement ::= DeclarationStart target Expression (as IDENTIFIER)? EOS TargetBodyStatement?
-TargetBodyStatement ::= INDENT TargetPropListStatement+ DEDENT
-TargetPropListStatement ::= PutInStatement ('*' PutInStatement)*
+TargetBodyStatement ::= INDENT PutInStatement+ DEDENT
 
 // PutIn
-PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier EOS FunctionalBlockBodyStatement?
+PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier? EOS FunctionalBlockBodyStatement?
+
+// Call
+CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBodyStatement?
+CallBodyStatement ::= INDENT CallScopeStatement DEDENT
+CallScopeStatement ::= PutInStatement+ | FunctionalScopeStatement+
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
