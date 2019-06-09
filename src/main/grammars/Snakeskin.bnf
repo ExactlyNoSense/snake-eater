@@ -252,21 +252,16 @@ DeclarationStart ::= SHARP | MINUS
 
 // Expressions
 Expression ::= AssignmentExpression
-	| IndexExpression
-	| DotExpression
 	| RelationExpression
 	| EqualityExpression
 	| AddGroup
 	| BooleanGroup
 	| MulGroup
 	| UnaryGroup
-	| PrimaryGroup
+	| MemberExpression
+	| CallExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative=true }
-
-IndexExpression ::= Expression '[' Expression ']'
-
-DotExpression ::= Expression '.' IDENTIFIER
 
 RelationExpression ::= Expression RelationOperators Expression
 RelationOperators ::= '<' | '>' | '<=' | '>='
@@ -314,3 +309,10 @@ PropertyAssignmentExpression ::= PropertyName ':' Expression
 PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
 
 ParenthesesExpression ::= '(' Expression ')'
+
+MemberExpression ::= PrimaryGroup MemberExpressionTail?
+MemberExpressionTail ::= ('[' Expression ']' | '.' IDENTIFIER) MemberExpressionTail?
+
+CallExpression ::= MemberExpression CallArguments CallExpressionTail?
+CallArguments ::= '(' [Expression (',' Expression)*] ')'
+CallExpressionTail ::= (MemberExpressionTail | CallArguments) CallExpressionTail?
