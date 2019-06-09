@@ -304,8 +304,8 @@ LiteralExpression ::= NULL_LITERAL
 ArrayLiteralExpression ::= '[' ElementsList ']'
 ElementsList ::= Expression (',' Expression)*
 
-ObjectLiteralExpression ::= '{' PropertyAssignmentExpression '}'
-PropertyAssignmentExpression ::= PropertyName ':' Expression
+ObjectLiteralExpression ::= '{' PropertyAssignment '}'
+PropertyAssignment ::= PropertyName ':' Expression
 PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
 
 ParenthesesExpression ::= '(' Expression ')'
