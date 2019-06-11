@@ -258,6 +258,7 @@ Expression ::= AssignmentExpression
 	| BooleanGroup
 	| MulGroup
 	| UnaryGroup
+	| TernaryExpression
 	| MemberExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative=true }
@@ -312,3 +313,5 @@ ParenthesesExpression ::= '(' Expression ')'
 MemberExpression ::= PrimaryGroup MemberExpressionTail?
 MemberExpressionTail ::= ('[' Expression ']' | '.' IDENTIFIER | CallArguments) MemberExpressionTail?
 CallArguments ::= '(' [Expression (',' Expression)*] ')'
+
+TernaryExpression ::= Expression '?' Expression ':' Expression
