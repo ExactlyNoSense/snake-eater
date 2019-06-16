@@ -43,8 +43,9 @@ WS_EOL = \R
 WS_LINE = [ \t]
 WS = {WS_EOL} | {WS_LINE}
 
-// Identifier
+// Identifiers
 IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
+WITH_IDENTIFIER = @[_\p{xidstart}][\p{xidcontinue}]*
 
 // Number literals
 DECIMAL_INTEGER_LITERAL = 0 | [1-9][0-9]*
@@ -214,6 +215,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {NUMERIC_LITERAL}     { return NUMERIC_LITERAL; }
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
   {IDENTIFIER}          { return IDENTIFIER; }
+  {WITH_IDENTIFIER}     { return WITH_IDENTIFIER; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 

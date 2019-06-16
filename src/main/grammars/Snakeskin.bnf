@@ -243,7 +243,7 @@ ParameterDeclaration ::= IDENTIFIER
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
 ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
-ArgumentDeclaration ::= IDENTIFIER ('?' | '!')? ('=' Expression)?
+ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
 
 QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
@@ -277,6 +277,7 @@ private PrimaryGroup ::= LiteralExpression
 	| ArrayLiteralExpression
 	| ObjectLiteralExpression
 	| ParenthesesExpression
+	| IdentifierOrWithIdentifier
 
 PlusExpression ::= Expression '+' Expression
 MinusExpression ::= Expression '-' Expression
@@ -298,8 +299,9 @@ LiteralExpression ::= NULL_LITERAL
 	| BOOLEAN_LITERAL
 	| STRING_LITERAL
 	| NUMERIC_LITERAL
-	| IDENTIFIER
 	| GlobalIdentifier
+
+IdentifierOrWithIdentifier ::= IDENTIFIER | WITH_IDENTIFIER
 
 ArrayLiteralExpression ::= '[' ElementsList ']'
 ElementsList ::= Expression (',' Expression)*
