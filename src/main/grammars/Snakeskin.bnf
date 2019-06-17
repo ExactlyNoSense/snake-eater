@@ -245,7 +245,7 @@ Arguments ::= '(' ArgumentDeclarationsList? ')'
 ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
 ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
 
-QualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
+QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
