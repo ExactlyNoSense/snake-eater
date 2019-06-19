@@ -164,6 +164,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "@"                   { return AT; }
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
+  "@["                  { return AT_BRACK; }
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }

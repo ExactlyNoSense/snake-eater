@@ -64,6 +64,7 @@
 		AT          = '@'
 		UNDERSCORE  = '_'
 		DOLLAR      = '$'
+		AT_BRACK		= '@['
 	]
 }
 
@@ -124,7 +125,7 @@ ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
 ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
-NamespaceStatement ::= DeclarationStart namespace QualifiedIdentifier
+NamespaceStatement ::= DeclarationStart namespace DefinitionQualifiedIdentifier
 
 // Include
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
@@ -165,7 +166,7 @@ DoctypeStatement ::= DeclarationStart doctype IDENTIFIER?
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
-TemplateDeclarationStatement ::= async? TemplateType '*'? QualifiedIdentifier TemplateDeclarationTail?
+TemplateDeclarationStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
 TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
@@ -245,7 +246,13 @@ Arguments ::= '(' ArgumentDeclarationsList? ')'
 ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
 ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
 
-QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']') QualifiedIdentifierTail*
+// Qualified identifiers
+// For template inheritance
+QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']' | '@[' Expression ']') QualifiedIdentifierTail*
+// For namespace and template definition
+DefinitionQualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
+// For template execution
+ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
