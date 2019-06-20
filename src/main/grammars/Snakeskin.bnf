@@ -97,6 +97,7 @@ GlobalScopeInlineDeclarationStatement ::= VariableStatement
 	| IncludeStatement
 	| ImportStatement
 	| VoidStatement
+	| DecoratorStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
 LocalScopeInlineDeclarationStatement ::= VariableStatement
@@ -163,6 +164,9 @@ ThrowStatement ::= DeclarationStart throw Expression
 
 // Doctype
 DoctypeStatement ::= DeclarationStart doctype IDENTIFIER?
+
+// Decorator
+DecoratorStatement ::= DeclarationStart ExecutionQualifiedIdentifier '(' ')'
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
