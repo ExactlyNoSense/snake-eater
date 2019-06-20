@@ -227,7 +227,7 @@ FinallyStatement ::= DeclarationStart finally EOS FunctionalBlockBodyStatement?
 
 // Function
 FuncStatement ::= FuncDeclaration EOS FunctionalBlockBodyStatement?
-FuncDeclaration ::= DeclarationStart func Parameters? | '(' ')' ('=>' Parameters)?
+FuncDeclaration ::= DeclarationStart func Arguments? | '(' ')' ('=>' Arguments)?
 
 // Target
 TargetStatement ::= DeclarationStart target Expression (as IDENTIFIER)? EOS TargetBodyStatement?
