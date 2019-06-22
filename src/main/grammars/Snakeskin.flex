@@ -198,6 +198,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }
+  "return"              { return RETURN; }
   "super"               { return SUPER; }
   "switch"              { return SWITCH; }
   "target"              { return TARGET; }
