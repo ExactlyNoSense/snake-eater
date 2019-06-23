@@ -50,6 +50,11 @@ WS = {WS_EOL} | {WS_LINE}
 IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
 WITH_IDENTIFIER = @[_\p{xidstart}][\p{xidcontinue}]*
 
+XML_TAG_START = [_:a-zA-Z]
+XML_TAG_CONTINUE = {XML_TAG_START} | [-\.0-9]
+XML_TAG = {XML_TAG_START} {XML_TAG_CONTINUE}*
+
+
 // Number literals
 DECIMAL_INTEGER_LITERAL = 0 | [1-9][0-9]*
 EXPONENT = [Ee] [+-]? [0-9]+
