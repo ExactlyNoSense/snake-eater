@@ -35,7 +35,9 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %function advance
 %type IElementType
 %unicode
-%state LINE_READING, LINE_SPLITTING, END_OF_LINE_SPLITTING, DEDENT_BLOCK, DEDENT_EOF
+%state CONTROL_DIRECTIVE, XML_DIRECTIVE
+%state LINE_SPLITTING, END_OF_LINE_SPLITTING
+%state DEDENT_BLOCK, DEDENT_EOF
 
 
 // Whitespace
@@ -75,7 +77,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {WS_LINE}+  { currentIndent = yylength(); }
   {WS_EOL}  { currentIndent = 0; }
   [^\R \t]  {
-    yybegin(LINE_READING);
+    yybegin(CONTROL_DIRECTIVE);
     yypushback(1);
 
     int stackTop = indentionStack.peek();
@@ -97,7 +99,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
       return DEDENT;
     }
     else {
-      yybegin(LINE_READING);
+      yybegin(CONTROL_DIRECTIVE);
     }
   }
 }
@@ -114,7 +116,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   }
 }
 
-<LINE_READING> {
+<CONTROL_DIRECTIVE> {
 
   "{"                   { return BRACE_OPEN; }
   "}"                   { return BRACE_CLOSE; }
@@ -246,13 +248,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (!zzIsMultilineMode) {
       zzIsMultilineMode = true;
     }
-    yybegin(LINE_READING);
+    yybegin(CONTROL_DIRECTIVE);
     yypushback(yylength());
   }
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(LINE_READING); yypushback(1); return AMP; }
+  .  { yybegin(CONTROL_DIRECTIVE); yypushback(1); return AMP; }
 }
 
 // Checks that there is no a non WS symbol after substring " .".
@@ -264,13 +266,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (zzIsMultilineMode) {
       zzIsMultilineMode = false;
     }
-    yybegin(LINE_READING);
+    yybegin(CONTROL_DIRECTIVE);
     yypushback(yylength());
   }
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(LINE_READING); yypushback(1); return DOT; }
+  .  { yybegin(CONTROL_DIRECTIVE); yypushback(1); return DOT; }
 }
 
 [^] { return BAD_CHARACTER; }
