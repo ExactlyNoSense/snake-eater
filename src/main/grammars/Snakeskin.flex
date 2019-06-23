@@ -248,7 +248,25 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (zzIsMultilineMode) {
       return WHITE_SPACE;
     } else {
-    	return endStatement(false);
+      return endStatement(false);
+    }
+  }
+
+  <<EOF>>  { return endStatement(true); }
+}
+
+<XML_DIRECTIVE> {
+  {WS_LINE}             { return WHITE_SPACE; }
+
+// Multiline declaration
+  {WS_LINE} "&"         { yybegin(LINE_SPLITTING); }
+  {WS} "."              { yybegin(END_OF_LINE_SPLITTING); }
+
+  {WS_EOL}  {
+    if (zzIsMultilineMode) {
+      return WHITE_SPACE;
+    } else {
+      return endStatement(false);
     }
   }
 
