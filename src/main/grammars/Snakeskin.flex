@@ -18,6 +18,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 
 %{
   private boolean zzIsMultilineMode = false;
+  private int currentDirectiveState = -1;
 
   private Stack<Integer> indentionStack = new Stack<>();
   private int currentIndent = 0;
@@ -37,7 +38,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE
 %state LINE_SPLITTING, END_OF_LINE_SPLITTING
-%state DEDENT_BLOCK, DEDENT_EOF
+%state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_EOF
 
 
 // Whitespace
@@ -76,19 +77,35 @@ COMMENT_BLOCK = {LINE_COMMENT}
 <YYINITIAL> {
   {WS_LINE}+  { currentIndent = yylength(); }
   {WS_EOL}  { currentIndent = 0; }
-  [^\R \t]  {
-    yybegin(CONTROL_DIRECTIVE);
-    yypushback(1);
 
-    int stackTop = indentionStack.peek();
-    if (stackTop < currentIndent) {
-      indentionStack.push(currentIndent);
-      return INDENT;
-    }
-    else if (stackTop > currentIndent) {
-      yybegin(DEDENT_BLOCK);
-    }
-  }
+  // '-' and other special characters that start control directives
+  "-" | ":" | "?" | "(" | "*" | "+" {
+        yypushback(yylength());
+        currentDirectiveState = CONTROL_DIRECTIVE;
+        yybegin(INDENT_BLOCK);
+      }
+  // '<' starts tags
+  "<" {
+        yypushback(yylength());
+        currentDirectiveState = XML_DIRECTIVE;
+        yybegin(INDENT_BLOCK);
+      }
+}
+
+<INDENT_BLOCK> {
+  [^] {
+        yypushback(yylength());
+        yybegin(currentDirectiveState);
+
+        int stackTop = indentionStack.peek();
+        if (stackTop < currentIndent) {
+          indentionStack.push(currentIndent);
+          return INDENT;
+        }
+        else if (stackTop > currentIndent) {
+          yybegin(DEDENT_BLOCK);
+        }
+      }
 }
 
 <DEDENT_BLOCK> {
@@ -99,7 +116,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
       return DEDENT;
     }
     else {
-      yybegin(CONTROL_DIRECTIVE);
+      yybegin(currentDirectiveState);
     }
   }
 }
@@ -248,13 +265,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (!zzIsMultilineMode) {
       zzIsMultilineMode = true;
     }
-    yybegin(CONTROL_DIRECTIVE);
+    yybegin(currentDirectiveState);
     yypushback(yylength());
   }
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(CONTROL_DIRECTIVE); yypushback(1); return AMP; }
+  .  { yybegin(currentDirectiveState); yypushback(1); return AMP; }
 }
 
 // Checks that there is no a non WS symbol after substring " .".
@@ -266,13 +283,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
     if (zzIsMultilineMode) {
       zzIsMultilineMode = false;
     }
-    yybegin(CONTROL_DIRECTIVE);
+    yybegin(currentDirectiveState);
     yypushback(yylength());
   }
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(CONTROL_DIRECTIVE); yypushback(1); return DOT; }
+  .  { yybegin(currentDirectiveState); yypushback(1); return DOT; }
 }
 
 [^] { return BAD_CHARACTER; }
