@@ -89,6 +89,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| PutInStatement
 	| CallStatement
 	| ReturnStatement
+	| XmlStatement
 	| COMMENT_BLOCK
 
 GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
@@ -264,6 +265,14 @@ ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression '
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
+
+// XML
+XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlAttrsDeclaration?
+XmlTagDeclaration ::= TAG_NAME | '?'
+XmlAttrsDeclaration ::= XmlAttrDeclaration ('|' XmlAttrDeclaration)*
+XmlAttrDeclaration ::= ATTR_NAME ['=' ATTR_VALUE?]
+
+TagDeclarationStart ::= LT
 
 // Expressions
 Expression ::= AssignmentExpression
