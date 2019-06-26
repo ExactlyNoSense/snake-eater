@@ -292,13 +292,15 @@ COMMENT_BLOCK = {LINE_COMMENT}
 }
 
 <XML_ATTR_VALUE> {
-  [^\|\r\n]*            {
-        yybegin(XML_DIRECTIVE);
-        return ATTR_VALUE;
-      }
+  {WS_LINE}+            { return WHITE_SPACE; }
+  "|"                   |
   {WS_EOL}              {
         yypushback(yylength());
         yybegin(XML_DIRECTIVE);
+      }
+  [^\|\r\n]+            {
+        yybegin(XML_DIRECTIVE);
+        return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
 }
