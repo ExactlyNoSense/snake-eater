@@ -37,6 +37,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE
+%state XML_ATTR_VALUE
 %state LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_EOF
 
@@ -264,6 +265,15 @@ COMMENT_BLOCK = {LINE_COMMENT}
 }
 
 <XML_DIRECTIVE> {
+  "<"                   { return LT; }
+  "="  {
+        yybegin(XML_ATTR_VALUE);
+        return EQ;
+      }
+  "|"                   { return PIPE; }
+  {XML_TAG}             { return TAG_NAME; }
+  {XML_ATTR}            { return ATTR_NAME; }
+
   {WS_LINE}             { return WHITE_SPACE; }
 
 // Multiline declaration
@@ -279,6 +289,18 @@ COMMENT_BLOCK = {LINE_COMMENT}
   }
 
   <<EOF>>  { return endStatement(true); }
+}
+
+<XML_ATTR_VALUE> {
+  [^\|\r\n]*            {
+        yybegin(XML_DIRECTIVE);
+        return ATTR_VALUE;
+      }
+  {WS_EOL}              {
+        yypushback(yylength());
+        yybegin(XML_DIRECTIVE);
+      }
+  <<EOF>>               { return endStatement(true); }
 }
 
 
