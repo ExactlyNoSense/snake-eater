@@ -267,8 +267,9 @@ QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 DeclarationStart ::= SHARP | MINUS
 
 // XML
-XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlAttrsDeclaration? EOS
+XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS
 XmlTagDeclaration ::= TAG_NAME | '?'
+XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 XmlAttrsDeclaration ::= XmlAttrDeclaration ('|' XmlAttrDeclaration)*
 XmlAttrDeclaration ::= ATTR_NAME ['=' ATTR_VALUE?]
 
