@@ -248,7 +248,7 @@ CallScopeStatement ::= PutInStatement+ | FunctionalScopeStatement+
 ReturnStatement ::= DeclarationStart return Expression? EOS FunctionalBlockBodyStatement?
 
 // Tags
-TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS
+TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS FunctionalBlockBodyStatement?
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
@@ -271,7 +271,7 @@ QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 DeclarationStart ::= SHARP | MINUS
 
 // XML
-XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS
+XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS FunctionalBlockBodyStatement?
 XmlTagDeclaration ::= TAG_NAME | '?'
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 XmlAttrsDeclaration ::= XmlAttrDeclaration ('|' XmlAttrDeclaration)*
