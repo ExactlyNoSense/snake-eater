@@ -89,6 +89,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| PutInStatement
 	| CallStatement
 	| ReturnStatement
+	| TagStatement
 	| XmlStatement
 	| COMMENT_BLOCK
 
@@ -245,6 +246,9 @@ CallScopeStatement ::= PutInStatement+ | FunctionalScopeStatement+
 
 // Return
 ReturnStatement ::= DeclarationStart return Expression? EOS FunctionalBlockBodyStatement?
+
+// Tags
+TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*

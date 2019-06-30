@@ -236,6 +236,11 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "return"              { return RETURN; }
   "super"               { return SUPER; }
   "switch"              { return SWITCH; }
+  "tag"                 {
+        currentDirectiveState = XML_DIRECTIVE;
+        yybegin(XML_DIRECTIVE);
+        return TAG;
+      }
   "target"              { return TARGET; }
   "template"            { return TEMPLATE; }
   "throw"               { return THROW; }
