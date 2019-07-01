@@ -18,6 +18,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 
 %{
   private boolean zzIsMultilineMode = false;
+  private boolean zzFromTemplate = false;
   private int currentDirectiveState = -1;
 
   private Stack<Integer> indentionStack = new Stack<>();
@@ -36,7 +37,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %function advance
 %type IElementType
 %unicode
-%state CONTROL_DIRECTIVE, XML_DIRECTIVE
+%state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
 %state XML_ATTR_VALUE
 %state LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_EOF
@@ -106,6 +107,11 @@ COMMENT_BLOCK = {LINE_COMMENT}
         currentDirectiveState = XML_DIRECTIVE;
         yybegin(INDENT_BLOCK);
       }
+  . {
+            yypushback(yylength());
+            currentDirectiveState = TEMPLATE_DIRECTIVE;
+            yybegin(INDENT_BLOCK);
+          }
 }
 
 <INDENT_BLOCK> {
@@ -152,7 +158,13 @@ COMMENT_BLOCK = {LINE_COMMENT}
 <CONTROL_DIRECTIVE> {
 
   "{"                   { return BRACE_OPEN; }
-  "}"                   { return BRACE_CLOSE; }
+  "}"                   {
+          if (zzFromTemplate) {
+            zzFromTemplate = false;
+            yybegin(TEMPLATE_DIRECTIVE);
+          }
+          return BRACE_CLOSE;
+        }
   "["                   { return BRACK_OPEN; }
   "]"                   { return BRACK_CLOSE; }
   "("                   { return PAREN_OPEN; }
@@ -319,6 +331,17 @@ COMMENT_BLOCK = {LINE_COMMENT}
   <<EOF>>               { return endStatement(true); }
 }
 
+<TEMPLATE_DIRECTIVE> {
+  "{"                   {
+        zzFromTemplate = true;
+        currentDirectiveState = CONTROL_DIRECTIVE;
+        yybegin(CONTROL_DIRECTIVE);
+        return BRACE_OPEN;
+      }
+  {WS_EOL}              { return endStatement(false); }
+  [^{\r\n]+             { return TEMPLATE_TEXT; }
+  <<EOF>>               { return endStatement(true); }
+}
 
 // Checks that there is no a non WS symbol after substring " &".
 // In this case it's a line splitting sequence.
