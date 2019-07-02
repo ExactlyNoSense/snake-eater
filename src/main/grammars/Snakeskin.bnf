@@ -281,7 +281,7 @@ XmlAttrDeclaration ::= ATTR_NAME ['=' ATTR_VALUE?]
 TagDeclarationStart ::= LT
 
 // Template text
-TemplateTextStatement ::= TEMPLATE_TEXT? TemplateOutputStatement? TEMPLATE_TEXT? EOS
+TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateOutputStatement TEMPLATE_TEXT?)* EOS
 TemplateOutputStatement ::= '{' Expression '}'
 
 // Expressions
