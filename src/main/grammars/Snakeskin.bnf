@@ -64,7 +64,9 @@
 		AT          = '@'
 		UNDERSCORE  = '_'
 		DOLLAR      = '$'
-		AT_BRACK		= '@['
+		AT_BRACK    = '@['
+		BRACE_OPEN_OPEN = '{{'
+		BRACE_CLOSE_CLOSE = '}}'
 	]
 }
 
@@ -281,8 +283,10 @@ XmlAttrDeclaration ::= ATTR_NAME ['=' ATTR_VALUE?]
 TagDeclarationStart ::= LT
 
 // Template text
-TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateOutputStatement TEMPLATE_TEXT?)* EOS
+TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* EOS
+TemplateInclusion ::= TemplateOutputStatement | TemplateInterpolationStatement
 TemplateOutputStatement ::= '{' Expression '}'
+TemplateInterpolationStatement ::= '{{' TEMPLATE_INTERPOLATION '}}'
 
 // Expressions
 Expression ::= AssignmentExpression

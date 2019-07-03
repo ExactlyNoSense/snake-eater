@@ -38,7 +38,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
-%state XML_ATTR_VALUE
+%state XML_ATTR_VALUE, INTERPOLATION
 %state LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_EOF
 
@@ -338,9 +338,24 @@ COMMENT_BLOCK = {LINE_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return BRACE_OPEN;
       }
+  "{{"                  {
+        yybegin(INTERPOLATION);
+        return BRACE_OPEN_OPEN;
+      }
   {WS_EOL}              { return endStatement(false); }
   [^{\r\n]+             { return TEMPLATE_TEXT; }
   <<EOF>>               { return endStatement(true); }
+}
+
+<INTERPOLATION> {
+  [^\r\n}]!([^]* (\R|}}) [^]*) / \R|}}  {
+        return TEMPLATE_INTERPOLATION;
+      }
+  "}}"  {
+        yybegin(TEMPLATE_DIRECTIVE);
+        return BRACE_CLOSE_CLOSE;
+      }
+  . { return BAD_CHARACTER; }
 }
 
 // Checks that there is no a non WS symbol after substring " &".
