@@ -114,6 +114,8 @@ LocalScopeInlineDeclarationStatement ::= VariableStatement
 	| DoctypeStatement
 	| SuperStatement
 
+private InlineStatement_recover ::= !EOS
+
 // Variables
 VariableStatement ::= VarClause VariableDeclarationsList
 VarClause ::= DeclarationStart var | ':'
@@ -132,7 +134,10 @@ ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
 ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
-NamespaceStatement ::= DeclarationStart namespace DefinitionQualifiedIdentifier
+NamespaceStatement ::= DeclarationStart namespace DefinitionQualifiedIdentifier {
+	pin=2
+	recoverWhile=InlineStatement_recover
+}
 
 // Include
 IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
