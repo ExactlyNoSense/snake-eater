@@ -65,6 +65,7 @@
 		UNDERSCORE  = '_'
 		DOLLAR      = '$'
 		AT_BRACK    = '@['
+		AT_AT_BACK  = '@@['
 		BRACE_OPEN_OPEN = '{{'
 		BRACE_CLOSE_CLOSE = '}}'
 	]
@@ -126,8 +127,8 @@ VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
-GlobalDeclarationIdentifier ::= ('@' '@')? (IDENTIFIER | '[' Expression ']')
-GlobalIdentifier ::= '@' '@' (IDENTIFIER | '[' Expression ']')
+GlobalDeclarationIdentifier ::= GLOBAL_ID | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
+GlobalIdentifier ::= GLOBAL_ID | '@@[' Expression ']'
 
 // Const
 ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?

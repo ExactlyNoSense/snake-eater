@@ -51,6 +51,7 @@ WS = {WS_EOL} | {WS_LINE}
 // Identifiers
 IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
 WITH_IDENTIFIER = @[_\p{xidstart}][\p{xidcontinue}]*
+GLOBAL_IDENTIFIER = @@[_\p{xidstart}][\p{xidcontinue}]*
 
 XML_TAG_START = [_:a-zA-Z]
 XML_TAG_CONTINUE = {XML_TAG_START} | [-\.0-9]
@@ -212,6 +213,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "_"                   { return UNDERSCORE; }
   "$"                   { return DOLLAR; }
   "@["                  { return AT_BRACK; }
+  "@@["                 { return AT_AT_BACK; }
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }
@@ -270,6 +272,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
   {IDENTIFIER}          { return IDENTIFIER; }
   {WITH_IDENTIFIER}     { return WITH_IDENTIFIER; }
+  {GLOBAL_IDENTIFIER}   { return GLOBAL_ID; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 
