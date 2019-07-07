@@ -272,7 +272,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
   {IDENTIFIER}          { return IDENTIFIER; }
   {WITH_IDENTIFIER}     { return WITH_IDENTIFIER; }
-  {GLOBAL_IDENTIFIER}   { return GLOBAL_ID; }
+  {GLOBAL_IDENTIFIER}   { return GLOBAL_IDENTIFIER; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 

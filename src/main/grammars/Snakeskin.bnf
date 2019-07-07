@@ -127,8 +127,7 @@ VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
-GlobalDeclarationIdentifier ::= GLOBAL_ID | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
-GlobalIdentifier ::= GLOBAL_ID | '@@[' Expression ']'
+GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
 
 // Const
 ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
@@ -321,7 +320,7 @@ private PrimaryGroup ::= LiteralExpression
 	| ArrayLiteralExpression
 	| ObjectLiteralExpression
 	| ParenthesesExpression
-	| IdentifierOrWithIdentifier
+	| IdentifierGroup
 
 PlusExpression ::= Expression '+' Expression
 MinusExpression ::= Expression '-' Expression
@@ -343,8 +342,12 @@ LiteralExpression ::= NULL_LITERAL
 	| BOOLEAN_LITERAL
 	| STRING_LITERAL
 	| NUMERIC_LITERAL
-	| GlobalIdentifier
 
+IdentifierGroup ::= GLOBAL_IDENTIFIER
+ | '@@[' Expression ']'
+ | WITH_IDENTIFIER
+ | '@[' Expression ']'
+ | IDENTIFIER
 IdentifierOrWithIdentifier ::= IDENTIFIER | WITH_IDENTIFIER
 
 ArrayLiteralExpression ::= '[' ElementsList ']'
