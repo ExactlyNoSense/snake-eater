@@ -92,6 +92,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| PutInStatement
 	| CallStatement
 	| ReturnStatement
+	| WithStatement
 	| TagStatement
 	| XmlStatement
 	| TemplateTextStatement
@@ -254,6 +255,9 @@ CallScopeStatement ::= PutInStatement+ | FunctionalScopeStatement+
 
 // Return
 ReturnStatement ::= DeclarationStart return Expression? EOS FunctionalBlockBodyStatement?
+
+// With
+WithStatement ::= DeclarationStart with Expression EOS FunctionalBlockBodyStatement?
 
 // Tags
 TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS FunctionalBlockBodyStatement?

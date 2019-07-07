@@ -263,6 +263,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "var"                 { return VAR; }
   "void"                { return VOID; }
   "while"               { return WHILE; }
+  "with"                { return WITH; }
 
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }
