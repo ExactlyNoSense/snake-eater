@@ -247,8 +247,8 @@ PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdenti
 
 // Call
 CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBlock?
-CallBlock ::= INDENT CallBodyStatement DEDENT
-CallBodyStatement ::= PutInStatement+ | BodyStatement+
+CallBlock ::= INDENT CallBodyStatement+ DEDENT
+CallBodyStatement ::= PutInStatement | BodyStatement
 
 // Return
 ReturnStatement ::= DeclarationStart return Expression? EOS Block?
