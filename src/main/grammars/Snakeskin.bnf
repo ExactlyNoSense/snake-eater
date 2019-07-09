@@ -204,8 +204,8 @@ MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS Block
 SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS Block?
 DefaultConditionalStatement ::= DeclarationStart else EOS Block?
 
-SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBodyStatement?
-SwitchBodyStatement ::= INDENT CaseStatement+ DefaultStatement? DEDENT
+SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBlock?
+SwitchBlock ::= INDENT CaseStatement+ DefaultStatement? DEDENT
 CaseStatement ::= (DeclarationStart case | '>') Expression EOS Block?
 DefaultStatement ::= DeclarationStart default EOS Block?
 
@@ -215,17 +215,17 @@ LoopStatement ::= ForLoopStatement
 	| WhileLoopStatement
 	| DoWhileLoopStatement
 
-ForLoopStatement ::= DeclarationStart for Expression ';' Expression ';' Expression EOS LoopBodyStatement?
-ForInLoopStatement ::= DeclarationStart for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBodyStatement?
-WhileLoopStatement ::= DeclarationStart while Expression EOS LoopBodyStatement?
-DoWhileLoopStatement ::= DeclarationStart do EOS LoopBodyStatement? (DeclarationStart while EOS)?
+ForLoopStatement ::= DeclarationStart for Expression ';' Expression ';' Expression EOS LoopBlock?
+ForInLoopStatement ::= DeclarationStart for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBlock?
+WhileLoopStatement ::= DeclarationStart while Expression EOS LoopBlock?
+DoWhileLoopStatement ::= DeclarationStart do EOS LoopBlock? (DeclarationStart while EOS)?
 
-LoopBodyStatement ::= INDENT LoopScopeStatement+ DEDENT
-LoopScopeStatement ::= BodyStatement | LoopControlStatement
+LoopBlock ::= INDENT LoopBodyStatement+ DEDENT
+LoopBodyStatement ::= BodyStatement | LoopControlStatement
 LoopControlStatement ::= DeclarationStart (break | continue)
 
 // Iterators
-IteratorStatement ::= DeclarationStart (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBodyStatement?
+IteratorStatement ::= DeclarationStart (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBlock?
 
 // try/catch/finally
 TryCatchStatement ::= TryStatement CatchFinallyStatemnt?
@@ -246,9 +246,9 @@ TargetBodyStatement ::= INDENT PutInStatement+ DEDENT
 PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier? EOS Block?
 
 // Call
-CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBodyStatement?
-CallBodyStatement ::= INDENT CallScopeStatement DEDENT
-CallScopeStatement ::= PutInStatement+ | BodyStatement+
+CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBlock?
+CallBlock ::= INDENT CallBodyStatement DEDENT
+CallBodyStatement ::= PutInStatement+ | BodyStatement+
 
 // Return
 ReturnStatement ::= DeclarationStart return Expression? EOS Block?
