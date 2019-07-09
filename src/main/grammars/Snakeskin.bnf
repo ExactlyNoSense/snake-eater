@@ -78,10 +78,9 @@ GlobalStatement ::= GlobalInlineStatement
 	| ExternalBlockStatement
 	| COMMENT_BLOCK
 
-LocalScopeStatement ::= FunctionalScopeStatement
+Block ::= INDENT BodyStatement+ DEDENT
+BodyStatement ::= LocalScopeInlineStatement
 	| InternalBlockStatement
-
-FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| ConditionalStatement
 	| SwitchStatement
 	| LoopStatement
@@ -181,37 +180,34 @@ DoctypeStatement ::= DeclarationStart doctype IDENTIFIER?
 DecoratorStatement ::= DeclarationStart ExecutionQualifiedIdentifier '(' ')'
 
 // Template
-TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BlockBodyStatement?
+TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS Block?
 TemplateDeclarationStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
 TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
-BlockBodyStatement ::= INDENT BlockBody DEDENT
-BlockBody ::= LocalScopeStatement*
 
 // Blocks
-InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BlockBodyStatement?
+InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS Block?
 InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
 
-ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EOS BlockBodyStatement?
+ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EOS Block?
 ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
 BlockDeclarationTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
 // Eval&Head
-EvalBlockStatement ::= DeclarationStart (eval | head) EOS FunctionalBlockBodyStatement?
-FunctionalBlockBodyStatement ::= INDENT FunctionalScopeStatement+ DEDENT
+EvalBlockStatement ::= DeclarationStart (eval | head) EOS Block?
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
-MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS FunctionalBlockBodyStatement?
-SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS FunctionalBlockBodyStatement?
-DefaultConditionalStatement ::= DeclarationStart else EOS FunctionalBlockBodyStatement?
+MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS Block?
+SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS Block?
+DefaultConditionalStatement ::= DeclarationStart else EOS Block?
 
 SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBodyStatement?
 SwitchBodyStatement ::= INDENT CaseStatement+ DefaultStatement? DEDENT
-CaseStatement ::= (DeclarationStart case | '>') Expression EOS FunctionalBlockBodyStatement?
-DefaultStatement ::= DeclarationStart default EOS FunctionalBlockBodyStatement?
+CaseStatement ::= (DeclarationStart case | '>') Expression EOS Block?
+DefaultStatement ::= DeclarationStart default EOS Block?
 
 // Loops
 LoopStatement ::= ForLoopStatement
@@ -225,7 +221,7 @@ WhileLoopStatement ::= DeclarationStart while Expression EOS LoopBodyStatement?
 DoWhileLoopStatement ::= DeclarationStart do EOS LoopBodyStatement? (DeclarationStart while EOS)?
 
 LoopBodyStatement ::= INDENT LoopScopeStatement+ DEDENT
-LoopScopeStatement ::= FunctionalScopeStatement | LoopControlStatement
+LoopScopeStatement ::= BodyStatement | LoopControlStatement
 LoopControlStatement ::= DeclarationStart (break | continue)
 
 // Iterators
@@ -233,13 +229,13 @@ IteratorStatement ::= DeclarationStart (FOREACH | FORIN) Expression '=>' Paramet
 
 // try/catch/finally
 TryCatchStatement ::= TryStatement CatchFinallyStatemnt?
-TryStatement ::= DeclarationStart try EOS FunctionalBlockBodyStatement?
+TryStatement ::= DeclarationStart try EOS Block?
 CatchFinallyStatemnt ::= CatchStatement FinallyStatement?
-CatchStatement ::= DeclarationStart catch IDENTIFIER EOS FunctionalBlockBodyStatement?
-FinallyStatement ::= DeclarationStart finally EOS FunctionalBlockBodyStatement?
+CatchStatement ::= DeclarationStart catch IDENTIFIER EOS Block?
+FinallyStatement ::= DeclarationStart finally EOS Block?
 
 // Function
-FuncStatement ::= FuncDeclaration EOS FunctionalBlockBodyStatement?
+FuncStatement ::= FuncDeclaration EOS Block?
 FuncDeclaration ::= DeclarationStart func ArgumentDeclarationsList? | '(' ')' ['=>' ArgumentDeclarationsList?]
 
 // Target
@@ -247,21 +243,21 @@ TargetStatement ::= DeclarationStart target Expression (as IDENTIFIER)? EOS Targ
 TargetBodyStatement ::= INDENT PutInStatement+ DEDENT
 
 // PutIn
-PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier? EOS FunctionalBlockBodyStatement?
+PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier? EOS Block?
 
 // Call
 CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBodyStatement?
 CallBodyStatement ::= INDENT CallScopeStatement DEDENT
-CallScopeStatement ::= PutInStatement+ | FunctionalScopeStatement+
+CallScopeStatement ::= PutInStatement+ | BodyStatement+
 
 // Return
-ReturnStatement ::= DeclarationStart return Expression? EOS FunctionalBlockBodyStatement?
+ReturnStatement ::= DeclarationStart return Expression? EOS Block?
 
 // With
-WithStatement ::= DeclarationStart with Expression EOS FunctionalBlockBodyStatement?
+WithStatement ::= DeclarationStart with Expression EOS Block?
 
 // Tags
-TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS FunctionalBlockBodyStatement?
+TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS Block?
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
@@ -284,7 +280,7 @@ QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 DeclarationStart ::= SHARP | MINUS
 
 // XML
-XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS FunctionalBlockBodyStatement?
+XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS Block?
 XmlTagDeclaration ::= TAG_NAME | '?'
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 XmlAttrsDeclaration ::= XmlAttrDeclaration ('|' XmlAttrDeclaration)*
