@@ -71,8 +71,8 @@
 	]
 }
 
-Snakeskin ::= GlobalScopeStatement*
-GlobalScopeStatement ::= GlobalScopeInlineStatement
+Snakeskin ::= GlobalStatement*
+GlobalStatement ::= GlobalInlineStatement
 	| EvalBlockStatement
 	| TemplateStatement
 	| ExternalBlockStatement
@@ -98,7 +98,7 @@ FunctionalScopeStatement ::= LocalScopeInlineStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
 
-GlobalScopeInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
+GlobalInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
 GlobalScopeInlineDeclarationStatement ::= VariableStatement
 	| GlobalVariableStatement
 	| NamespaceStatement
@@ -192,6 +192,7 @@ BlockBody ::= LocalScopeStatement*
 // Blocks
 InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BlockBodyStatement?
 InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
+
 ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EOS BlockBodyStatement?
 ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
 BlockDeclarationTail ::= Arguments BlockSelfCall?
