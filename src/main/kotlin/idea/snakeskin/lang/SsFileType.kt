@@ -5,7 +5,7 @@ import javax.swing.Icon
 
 class SsFileType : LanguageFileType(SsLanguage.INSTANCE) {
 	companion object {
-	    val INSTANCE = SsFileType()
+		val INSTANCE = SsFileType()
 	}
 
 	override fun getIcon(): Icon? {
