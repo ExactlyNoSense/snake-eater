@@ -140,7 +140,9 @@ NamespaceStatement ::= DeclarationStart namespace DefinitionQualifiedIdentifier 
 }
 
 // Include
-IncludeStatement ::= DeclarationStart include Expression RenderAsExpression?
+IncludeStatement ::= DeclarationStart include Expression RenderAsExpression? {
+	pin=2
+}
 RenderAsExpression ::= as (interface | placeholder)
 
 // Import
