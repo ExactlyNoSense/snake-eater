@@ -147,7 +147,9 @@ RenderAsExpression ::= as (interface | placeholder)
 
 // Import
 ImportStatement ::= DeclarationStart ImportDeclaration
-ImportDeclaration ::= import (ImportClause FromClause | ModuleSpecifier)
+ImportDeclaration ::= import (ImportClause FromClause | ModuleSpecifier) {
+	pin=1
+}
 
 ImportClause ::= CombinedImport
 	| DefaultImport
