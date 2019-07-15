@@ -178,7 +178,9 @@ SuperStatement ::= DeclarationStart super
 ThrowStatement ::= DeclarationStart throw Expression
 
 // Doctype
-DoctypeStatement ::= DeclarationStart doctype IDENTIFIER?
+DoctypeStatement ::= DeclarationStart doctype IDENTIFIER? {
+	pin=2
+}
 
 // Decorator
 DecoratorStatement ::= DeclarationStart ExecutionQualifiedIdentifier '(' ')'
