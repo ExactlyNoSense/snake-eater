@@ -175,7 +175,9 @@ VoidStatement ::= (DeclarationStart void | '?') Expression
 SuperStatement ::= DeclarationStart super
 
 // Throw
-ThrowStatement ::= DeclarationStart throw Expression
+ThrowStatement ::= DeclarationStart throw Expression {
+	pin=2
+}
 
 // Doctype
 DoctypeStatement ::= DeclarationStart doctype IDENTIFIER? {
