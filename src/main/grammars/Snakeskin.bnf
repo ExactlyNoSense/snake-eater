@@ -73,10 +73,10 @@
 
 Snakeskin ::= GlobalStatement*
 GlobalStatement ::= GlobalInlineStatement
-	| EvalBlockStatement
-	| TemplateStatement
-	| ExternalBlockStatement
-	| COMMENT_BLOCK
+//	| EvalBlockStatement
+//	| TemplateStatement
+//	| ExternalBlockStatement
+//	| COMMENT_BLOCK
 
 BodyBlock ::= INDENT BodyStatement+ DEDENT
 BodyStatement ::= LocalScopeInlineStatement
@@ -97,14 +97,19 @@ BodyStatement ::= LocalScopeInlineStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
 
-GlobalInlineStatement ::= GlobalScopeInlineDeclarationStatement EOS
-GlobalScopeInlineDeclarationStatement ::= VariableStatement
+GlobalInlineStatement ::= (GlobalVerboseInlineStatement | GlobalShortInlineStatement) EOS
+
+GlobalVerboseInlineStatement ::= StatementStart InnerGlobalVerboseInlineStatement
+InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
+	| DecoratorStatement
 	| GlobalVariableStatement
 	| NamespaceStatement
 	| IncludeStatement
 	| ImportStatement
-	| VoidStatement
-	| DecoratorStatement
+	| VerboseVoidStatement
+
+GlobalShortInlineStatement ::= ShortVariableStatement
+	| ShortVoidStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
 LocalScopeInlineDeclarationStatement ::= VariableStatement
@@ -123,8 +128,11 @@ VarClause ::= DeclarationStart var | ':'
 VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
 VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 
+VerboseVariableStatement ::= var VariableDeclarationsList
+ShortVariableStatement ::= ':' VariableDeclarationsList
+
 // Global variables
-GlobalVariableStatement ::= DeclarationStart global? GlobalVariableDeclarationsList
+GlobalVariableStatement ::= global? GlobalVariableDeclarationsList
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
 GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
@@ -134,22 +142,14 @@ ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
 ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
-NamespaceStatement ::= DeclarationStart namespace DefinitionQualifiedIdentifier {
-	pin=2
-	recoverWhile=InlineStatement_recover
-}
+NamespaceStatement ::= namespace DefinitionQualifiedIdentifier
 
 // Include
-IncludeStatement ::= DeclarationStart include Expression RenderAsExpression? {
-	pin=2
-}
+IncludeStatement ::= include Expression RenderAsExpression?
 RenderAsExpression ::= as (interface | placeholder)
 
 // Import
-ImportStatement ::= DeclarationStart ImportDeclaration
-ImportDeclaration ::= import (ImportClause FromClause | ModuleSpecifier) {
-	pin=1
-}
+ImportStatement ::= import (ImportClause FromClause | ModuleSpecifier)
 
 ImportClause ::= CombinedImport
 	| DefaultImport
@@ -171,6 +171,9 @@ OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'
 // Void
 VoidStatement ::= (DeclarationStart void | '?') Expression
 
+VerboseVoidStatement ::= void Expression
+ShortVoidStatement ::= '?' Expression
+
 // Super
 SuperStatement ::= DeclarationStart super
 
@@ -185,7 +188,7 @@ DoctypeStatement ::= DeclarationStart doctype IDENTIFIER? {
 }
 
 // Decorator
-DecoratorStatement ::= DeclarationStart ExecutionQualifiedIdentifier '(' ')'
+DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
 
 // Template
 TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BodyBlock?
@@ -286,6 +289,7 @@ ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression '
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 DeclarationStart ::= SHARP | MINUS
+StatementStart ::= SHARP | MINUS
 
 // XML
 XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BodyBlock?
