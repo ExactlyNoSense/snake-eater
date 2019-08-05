@@ -73,10 +73,10 @@
 
 Snakeskin ::= GlobalStatement*
 GlobalStatement ::= GlobalInlineStatement
-//	| EvalBlockStatement
-//	| TemplateStatement
-//	| ExternalBlockStatement
-//	| COMMENT_BLOCK
+	| EvalBlockStatement
+	| TemplateStatement
+	| ExternalBlockStatement
+	| COMMENT_BLOCK
 
 BodyBlock ::= INDENT BodyStatement+ DEDENT
 BodyStatement ::= LocalScopeInlineStatement
