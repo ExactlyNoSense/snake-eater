@@ -72,11 +72,7 @@
 }
 
 Snakeskin ::= GlobalStatement*
-GlobalStatement ::= GlobalInlineStatement
-	| EvalBlockStatement
-	| TemplateStatement
-	| ExternalBlockStatement
-	| COMMENT_BLOCK
+GlobalStatement ::= GlobalInlineStatement | GlobalBlockStatement
 
 
 //////////////////////////////
@@ -96,6 +92,14 @@ InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
 GlobalShortInlineStatement ::= ShortVariableStatement
 	| ShortVoidStatement
 
+
+/////////////////////////////
+// GLOBAL BLOCK STATEMENTS //
+/////////////////////////////
+GlobalBlockStatement ::= StatementStart GlobalBlockHead EOS BodyBlock?
+GlobalBlockHead ::= HeadOrEvalHeadStatement
+	| ExternalBlockHeadStatement
+	| TemplateHeadStatement
 
 
 BodyBlock ::= INDENT BodyStatement+ DEDENT
@@ -197,8 +201,7 @@ DoctypeStatement ::= DeclarationStart doctype IDENTIFIER? {
 DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
 
 // Template
-TemplateStatement ::= DeclarationStart TemplateDeclarationStatement EOS BodyBlock?
-TemplateDeclarationStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
+TemplateHeadStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
 TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
@@ -207,13 +210,12 @@ TemplateType ::= template | interface | placeholder
 InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BodyBlock?
 InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
 
-ExternalBlockStatement ::= DeclarationStart ExternalBlockDeclarationStatement EOS BodyBlock?
-ExternalBlockDeclarationStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
+ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
 BlockDeclarationTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
 // Eval&Head
-EvalBlockStatement ::= DeclarationStart (eval | head) EOS BodyBlock?
+HeadOrEvalHeadStatement ::= eval | head
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
