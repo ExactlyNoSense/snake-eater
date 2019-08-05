@@ -78,6 +78,26 @@ GlobalStatement ::= GlobalInlineStatement
 	| ExternalBlockStatement
 	| COMMENT_BLOCK
 
+
+//////////////////////////////
+// GLOBAL INLINE STATEMENTS //
+//////////////////////////////
+GlobalInlineStatement ::= (GlobalVerboseInlineStatement | GlobalShortInlineStatement) EOS
+
+GlobalVerboseInlineStatement ::= StatementStart InnerGlobalVerboseInlineStatement
+InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
+	| DecoratorStatement
+	| GlobalVariableStatement
+	| NamespaceStatement
+	| IncludeStatement
+	| ImportStatement
+	| VerboseVoidStatement
+
+GlobalShortInlineStatement ::= ShortVariableStatement
+	| ShortVoidStatement
+
+
+
 BodyBlock ::= INDENT BodyStatement+ DEDENT
 BodyStatement ::= LocalScopeInlineStatement
 	| InternalBlockStatement
@@ -96,20 +116,6 @@ BodyStatement ::= LocalScopeInlineStatement
 	| XmlStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
-
-GlobalInlineStatement ::= (GlobalVerboseInlineStatement | GlobalShortInlineStatement) EOS
-
-GlobalVerboseInlineStatement ::= StatementStart InnerGlobalVerboseInlineStatement
-InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
-	| DecoratorStatement
-	| GlobalVariableStatement
-	| NamespaceStatement
-	| IncludeStatement
-	| ImportStatement
-	| VerboseVoidStatement
-
-GlobalShortInlineStatement ::= ShortVariableStatement
-	| ShortVoidStatement
 
 LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
 LocalScopeInlineDeclarationStatement ::= VariableStatement
