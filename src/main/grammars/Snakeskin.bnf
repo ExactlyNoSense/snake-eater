@@ -288,8 +288,13 @@ ParameterDeclaration ::= IDENTIFIER
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
-ArgumentDeclarationsList ::= ArgumentDeclaration (',' ArgumentDeclaration)*
+{ pin = 1 }
+ArgumentDeclarationsList ::= ArgumentDeclaration (ArgumentDeclarationsListTail)*
+ArgumentDeclarationsListTail ::= ',' ArgumentDeclaration
+{ pin = 1 }
 ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
+{ recoverWhile = ArgumentDeclaration_recover }
+private ArgumentDeclaration_recover ::= !(')' | ',')
 
 // Qualified identifiers
 // For template inheritance
