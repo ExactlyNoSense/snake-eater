@@ -81,6 +81,7 @@ GlobalStatement ::= GlobalInlineStatement | GlobalBlockStatement
 GlobalInlineStatement ::= (GlobalVerboseInlineStatement | GlobalShortInlineStatement) EOS
 
 GlobalVerboseInlineStatement ::= StatementStart InnerGlobalVerboseInlineStatement
+{ pin = 1 }
 InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| DecoratorStatement
 	| GlobalVariableStatement
@@ -97,6 +98,7 @@ GlobalShortInlineStatement ::= ShortVariableStatement
 // GLOBAL BLOCK STATEMENTS //
 /////////////////////////////
 GlobalBlockStatement ::= StatementStart GlobalBlockHead EOS BodyBlock?
+{ pin = 1 }
 GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| ExternalBlockHeadStatement
 	| TemplateHeadStatement
@@ -202,6 +204,7 @@ DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
 
 // Template
 TemplateHeadStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
+{ pin = 2 }
 TemplateDeclarationTail ::= Arguments TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
@@ -211,6 +214,7 @@ InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EO
 InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
 
 ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
+{ pin = 1 }
 BlockDeclarationTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
