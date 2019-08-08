@@ -157,8 +157,13 @@ ShortVariableStatement ::= ':' VariableDeclarationsList
 
 // Global variables
 GlobalVariableStatement ::= global? GlobalVariableDeclarationsList
-GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (',' GlobalVariableDeclaration)*
+{ pin = 1 }
+GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (GlobalVariableDeclarationsListTail)*
+GlobalVariableDeclarationsListTail ::= ',' GlobalVariableDeclaration
+{ pin = 1 }
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
+{ recoverWhile = GlobalVariableDeclaration_recover }
+private GlobalVariableDeclaration_recover ::= !(',' | EOS)
 GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
 
 // Const
