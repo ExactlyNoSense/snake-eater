@@ -205,6 +205,7 @@ OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'
 VoidStatement ::= (DeclarationStart void | '?') Expression
 
 VerboseVoidStatement ::= void Expression
+{ pin = 1 }
 ShortVoidStatement ::= '?' Expression
 
 // Super
