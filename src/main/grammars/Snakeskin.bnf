@@ -95,6 +95,7 @@ InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| IncludeStatement
 	| ImportStatement
 	| VerboseVoidStatement
+{ recoverWhile = InlineStatement_recover}
 
 GlobalShortInlineStatement ::= ShortVariableStatement
 	| ShortVoidStatement
