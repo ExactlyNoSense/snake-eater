@@ -144,10 +144,15 @@ private InlineStatement_recover ::= !EOS
 // Variables
 VariableStatement ::= VarClause VariableDeclarationsList
 VarClause ::= DeclarationStart var | ':'
-VariableDeclarationsList ::= VariableDeclaration (',' VariableDeclaration)*
+VariableDeclarationsList ::= VariableDeclaration (VariableDeclarationsListTail)*
+VariableDeclarationsListTail ::= ',' VariableDeclaration
+{ pin = 1 }
 VariableDeclaration ::= IDENTIFIER ('=' Expression)?
+{ recoverWhile = VariableDeclaration_recover }
+private VariableDeclaration_recover ::= !(',' | EOS)
 
 VerboseVariableStatement ::= var VariableDeclarationsList
+{ pin = 1 }
 ShortVariableStatement ::= ':' VariableDeclarationsList
 
 // Global variables
