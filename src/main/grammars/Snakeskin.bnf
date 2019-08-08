@@ -171,6 +171,7 @@ ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
 NamespaceStatement ::= namespace DefinitionQualifiedIdentifier
+{ pin = 1 }
 
 // Include
 IncludeStatement ::= include Expression RenderAsExpression?
