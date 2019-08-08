@@ -175,6 +175,7 @@ NamespaceStatement ::= namespace DefinitionQualifiedIdentifier
 
 // Include
 IncludeStatement ::= include Expression RenderAsExpression?
+{ pin = 1 }
 RenderAsExpression ::= as (interface | placeholder)
 
 // Import
