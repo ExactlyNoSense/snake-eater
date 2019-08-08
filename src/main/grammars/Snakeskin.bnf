@@ -157,7 +157,6 @@ ShortVariableStatement ::= ':' VariableDeclarationsList
 
 // Global variables
 GlobalVariableStatement ::= global? GlobalVariableDeclarationsList
-{ pin = 1 }
 GlobalVariableDeclarationsList ::= GlobalVariableDeclaration (GlobalVariableDeclarationsListTail)*
 GlobalVariableDeclarationsListTail ::= ',' GlobalVariableDeclaration
 { pin = 1 }
