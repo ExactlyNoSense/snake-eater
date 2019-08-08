@@ -180,7 +180,7 @@ RenderAsExpression ::= as (interface | placeholder)
 
 // Import
 ImportStatement ::= import (ImportClause FromClause | ModuleSpecifier)
-
+{ pin = 1 }
 ImportClause ::= CombinedImport
 	| DefaultImport
 	| NamespaceImport
@@ -188,9 +188,12 @@ ImportClause ::= CombinedImport
 CombinedImport ::= DefaultImport ',' (NamespaceImport | NamedImportsList)
 DefaultImport ::= IDENTIFIER
 NamespaceImport ::= '*' as IDENTIFIER
-NamedImportsList ::= '{' NamedImport (',' NamedImport)* '}'
+NamedImportsList ::= '{' NamedImport (NamedImportsListTail)* '}'
+NamedImportsListTail ::= ',' NamedImport
+{ pin = 1 }
 NamedImport ::= IDENTIFIER (as IDENTIFIER)?
-
+{ recoverWhile = NamedImport_recover }
+private NamedImport_recover ::= !(',' | '}')
 FromClause ::= from ModuleSpecifier
 
 ModuleSpecifier ::= STRING_LITERAL
