@@ -99,8 +99,6 @@ GlobalShortInlineStatement ::= ShortVariableStatement
 /////////////////////////////
 // GLOBAL BLOCK STATEMENTS //
 /////////////////////////////
-GlobalBlockStatement ::= StatementStart GlobalBlockHead EOS BodyBlock?
-{ pin = 1 }
 GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| ExternalBlockHeadStatement
 	| TemplateHeadStatement
