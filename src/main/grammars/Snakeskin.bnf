@@ -72,7 +72,6 @@
 }
 
 Snakeskin ::= GlobalStatement*
-//GlobalStatement ::= GlobalInlineStatement | GlobalBlockStatement
 
 GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
 GlobalVerboseStatement ::= StatementStart (InnerGlobalVerboseInlineStatement EOS | GlobalVerboseBlockStatement)
@@ -84,10 +83,6 @@ GlobalShortStatement ::= GlobalShortInlineStatement EOS
 //////////////////////////////
 // GLOBAL INLINE STATEMENTS //
 //////////////////////////////
-GlobalInlineStatement ::= (GlobalVerboseInlineStatement | GlobalShortInlineStatement) EOS
-
-GlobalVerboseInlineStatement ::= StatementStart InnerGlobalVerboseInlineStatement
-{ pin = 1 }
 InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| DecoratorStatement
 	| GlobalVariableStatement
