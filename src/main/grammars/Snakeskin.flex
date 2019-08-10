@@ -109,10 +109,14 @@ COMMENT_BLOCK = {LINE_COMMENT}
         yybegin(INDENT_BLOCK);
       }
   . {
-            yypushback(yylength());
-            currentDirectiveState = TEMPLATE_DIRECTIVE;
-            yybegin(INDENT_BLOCK);
-          }
+      yypushback(yylength());
+      currentDirectiveState = TEMPLATE_DIRECTIVE;
+      yybegin(INDENT_BLOCK);
+    }
+
+  <<EOF>>  {
+        yybegin(DEDENT_EOF);
+      }
 }
 
 <INDENT_BLOCK> {
@@ -151,7 +155,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
       return DEDENT;
     }
     else {
-      yybegin(YYINITIAL);
+      return null;
     }
   }
 }
