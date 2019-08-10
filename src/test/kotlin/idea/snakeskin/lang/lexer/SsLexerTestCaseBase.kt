@@ -12,6 +12,8 @@ open class SsLexerTestCaseBase : LexerTestCase() {
 
 	override fun createLexer() = SsLexer()
 
+	override fun shouldTrim() = false
+
 	override fun getPathToTestDataFile(extension: String): String {
 		return Paths.get(BASE_PATH, dirPath, getTestName(true) + extension).toString()
 	}
