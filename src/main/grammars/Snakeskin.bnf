@@ -80,6 +80,8 @@ GlobalVerboseBlockStatement ::= GlobalBlockHead EOS BodyBlock?
 
 GlobalShortStatement ::= GlobalShortInlineStatement EOS
 
+private Statement_recover ::= !EOS
+
 //////////////////////////////
 // GLOBAL INLINE STATEMENTS //
 //////////////////////////////
@@ -90,7 +92,7 @@ InnerGlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| IncludeStatement
 	| ImportStatement
 	| VerboseVoidStatement
-{ recoverWhile = InlineStatement_recover}
+{ recoverWhile = Statement_recover}
 
 GlobalShortInlineStatement ::= ShortVariableStatement
 	| ShortVoidStatement
@@ -102,6 +104,7 @@ GlobalShortInlineStatement ::= ShortVariableStatement
 GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| ExternalBlockHeadStatement
 	| TemplateHeadStatement
+{ recoverWhile = Statement_recover }
 
 
 BodyBlock ::= INDENT BodyStatement+ DEDENT
@@ -131,8 +134,6 @@ LocalScopeInlineDeclarationStatement ::= VariableStatement
 	| ThrowStatement
 	| DoctypeStatement
 	| SuperStatement
-
-private InlineStatement_recover ::= !EOS
 
 // Variables
 VariableStatement ::= VarClause VariableDeclarationsList
