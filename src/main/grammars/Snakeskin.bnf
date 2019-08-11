@@ -94,8 +94,8 @@ GlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| VerboseVoidStatement
 { recoverWhile = Statement_recover}
 
-GlobalShortInlineStatement ::= ShortVariableStatement
-	| ShortVoidStatement
+GlobalShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
+{ recoverWhile = Statement_recover }
 
 
 /////////////////////////////
