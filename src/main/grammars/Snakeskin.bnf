@@ -108,8 +108,7 @@ GlobalBlockHead ::= HeadOrEvalHeadStatement
 
 
 BlockBody ::= INDENT BodyStatement+ DEDENT
-BodyStatement ::= LocalScopeInlineStatement
-	| InternalBlockStatement
+BodyStatement_ ::= InternalBlockStatement
 	| ConditionalStatement
 	| SwitchStatement
 	| LoopStatement
@@ -126,18 +125,22 @@ BodyStatement ::= LocalScopeInlineStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
 
-LocalScopeInlineStatement ::= LocalScopeInlineDeclarationStatement EOS
-LocalScopeInlineDeclarationStatement ::= VariableStatement
+BodyStatement ::= VerboseStatement | ShortStatement | XmlStatement | TemplateTextStatement
+VerboseStatement ::= StatementStart (VerboseInlineStatement EOS | VerboseBlockStatement)
+VerboseInlineStatement ::= VerboseVariableStatement
 	| ConstStatement
-	| OutputStatement
-	| VoidStatement
+	| VerboseOutputStatement
+	| VerboseVoidStatement
 	| ThrowStatement
 	| DoctypeStatement
 	| SuperStatement
 
+ShortStatement ::= ShortVariableStatement
+	| ShortOutputStatement
+	| ShortVoidStatement
+
+
 // Variables
-VariableStatement ::= VarClause VariableDeclarationsList
-VarClause ::= DeclarationStart var | ':'
 VariableDeclarationsList ::= VariableDeclaration (VariableDeclarationsListTail)*
 VariableDeclarationsListTail ::= ',' VariableDeclaration
 { pin = 1 }
@@ -160,7 +163,7 @@ private GlobalVariableDeclaration_recover ::= !(',' | EOS)
 GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
 
 // Const
-ConstStatement ::= DeclarationStart const? ConstDeclaration '?'?
+ConstStatement ::= const? ConstDeclaration '?'?
 ConstDeclaration ::= IDENTIFIER '=' Expression
 
 // Namespace
@@ -193,27 +196,22 @@ FromClause ::= from ModuleSpecifier
 ModuleSpecifier ::= STRING_LITERAL
 
 // Output
-OutputStatement ::= DeclarationStart output Expression | '{' Expression '}'
+VerboseOutputStatement ::= output Expression
+ShortOutputStatement ::= '{' Expression '}'
 
 // Void
-VoidStatement ::= (DeclarationStart void | '?') Expression
-
 VerboseVoidStatement ::= void Expression
 { pin = 1 }
 ShortVoidStatement ::= '?' Expression
 
 // Super
-SuperStatement ::= DeclarationStart super
+SuperStatement ::= super
 
 // Throw
-ThrowStatement ::= DeclarationStart throw Expression {
-	pin=2
-}
+ThrowStatement ::= throw Expression
 
 // Doctype
-DoctypeStatement ::= DeclarationStart doctype IDENTIFIER? {
-	pin=2
-}
+DoctypeStatement ::= doctype IDENTIFIER?
 
 // Decorator
 DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
