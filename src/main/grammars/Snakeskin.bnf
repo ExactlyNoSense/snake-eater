@@ -108,24 +108,12 @@ GlobalBlockHead ::= HeadOrEvalHeadStatement
 
 
 BlockBody ::= INDENT BodyStatement+ DEDENT
-BodyStatement_ ::= InternalBlockStatement
-	| ConditionalStatement
-	| SwitchStatement
-	| LoopStatement
-	| IteratorStatement
-	| TryCatchStatement
-	| FuncStatement
-	| TargetStatement
-	| PutInStatement
-	| CallStatement
-	| ReturnStatement
-	| WithStatement
-	| TagStatement
+BodyStatement ::= VerboseStatement
+	| ShortStatement
 	| XmlStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
 
-BodyStatement ::= VerboseStatement | ShortStatement | XmlStatement | TemplateTextStatement
 VerboseStatement ::= StatementStart (VerboseInlineStatement EOS | VerboseBlockStatement)
 VerboseInlineStatement ::= VerboseVariableStatement
 	| ConstStatement
@@ -134,10 +122,29 @@ VerboseInlineStatement ::= VerboseVariableStatement
 	| ThrowStatement
 	| DoctypeStatement
 	| SuperStatement
+{ recoverWhile = Statement_recover }
 
-ShortStatement ::= ShortVariableStatement
+VerboseBlockStatement ::= BlockStatement
+	| ConditionalStatement
+	| SwitchStatement
+	| LoopStatement
+	| IteratorStatement
+	| TryCatchStatement
+	| FuncStatement
+	| TargetStatement
+	| VerbosePutInStatement
+	| VerboseCallStatement
+	| ReturnStatement
+	| WithStatement
+	| TagStatement
+
+ShortStatement ::= ShortInlineStatement | ShortBlockStatement
+ShortInlineStatement ::= ShortVariableStatement
 	| ShortOutputStatement
 	| ShortVoidStatement
+
+ShortBlockStatement ::= ShortPutInStatement
+	| ShortCallStatement
 
 
 // Variables
@@ -224,8 +231,7 @@ TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 
 // Blocks
-InternalBlockStatement ::= DeclarationStart InternalBlockDeclarationStatement EOS BlockBody?
-InternalBlockDeclarationStatement ::= block IDENTIFIER BlockDeclarationTail?
+BlockStatement ::= block IDENTIFIER BlockDeclarationTail? EOS BlockBody?
 
 ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
 { pin = 1 }
@@ -237,14 +243,14 @@ HeadOrEvalHeadStatement ::= eval | head
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
-MainConditionalStatement ::= DeclarationStart (if | unless) Expression EOS BlockBody?
-SecondaryConditionalStatement ::= DeclarationStart else (if | unless) Expression EOS BlockBody?
-DefaultConditionalStatement ::= DeclarationStart else EOS BlockBody?
+MainConditionalStatement ::= (if | unless) Expression EOS BlockBody?
+SecondaryConditionalStatement ::= StatementStart else (if | unless) Expression EOS BlockBody?
+DefaultConditionalStatement ::= StatementStart else EOS BlockBody?
 
-SwitchStatement ::= DeclarationStart switch Expression EOS SwitchBlock?
-SwitchBlock ::= INDENT CaseStatement+ DefaultStatement? DEDENT
-CaseStatement ::= (DeclarationStart case | '>') Expression EOS BlockBody?
-DefaultStatement ::= DeclarationStart default EOS BlockBody?
+SwitchStatement ::= switch Expression EOS SwitchBlockBody?
+SwitchBlockBody ::= INDENT CaseStatement+ DefaultCaseStatement? DEDENT
+CaseStatement ::= (StatementStart case | '>') Expression EOS BlockBody?
+DefaultCaseStatement ::= StatementStart default EOS BlockBody?
 
 // Loops
 LoopStatement ::= ForLoopStatement
@@ -252,49 +258,52 @@ LoopStatement ::= ForLoopStatement
 	| WhileLoopStatement
 	| DoWhileLoopStatement
 
-ForLoopStatement ::= DeclarationStart for Expression ';' Expression ';' Expression EOS LoopBlock?
-ForInLoopStatement ::= DeclarationStart for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBlock?
-WhileLoopStatement ::= DeclarationStart while Expression EOS LoopBlock?
-DoWhileLoopStatement ::= DeclarationStart do EOS LoopBlock? (DeclarationStart while EOS)?
+ForLoopStatement ::= for Expression ';' Expression ';' Expression EOS LoopBlockBody?
+ForInLoopStatement ::= for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBlockBody?
+WhileLoopStatement ::= while Expression EOS LoopBlockBody?
+DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while EOS)?
 
-LoopBlock ::= INDENT LoopBodyStatement+ DEDENT
+LoopBlockBody ::= INDENT LoopBodyStatement+ DEDENT
 LoopBodyStatement ::= BodyStatement | LoopControlStatement
-LoopControlStatement ::= DeclarationStart (break | continue)
+LoopControlStatement ::= StatementStart (break | continue)
 
 // Iterators
-IteratorStatement ::= DeclarationStart (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBlock?
+IteratorStatement ::= (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBlockBody?
 
 // try/catch/finally
 TryCatchStatement ::= TryStatement CatchFinallyStatemnt?
-TryStatement ::= DeclarationStart try EOS BlockBody?
+TryStatement ::= try EOS BlockBody?
 CatchFinallyStatemnt ::= CatchStatement FinallyStatement?
-CatchStatement ::= DeclarationStart catch IDENTIFIER EOS BlockBody?
-FinallyStatement ::= DeclarationStart finally EOS BlockBody?
+CatchStatement ::= StatementStart catch IDENTIFIER EOS BlockBody?
+FinallyStatement ::= StatementStart finally EOS BlockBody?
 
 // Function
 FuncStatement ::= FuncDeclaration EOS BlockBody?
-FuncDeclaration ::= DeclarationStart func ArgumentDeclarationsList? | '(' ')' ['=>' ArgumentDeclarationsList?]
+FuncDeclaration ::= func ArgumentDeclarationsList? | '(' ')' ['=>' ArgumentDeclarationsList?]
 
 // Target
-TargetStatement ::= DeclarationStart target Expression (as IDENTIFIER)? EOS TargetBodyStatement?
-TargetBodyStatement ::= INDENT PutInStatement+ DEDENT
+TargetStatement ::= target Expression (as IDENTIFIER)? EOS TargetBlockBody?
+TargetBlockBody ::= INDENT CallBodyStatement+ DEDENT
 
 // PutIn
-PutInStatement ::= ((VarClause | DeclarationStart) PUT_IN | '*') QualifiedIdentifier? EOS BlockBody?
+VerbosePutInStatement ::= var? PUT_IN QualifiedIdentifier? EOS BlockBody?
+ShortPutInStatement ::= ':' PUT_IN QualifiedIdentifier? EOS BlockBody?
+SuperShortPutInStatement ::= '*' QualifiedIdentifier? EOS BlockBody?
 
 // Call
-CallStatement ::= (DeclarationStart call | '+=') Expression EOS CallBlock?
-CallBlock ::= INDENT CallBodyStatement+ DEDENT
-CallBodyStatement ::= PutInStatement | BodyStatement
+VerboseCallStatement ::= call Expression EOS CallBlockBody?
+ShortCallStatement ::= '+=' Expression EOS CallBlockBody?
+CallBlockBody ::= INDENT CallBodyStatement+ DEDENT
+CallBodyStatement ::= SuperShortPutInStatement | BodyStatement
 
 // Return
-ReturnStatement ::= DeclarationStart return Expression? EOS BlockBody?
+ReturnStatement ::= return Expression? EOS BlockBody?
 
 // With
-WithStatement ::= DeclarationStart with Expression EOS BlockBody?
+WithStatement ::= with Expression EOS BlockBody?
 
 // Tags
-TagStatement ::= DeclarationStart tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BlockBody?
+TagStatement ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BlockBody?
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
@@ -319,7 +328,6 @@ DefinitionQualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIde
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
-DeclarationStart ::= SHARP | MINUS
 StatementStart ::= SHARP | MINUS
 
 // XML
