@@ -310,7 +310,7 @@ ArgumentDeclarationsListTail ::= ',' ArgumentDeclaration
 { pin = 1 }
 ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
 { recoverWhile = ArgumentDeclaration_recover }
-private ArgumentDeclaration_recover ::= !(')' | ',')
+private ArgumentDeclaration_recover ::= !(')' | ',' | EOS)
 
 // Qualified identifiers
 // For template inheritance
