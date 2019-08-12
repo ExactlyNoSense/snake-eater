@@ -231,11 +231,13 @@ TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 
 // Blocks
-BlockStatement ::= block IDENTIFIER BlockDeclarationTail? EOS BlockBody?
+BlockStatement ::= BlockHeadStatement EOS BlockBody?
+BlockHeadStatement ::= block IDENTIFIER BlockHeadTail?
+{ pin = 1; recoverWhile = Statement_recover }
 
-ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockDeclarationTail?
+ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockHeadTail?
 { pin = 1 }
-BlockDeclarationTail ::= Arguments BlockSelfCall?
+BlockHeadTail ::= Arguments BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
 // Eval&Head
