@@ -244,10 +244,15 @@ BlockSelfCall ::=  ('=>' Expression)
 HeadOrEvalHeadStatement ::= eval | head
 
 // Conditionals
-ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement* DefaultConditionalStatement?
-MainConditionalStatement ::= (if | unless) Expression EOS BlockBody?
-SecondaryConditionalStatement ::= StatementStart else (if | unless) Expression EOS BlockBody?
-DefaultConditionalStatement ::= StatementStart else EOS BlockBody?
+ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement*
+MainConditionalStatement ::= MainConditionalHead EOS BlockBody?
+MainConditionalHead ::= (if | unless) Expression
+{ pin = 1; recoverWhile = Statement_recover }
+SecondaryConditionalStatement ::= StatementStart SecondaryConditionalHead EOS BlockBody?
+{ pin = 1 }
+SecondaryConditionalHead ::= else SecondaryConditionalHeadTail?
+{ pin = 1; recoverWhile = Statement_recover }
+SecondaryConditionalHeadTail ::= (if | unless) Expression
 
 SwitchStatement ::= switch Expression EOS SwitchBlockBody?
 SwitchBlockBody ::= INDENT CaseStatement+ DefaultCaseStatement? DEDENT
