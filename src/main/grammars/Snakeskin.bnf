@@ -81,6 +81,7 @@ GlobalVerboseBlockStatement ::= GlobalBlockHead EOS BlockBody?
 GlobalShortStatement ::= GlobalShortInlineStatement EOS
 
 private Statement_recover ::= !EOS
+private Body_recover ::= !DEDENT
 
 //////////////////////////////
 // GLOBAL INLINE STATEMENTS //
