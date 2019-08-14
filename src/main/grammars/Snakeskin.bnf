@@ -108,13 +108,16 @@ GlobalBlockHead ::= HeadOrEvalHeadStatement
 
 
 BlockBody ::= INDENT BodyStatement+ DEDENT
+{ pin = 1 }
 BodyStatement ::= VerboseStatement
 	| ShortStatement
 	| XmlStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
+{ recoverWhile = Body_recover }
 
 VerboseStatement ::= StatementStart (VerboseInlineStatement EOS | VerboseBlockStatement)
+{ pin = 1 }
 VerboseInlineStatement ::= VerboseVariableStatement
 	| ConstStatement
 	| VerboseOutputStatement
