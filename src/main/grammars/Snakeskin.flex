@@ -97,7 +97,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {WS_EOL}  { currentIndent = 0; }
 
   // '-' and other special characters that start control directives
-  "-" | "#" | ":" | "?" | "(" | "*" | "+" {
+  "-" | "#" | ":" | "?" | "(" | "*" | "+" | ">"  {
         yypushback(yylength());
         currentDirectiveState = CONTROL_DIRECTIVE;
         yybegin(INDENT_BLOCK);
