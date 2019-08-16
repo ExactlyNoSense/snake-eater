@@ -259,10 +259,28 @@ SecondaryConditionalHead ::= else SecondaryConditionalHeadTail?
 { pin = 1; recoverWhile = Statement_recover }
 SecondaryConditionalHeadTail ::= (if | unless) Expression
 
-SwitchStatement ::= switch Expression EOS SwitchBlockBody?
-SwitchBlockBody ::= INDENT CaseStatement+ DefaultCaseStatement? DEDENT
-CaseStatement ::= (StatementStart case | '>') Expression EOS BlockBody?
-DefaultCaseStatement ::= StatementStart default EOS BlockBody?
+
+SwitchStatement ::= SwitchHead EOS SwitchBlockBody?
+SwitchHead ::= switch Expression
+{ pin = 1; recoverWhile = Statement_recover }
+SwitchBlockBody ::= INDENT SwitchBodyStatements DEDENT
+{ pin = 1}
+SwitchBodyStatements ::= SwitchBodyStatement+
+{ recoverWhile = Body_recover }
+
+SwitchBodyStatement ::= SwitchCaseStatement EOS BlockBody?
+SwitchCaseStatement ::= VerboseSwitchCaseStatement | ShortSwitchCaseStatement
+{ recoverWhile = Statement_recover }
+
+VerboseSwitchCaseStatement ::= StatementStart (SwitchCaseHead | DefaultSwitchCaseHead)
+{ pin = 1 }
+SwitchCaseHead ::= case Expression
+{ pin = 1 }
+DefaultSwitchCaseHead ::= default
+
+ShortSwitchCaseStatement ::= '>' Expression
+{ pin = 1 }
+
 
 // Loops
 LoopStatement ::= ForLoopStatement
