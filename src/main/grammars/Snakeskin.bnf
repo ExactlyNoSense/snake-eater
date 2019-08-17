@@ -312,11 +312,17 @@ IteratorHead ::= (FOREACH | FORIN) Expression '=>' Parameters
 { pin = 1; recoverWhile = Statement_recover }
 
 // try/catch/finally
-TryCatchStatement ::= TryStatement CatchFinallyStatemnt?
-TryStatement ::= try EOS BlockBody?
-CatchFinallyStatemnt ::= CatchStatement FinallyStatement?
-CatchStatement ::= StatementStart catch IDENTIFIER EOS BlockBody?
-FinallyStatement ::= StatementStart finally EOS BlockBody?
+TryCatchStatement ::= TryStatement CatchFinallyStatement?
+TryStatement ::= TryHead EOS BlockBody?
+TryHead ::= try
+{ recoverWhile = Statement_recover }
+CatchFinallyStatement ::= CatchStatement FinallyStatement?
+CatchStatement ::= StatementStart CatchHead EOS BlockBody?
+CatchHead ::= catch IDENTIFIER
+{ pin = 1; recoverWhile = Statement_recover }
+FinallyStatement ::= StatementStart FinallyHead EOS BlockBody?
+FinallyHead ::= finally
+{ recoverWhile = Statement_recover }
 
 // Function
 FuncStatement ::= FuncDeclaration EOS BlockBody?
