@@ -307,7 +307,9 @@ LoopBodyStatement ::= BodyStatement | LoopControlStatement
 LoopControlStatement ::= StatementStart (break | continue)
 
 // Iterators
-IteratorStatement ::= (FOREACH | FORIN) Expression '=>' Parameters EOS LoopBlockBody?
+IteratorStatement ::= IteratorHead EOS LoopBlockBody?
+IteratorHead ::= (FOREACH | FORIN) Expression '=>' Parameters
+{ pin = 1; recoverWhile = Statement_recover }
 
 // try/catch/finally
 TryCatchStatement ::= TryStatement CatchFinallyStatemnt?
