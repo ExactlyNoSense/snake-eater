@@ -284,16 +284,25 @@ ShortSwitchCaseStatement ::= '>' Expression
 
 // Loops
 LoopStatement ::= ForLoopStatement
-	| ForInLoopStatement
 	| WhileLoopStatement
 	| DoWhileLoopStatement
 
-ForLoopStatement ::= for Expression ';' Expression ';' Expression EOS LoopBlockBody?
-ForInLoopStatement ::= for (var | const | global | ':' | '-') IDENTIFIER in Expression EOS LoopBlockBody?
-WhileLoopStatement ::= while Expression EOS LoopBlockBody?
-DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while EOS)?
+ForLoopStatement ::= ForLoopHead EOS LoopBlockBody?
+ForLoopHead ::= for (CommonForLoopHead | ForInLoopHead)
+{ pin = 1; recoverWhile = Statement_recover }
+CommonForLoopHead ::= Expression ';' Expression ';' Expression
+ForInLoopHead ::= (var | const | global | ':' | '-') IDENTIFIER in Expression
 
-LoopBlockBody ::= INDENT LoopBodyStatement+ DEDENT
+WhileLoopStatement ::= WhileLoopHead EOS LoopBlockBody?
+WhileLoopHead ::= while Expression
+{ pin = 1; recoverWhile = Statement_recover }
+DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while EOS)?
+{ pin = 1 }
+
+LoopBlockBody ::= INDENT LoopBodyStatements DEDENT
+{ pin = 1 }
+LoopBodyStatements ::= LoopBodyStatement+
+{ recoverWhile = Body_recover }
 LoopBodyStatement ::= BodyStatement | LoopControlStatement
 LoopControlStatement ::= StatementStart (break | continue)
 
