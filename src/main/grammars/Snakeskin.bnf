@@ -303,7 +303,7 @@ LoopBlockBody ::= INDENT LoopBodyStatements DEDENT
 { pin = 1 }
 LoopBodyStatements ::= LoopBodyStatement+
 { recoverWhile = Body_recover }
-LoopBodyStatement ::= BodyStatement | LoopControlStatement
+LoopBodyStatement ::= LoopControlStatement | BodyStatement
 LoopControlStatement ::= StatementStart (break | continue)
 
 // Iterators
