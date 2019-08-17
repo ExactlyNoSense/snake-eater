@@ -296,7 +296,7 @@ ForInLoopHead ::= (var | const | global | ':' | '-') IDENTIFIER in Expression
 WhileLoopStatement ::= WhileLoopHead EOS LoopBlockBody?
 WhileLoopHead ::= while Expression
 { pin = 1; recoverWhile = Statement_recover }
-DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while EOS)?
+DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while Expression EOS)?
 { pin = 1 }
 
 LoopBlockBody ::= INDENT LoopBodyStatements DEDENT
