@@ -335,8 +335,9 @@ ShortFuncHead ::= '(' ')' ['=>' ArgumentDeclarationsList?]
 { pin = 1; recoverWhile = Statement_recover }
 
 // Target
-TargetStatement ::= target Expression (as IDENTIFIER)? EOS TargetBlockBody?
-TargetBlockBody ::= INDENT CallBodyStatement+ DEDENT
+TargetStatement ::= TargetHead EOS CallBlockBody?
+TargetHead ::= target Expression [as IDENTIFIER]
+{ pin = 1; recoverWhile = Statement_recover }
 
 // PutIn
 VerbosePutInStatement ::= var? PUT_IN QualifiedIdentifier? EOS BlockBody?
@@ -346,7 +347,11 @@ SuperShortPutInStatement ::= '*' QualifiedIdentifier? EOS BlockBody?
 // Call
 VerboseCallStatement ::= call Expression EOS CallBlockBody?
 ShortCallStatement ::= '+=' Expression EOS CallBlockBody?
-CallBlockBody ::= INDENT CallBodyStatement+ DEDENT
+
+CallBlockBody ::= INDENT CallBodyStatements DEDENT
+{ pin = 1 }
+CallBodyStatements ::= CallBodyStatement+
+{ recoverWhile = Body_recover }
 CallBodyStatement ::= SuperShortPutInStatement | BodyStatement
 
 // Return
