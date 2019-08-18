@@ -135,7 +135,7 @@ VerboseBlockStatement ::= BlockStatement
 	| LoopStatement
 	| IteratorStatement
 	| TryCatchStatement
-	| FuncStatement
+	| VerboseFuncStatement
 	| TargetStatement
 	| VerbosePutInStatement
 	| VerboseCallStatement
@@ -148,7 +148,8 @@ ShortInlineStatement ::= ShortVariableStatement
 	| ShortOutputStatement
 	| ShortVoidStatement
 
-ShortBlockStatement ::= ShortPutInStatement
+ShortBlockStatement ::= ShortFuncStatement
+	| ShortPutInStatement
 	| ShortCallStatement
 
 
@@ -325,8 +326,13 @@ FinallyHead ::= finally
 { recoverWhile = Statement_recover }
 
 // Function
-FuncStatement ::= FuncDeclaration EOS BlockBody?
-FuncDeclaration ::= func ArgumentDeclarationsList? | '(' ')' ['=>' ArgumentDeclarationsList?]
+VerboseFuncStatement ::= VerboseFuncHead EOS BlockBody?
+VerboseFuncHead ::= func ArgumentDeclarationsList?
+{ pin = 1; recoverWhile = Statement_recover }
+
+ShortFuncStatement ::= ShortFuncHead EOS BlockBody?
+ShortFuncHead ::= '(' ')' ['=>' ArgumentDeclarationsList?]
+{ pin = 1; recoverWhile = Statement_recover }
 
 // Target
 TargetStatement ::= target Expression (as IDENTIFIER)? EOS TargetBlockBody?
