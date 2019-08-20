@@ -368,7 +368,9 @@ ReturnHead ::= return Expression?
 { pin = 1; recoverWhile = Statement_recover }
 
 // With
-WithStatement ::= with Expression EOS BlockBody?
+WithStatement ::= WithHead EOS BlockBody?
+WithHead ::= with Expression
+{ pin = 1; recoverWhile = Statement_recover }
 
 // Tags
 TagStatement ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BlockBody?
