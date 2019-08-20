@@ -363,7 +363,9 @@ CallBodyStatements ::= CallBodyStatement+
 CallBodyStatement ::= SuperShortPutInStatement | BodyStatement
 
 // Return
-ReturnStatement ::= return Expression? EOS BlockBody?
+ReturnStatement ::= ReturnHead EOS BlockBody?
+ReturnHead ::= return Expression?
+{ pin = 1; recoverWhile = Statement_recover }
 
 // With
 WithStatement ::= with Expression EOS BlockBody?
