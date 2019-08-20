@@ -340,9 +340,17 @@ TargetHead ::= target Expression [as IDENTIFIER]
 { pin = 1; recoverWhile = Statement_recover }
 
 // PutIn
-VerbosePutInStatement ::= var? PUT_IN QualifiedIdentifier? EOS BlockBody?
-ShortPutInStatement ::= ':' PUT_IN QualifiedIdentifier? EOS BlockBody?
-SuperShortPutInStatement ::= '*' QualifiedIdentifier? EOS BlockBody?
+VerbosePutInStatement ::= VerbosePutInHead EOS BlockBody?
+VerbosePutInHead ::= var? PUT_IN QualifiedIdentifier?
+{ pin = 2; recoverWhile = Statement_recover }
+
+ShortPutInStatement ::= ShortPutInHead EOS BlockBody?
+ShortPutInHead ::= ':' PUT_IN QualifiedIdentifier?
+{ pin = 1; recoverWhile = Statement_recover }
+
+SuperShortPutInStatement ::= SuperShortPutInHead EOS BlockBody?
+SuperShortPutInHead ::= '*' QualifiedIdentifier?
+{ pin = 1; recoverWhile = Statement_recover }
 
 // Call
 VerboseCallStatement ::= call Expression EOS CallBlockBody?
