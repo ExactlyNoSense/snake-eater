@@ -373,7 +373,9 @@ WithHead ::= with Expression
 { pin = 1; recoverWhile = Statement_recover }
 
 // Tags
-TagStatement ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BlockBody?
+TagStatement ::= TagHead EOS BlockBody?
+TagHead ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsList?
+{ pin = 1; recoverWhile = Statement_recover }
 
 // Parameters
 Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
@@ -401,11 +403,19 @@ QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 StatementStart ::= SHARP | MINUS
 
 // XML
-XmlStatement ::= TagDeclarationStart XmlTagDeclaration? XmlSelector? XmlAttrsDeclaration? EOS BlockBody?
+XmlStatement ::= TagDeclarationStart XmlHead EOS BlockBody?
+{ pin = 1 }
+XmlHead ::= XmlTagDeclaration? XmlSelector? XmlAttrsList?
+{ recoverWhile = Statement_recover }
 XmlTagDeclaration ::= TAG_NAME | '?'
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
-XmlAttrsDeclaration ::= XmlAttrDeclaration ('|' XmlAttrDeclaration)*
-XmlAttrDeclaration ::= ATTR_NAME ['=' ATTR_VALUE?]
+
+XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
+XmlAttrsListTail ::= '|' XmlAttrDeclaration
+{ pin = 1 }
+XmlAttrDeclaration ::= (ATTR_NAME | TAG_NAME) ['=' ATTR_VALUE?]
+{ recoverWhile = XmlAttrDeclaration_recover }
+private XmlAttrDeclaration_recover ::= !('|' | EOS)
 
 TagDeclarationStart ::= LT
 
