@@ -312,7 +312,20 @@ COMMENT_BLOCK = {LINE_COMMENT}
 
 // Multiline declaration
   {WS_LINE} "&"         { yybegin(LINE_SPLITTING); }
-  {WS} "."              { yybegin(END_OF_LINE_SPLITTING); }
+  {WS_LINE} "."  {
+        if (!zzIsMultilineMode) {
+          yypushback(1);    // returns DOT to stream
+          return WHITE_SPACE;
+        }
+        yybegin(END_OF_LINE_SPLITTING);
+      }
+  {WS_EOL} "."  {
+        if (!zzIsMultilineMode) {
+          yypushback(1);    // returns DOT to stream
+          return endStatement(false);
+        }
+        yybegin(END_OF_LINE_SPLITTING);
+      }
 
   {WS_EOL}  {
     if (zzIsMultilineMode) {
