@@ -68,6 +68,9 @@
 		AT_AT_BACK  = '@@['
 		BRACE_OPEN_OPEN = '{{'
 		BRACE_CLOSE_CLOSE = '}}'
+		LT_LT_EQ    = '<<='
+		GT_GT_EQ    = '>>='
+		GT_GT_GT_EQ = '>>>='
 	]
 }
 
@@ -427,6 +430,7 @@ TemplateInterpolationStatement ::= '{{' TEMPLATE_INTERPOLATION '}}'
 
 // Expressions
 Expression ::= AssignmentExpression
+	| AssignmentOperatorExpression
 	| RelationExpression
 	| EqualityExpression
 	| AddGroup
@@ -436,7 +440,10 @@ Expression ::= AssignmentExpression
 	| TernaryExpression
 	| MemberExpression
 
-AssignmentExpression ::= Expression '=' Expression { rightAssociative=true }
+AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
+
+AssignmentOperatorExpression ::= Expression AssignmentOperator Expression { rightAssociative = true }
+AssignmentOperator ::= '+=' | '-=' | '*=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '>>>='
 
 RelationExpression ::= Expression RelationOperators Expression
 RelationOperators ::= '<' | '>' | '<=' | '>='

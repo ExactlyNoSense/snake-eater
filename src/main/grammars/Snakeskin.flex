@@ -218,6 +218,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "$"                   { return DOLLAR; }
   "@["                  { return AT_BRACK; }
   "@@["                 { return AT_AT_BACK; }
+  "<<="                 { return LT_LT_EQ; }
+  ">>="                 { return GT_GT_EQ; }
+  ">>>="                { return GT_GT_GT_EQ; }
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }
