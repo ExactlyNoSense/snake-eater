@@ -462,7 +462,7 @@ ShiftOperator ::= '<<' | '>>' | '>>>'
 private AddGroup ::= PlusExpression | MinusExpression
 private BooleanGroup ::= IsNotExpression | XorExpression | AndExpression | OrExpression
 private MulGroup ::= MulExpression | DivExpression | RemainderExpression
-private BitGroup ::= BitAndExpression | BitOrExpression | BitXorExpression
+private BitGroup ::= BitNotExpression | BitAndExpression | BitOrExpression | BitXorExpression
 private UnaryGroup ::= UnaryPlusExpression | UnaryMinusExpression
 private PrimaryGroup ::= LiteralExpression
 	| ArrayLiteralExpression
@@ -482,6 +482,7 @@ MulExpression ::= Expression '*' Expression
 DivExpression ::= Expression '/' Expression
 RemainderExpression ::= Expression '%' Expression
 
+BitNotExpression ::= '~' Expression
 BitAndExpression ::= Expression '&' Expression
 BitOrExpression ::= Expression '|' Expression
 BitXorExpression ::= Expression '^' Expression
