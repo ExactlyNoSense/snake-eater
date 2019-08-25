@@ -71,6 +71,9 @@
 		LT_LT_EQ    = '<<='
 		GT_GT_EQ    = '>>='
 		GT_GT_GT_EQ = '>>>='
+		LT_LT       = '<<'
+		GT_GT       = '>>'
+		GT_GT_GT    = '>>>'
 	]
 }
 
@@ -433,6 +436,7 @@ Expression ::= AssignmentExpression
 	| AssignmentOperatorExpression
 	| RelationExpression
 	| EqualityExpression
+	| ShiftExpression
 	| AddGroup
 	| BooleanGroup
 	| MulGroup
@@ -451,6 +455,9 @@ RelationOperators ::= '<' | '>' | '<=' | '>='
 
 EqualityExpression ::= Expression EqualityOperators Expression
 EqualityOperators ::= '==' | '!=' | '===' | '!=='
+
+ShiftExpression ::= Expression ShiftOperator Expression
+ShiftOperator ::= '<<' | '>>' | '>>>'
 
 private AddGroup ::= PlusExpression | MinusExpression
 private BooleanGroup ::= IsNotExpression | XorExpression | AndExpression | OrExpression

@@ -221,6 +221,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "<<="                 { return LT_LT_EQ; }
   ">>="                 { return GT_GT_EQ; }
   ">>>="                { return GT_GT_GT_EQ; }
+  "<<"                  { return LT_LT; }
+  ">>"                  { return GT_GT; }
+  ">>>"                 { return GT_GT_GT; }
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }
