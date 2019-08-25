@@ -436,6 +436,7 @@ Expression ::= AssignmentExpression
 	| AddGroup
 	| BooleanGroup
 	| MulGroup
+	| BitGroup
 	| UnaryGroup
 	| TernaryExpression
 	| MemberExpression
@@ -454,6 +455,7 @@ EqualityOperators ::= '==' | '!=' | '===' | '!=='
 private AddGroup ::= PlusExpression | MinusExpression
 private BooleanGroup ::= IsNotExpression | XorExpression | AndExpression | OrExpression
 private MulGroup ::= MulExpression | DivExpression | RemainderExpression
+private BitGroup ::= BitAndExpression | BitOrExpression | BitXorExpression
 private UnaryGroup ::= UnaryPlusExpression | UnaryMinusExpression
 private PrimaryGroup ::= LiteralExpression
 	| ArrayLiteralExpression
@@ -472,6 +474,10 @@ OrExpression ::= Expression '||' Expression
 MulExpression ::= Expression '*' Expression
 DivExpression ::= Expression '/' Expression
 RemainderExpression ::= Expression '%' Expression
+
+BitAndExpression ::= Expression '&' Expression
+BitOrExpression ::= Expression '|' Expression
+BitXorExpression ::= Expression '^' Expression
 
 UnaryPlusExpression ::= '+' Expression
 UnaryMinusExpression ::= '-' Expression
