@@ -503,8 +503,14 @@ IdentifierGroup ::= GLOBAL_IDENTIFIER
  | IDENTIFIER
 IdentifierOrWithIdentifier ::= IDENTIFIER | WITH_IDENTIFIER
 
-ArrayLiteralExpression ::= '[' ElementsList ']'
-ElementsList ::= Expression (',' Expression)*
+ArrayLiteralExpression ::= '[' ArrayElementsList? ']'
+{ pin = 1 }
+ArrayElementsList ::= ArrayElement? ElementsListTail*
+ElementsListTail ::= ',' ArrayElement?
+{ pin = 1 }
+ArrayElement ::= Expression
+{ recoverWhile = ArrayElement_recover }
+private ArrayElement_recover ::= !(',' | ']' | EOS)
 
 ObjectLiteralExpression ::= '{' PropertyAssignment '}'
 PropertyAssignment ::= PropertyName ':' Expression
