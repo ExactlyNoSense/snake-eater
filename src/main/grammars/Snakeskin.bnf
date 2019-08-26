@@ -512,9 +512,15 @@ ArrayElement ::= Expression
 { recoverWhile = ArrayElement_recover }
 private ArrayElement_recover ::= !(',' | ']' | EOS)
 
-ObjectLiteralExpression ::= '{' PropertyAssignment '}'
+ObjectLiteralExpression ::= '{' PropertiesList? '}'
+{ pin = 1 }
+PropertiesList ::= PropertyAssignment PropertiesListTail*
+PropertiesListTail ::= ',' PropertyAssignment
+{ pin = 1 }
 PropertyAssignment ::= PropertyName ':' Expression
+{ recoverWhile = PropertyAssignment_recover }
 PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
+private PropertyAssignment_recover ::= !(',' | '}' | EOS)
 
 ParenthesesExpression ::= '(' Expression ')'
 
