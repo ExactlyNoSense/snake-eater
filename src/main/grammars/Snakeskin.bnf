@@ -441,6 +441,8 @@ Expression ::= AssignmentExpression
 	| BooleanGroup
 	| MulGroup
 	| BitGroup
+	| PostfixGroup
+	| PrefixGroup
 	| UnaryGroup
 	| TernaryExpression
 	| MemberExpression
@@ -463,6 +465,8 @@ private AddGroup ::= PlusExpression | MinusExpression
 private BooleanGroup ::= IsNotExpression | XorExpression | AndExpression | OrExpression
 private MulGroup ::= MulExpression | DivExpression | RemainderExpression
 private BitGroup ::= BitNotExpression | BitAndExpression | BitOrExpression | BitXorExpression
+private PostfixGroup ::= PostIncrementExpression | PostDecrementExpression
+private PrefixGroup ::= PreIncrementExpression | PreDecrementExpression
 private UnaryGroup ::= UnaryPlusExpression | UnaryMinusExpression
 private PrimaryGroup ::= LiteralExpression
 	| ArrayLiteralExpression
@@ -486,6 +490,12 @@ BitNotExpression ::= '~' Expression
 BitAndExpression ::= Expression '&' Expression
 BitOrExpression ::= Expression '|' Expression
 BitXorExpression ::= Expression '^' Expression
+
+PostIncrementExpression ::= Expression '++'
+PostDecrementExpression ::= Expression '--'
+
+PreIncrementExpression ::= '++' Expression
+PreDecrementExpression ::= '--' Expression
 
 UnaryPlusExpression ::= '+' Expression
 UnaryMinusExpression ::= '-' Expression
