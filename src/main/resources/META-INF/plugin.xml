@@ -13,7 +13,14 @@
 
     <extensions defaultExtensionNs="com.intellij">
 		<fileTypeFactory implementation="idea.snakeskin.lang.SsFileTypeFactory"/>
+
+		<!-- Parser -->
+
 		<lang.parserDefinition language="Snakeskin" implementationClass="idea.snakeskin.lang.parser.SnakeskinParserDefinition"/>
+
+		<!-- Syntax Highlighter -->
+
+		<lang.syntaxHighlighterFactory language="Snakeskin" implementationClass="idea.snakeskin.ide.highlight.SsSyntaxHighlighterFactory"/>
     </extensions>
 
     <actions>
