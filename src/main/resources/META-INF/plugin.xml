@@ -21,6 +21,10 @@
 		<!-- Syntax Highlighter -->
 
 		<lang.syntaxHighlighterFactory language="Snakeskin" implementationClass="idea.snakeskin.ide.highlight.SsSyntaxHighlighterFactory"/>
+
+		<!-- Color Settings -->
+
+		<colorSettingsPage implementation="idea.snakeskin.ide.color.SsColorSettingsPage"/>
     </extensions>
 
     <actions>
