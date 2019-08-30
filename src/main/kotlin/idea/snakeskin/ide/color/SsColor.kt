@@ -6,7 +6,9 @@ import com.intellij.openapi.options.colors.AttributesDescriptor
 
 enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 	IDENTIFIER("identifier", DefaultLanguageHighlighterColors.IDENTIFIER),
-	STRING("string", DefaultLanguageHighlighterColors.STRING);
+	STRING("string", DefaultLanguageHighlighterColors.STRING),
+	NUMBER("Number", DefaultLanguageHighlighterColors.NUMBER),
+	;
 
 	val textAttributesKey = TextAttributesKey.createTextAttributesKey("idea.snakeskin.$name", fallback)
 	val attributesDescriptor = AttributesDescriptor(uiName, textAttributesKey)

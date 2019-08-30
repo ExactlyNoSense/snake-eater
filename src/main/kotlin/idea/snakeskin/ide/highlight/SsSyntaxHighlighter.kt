@@ -13,6 +13,7 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 		fun map(tokenType: IElementType): SsColor? = when (tokenType) {
 			IDENTIFIER -> SsColor.IDENTIFIER
 			STRING_LITERAL -> SsColor.STRING
+			NUMERIC_LITERAL -> SsColor.NUMBER
 
 			else -> null
 		}
