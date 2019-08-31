@@ -11,7 +11,7 @@ import idea.snakeskin.lang.psi.SsElementTypes.*
 class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 	companion object {
 		fun map(tokenType: IElementType): SsColor? = when (tokenType) {
-			IDENTIFIER -> SsColor.IDENTIFIER
+			IDENTIFIER, WITH_IDENTIFIER, GLOBAL_IDENTIFIER -> SsColor.IDENTIFIER
 			STRING_LITERAL -> SsColor.STRING
 			NUMERIC_LITERAL -> SsColor.NUMBER
 
