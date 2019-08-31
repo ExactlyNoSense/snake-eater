@@ -15,6 +15,12 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			STRING_LITERAL -> SsColor.STRING
 			NUMERIC_LITERAL -> SsColor.NUMBER
 
+			BRACE_OPEN, BRACE_CLOSE -> SsColor.BRACES
+			BRACK_OPEN, BRACK_CLOSE -> SsColor.BRACKETS
+			PAREN_OPEN, PAREN_CLOSE -> SsColor.PARENTHESES
+			DOT -> SsColor.DOT
+			COMMA -> SsColor.COMMA
+
 			else -> null
 		}
 	}
