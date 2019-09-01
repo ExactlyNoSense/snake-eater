@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import idea.snakeskin.lang.lexer.SsLexer
 import idea.snakeskin.ide.color.SsColor
 import idea.snakeskin.lang.psi.SsElementTypes.*
+import idea.snakeskin.lang.psi.SS_OPERATORS
 
 class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 	companion object {
@@ -20,6 +21,7 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			PAREN_OPEN, PAREN_CLOSE -> SsColor.PARENTHESES
 			DOT -> SsColor.DOT
 			COMMA -> SsColor.COMMA
+			in SS_OPERATORS -> SsColor.OPERATORS
 
 			else -> null
 		}
