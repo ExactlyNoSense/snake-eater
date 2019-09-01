@@ -93,7 +93,10 @@ COMMENT_BLOCK = {LINE_COMMENT}
 
 %%
 <YYINITIAL> {
-  {WS_LINE}+  { currentIndent = yylength(); }
+  {WS_LINE}  {
+        currentIndent += yylength();
+        return WHITE_SPACE;
+      }
   {WS_EOL}  { currentIndent = 0; }
 
   // '-' and other special characters that start control directives
