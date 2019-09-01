@@ -16,6 +16,8 @@ enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 	COMMA("Braces and Operators//Comma", Default.COMMA),
 	SEMICOLON("Braces and Operators//Semicolon", Default.SEMICOLON),
 	OPERATORS("Braces and Operators//Operators", Default.OPERATION_SIGN),
+
+	KEYWORD("Keyword", Default.KEYWORD),
 	;
 
 	val textAttributesKey = TextAttributesKey.createTextAttributesKey("idea.snakeskin.$name", fallback)

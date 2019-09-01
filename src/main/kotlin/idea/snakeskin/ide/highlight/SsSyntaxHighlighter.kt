@@ -6,6 +6,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 import idea.snakeskin.lang.lexer.SsLexer
 import idea.snakeskin.ide.color.SsColor
+import idea.snakeskin.lang.psi.SS_KEYWORDS
 import idea.snakeskin.lang.psi.SsElementTypes.*
 import idea.snakeskin.lang.psi.SS_OPERATORS
 
@@ -23,6 +24,8 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			COMMA -> SsColor.COMMA
 			SEMICOLON -> SsColor.SEMICOLON
 			in SS_OPERATORS -> SsColor.OPERATORS
+
+			in SS_KEYWORDS -> SsColor.KEYWORD
 
 			else -> null
 		}
