@@ -10,7 +10,7 @@ open class SsLexerTestCaseBase : LexerTestCase() {
 
 	override fun getDirPath() = "lexer"
 
-	override fun createLexer() = SsLexer()
+	override fun createLexer() = SsLexer(false)
 
 	override fun shouldTrim() = false
 

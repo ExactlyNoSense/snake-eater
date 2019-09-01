@@ -29,7 +29,7 @@ class SnakeskinParserDefinition : ParserDefinition {
 
 	override fun getFileNodeType(): IFileElementType = FILE
 
-	override fun createLexer(project: Project?): Lexer = SsLexer()
+	override fun createLexer(project: Project?): Lexer = SsLexer(false)
 
 	override fun createElement(node: ASTNode?): PsiElement = SsElementTypes.Factory.createElement(node)
 

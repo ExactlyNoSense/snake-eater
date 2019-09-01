@@ -10,9 +10,22 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %%
 
 %{
-  public SnakeskinLexer() {
+  /**
+  * When the lexer is using as syntax highlighter, LexerEditorHighlighter
+  * checks if start position, state and token type are the same after
+  * each new token. But when the lexer generates DEDENT tokens, it doesn't
+  * change its position, state and token type. So that leads to
+  * exception in LexerEditorHighlighter. To prevent this, the hack was
+  * implemented:
+  * cretead two absolutely the same dedent states
+  * dedent states swap after each DEDENT token generation
+  *
+  * @param isHighlighter - true if the lexer is using for highlighting
+  */
+  public SnakeskinLexer(boolean isHighlighter) {
     this(null);
     indentionStack.push(0);
+    zzIsHighlighter = isHighlighter;
   }
 %}
 
@@ -20,14 +33,28 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
   private boolean zzIsMultilineMode = false;
   private boolean zzFromTemplate = false;
   private int currentDirectiveState = -1;
+  private boolean zzIsHighlighter = false;
+  private int zzNextDedentState = DEDENT_BLOCK;
 
   private Stack<Integer> indentionStack = new Stack<>();
   private int currentIndent = 0;
 
   private IElementType endStatement(boolean isEof) {
-    yybegin(isEof ? DEDENT_EOF : YYINITIAL);
+    if (isEof) {
+      toDedent();
+    }
+    else {
+      yybegin(YYINITIAL);
+    }
     currentIndent = 0;
     return EOS;
+  }
+
+  private void toDedent() {
+    yybegin(zzNextDedentState);
+    if (zzIsHighlighter) {
+      zzNextDedentState = zzNextDedentState == DEDENT_BLOCK ? DEDENT_BLOCK_2 : DEDENT_BLOCK;
+    }
   }
 %}
 
@@ -40,7 +67,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
 %state XML_ATTR_VALUE, INTERPOLATION
 %state LINE_SPLITTING, END_OF_LINE_SPLITTING
-%state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_EOF
+%state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
 
 // Whitespace
@@ -117,9 +144,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
       yybegin(INDENT_BLOCK);
     }
 
-  <<EOF>>  {
-        yybegin(DEDENT_EOF);
-      }
+  <<EOF>>  { toDedent(); }
 }
 
 <INDENT_BLOCK> {
@@ -133,34 +158,34 @@ COMMENT_BLOCK = {LINE_COMMENT}
           return INDENT;
         }
         else if (stackTop > currentIndent) {
-          yybegin(DEDENT_BLOCK);
+          toDedent();
         }
       }
 }
 
-<DEDENT_BLOCK> {
+<DEDENT_BLOCK, DEDENT_BLOCK_2> {
   [^]  {
     yypushback(yylength());
     if (indentionStack.peek() > currentIndent) {
       indentionStack.pop();
+      toDedent();
       return DEDENT;
     }
     else {
       yybegin(currentDirectiveState);
     }
   }
-}
 
-<DEDENT_EOF> {
   <<EOF>>  {
-    if (indentionStack.peek() > 0) {
-      indentionStack.pop();
-      return DEDENT;
+      if (indentionStack.peek() > 0) {
+        indentionStack.pop();
+        toDedent();
+        return DEDENT;
+      }
+      else {
+        return null;
+      }
     }
-    else {
-      return null;
-    }
-  }
 }
 
 <CONTROL_DIRECTIVE> {

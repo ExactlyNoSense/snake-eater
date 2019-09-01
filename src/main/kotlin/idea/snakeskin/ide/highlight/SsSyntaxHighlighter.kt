@@ -28,5 +28,5 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 	override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> =
 		pack(map(tokenType)?.textAttributesKey)
 
-	override fun getHighlightingLexer(): Lexer = SsLexer()
+	override fun getHighlightingLexer(): Lexer = SsLexer(true)
 }
