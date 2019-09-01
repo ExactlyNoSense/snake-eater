@@ -21,6 +21,7 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			PAREN_OPEN, PAREN_CLOSE -> SsColor.PARENTHESES
 			DOT -> SsColor.DOT
 			COMMA -> SsColor.COMMA
+			SEMICOLON -> SsColor.SEMICOLON
 			in SS_OPERATORS -> SsColor.OPERATORS
 
 			else -> null
