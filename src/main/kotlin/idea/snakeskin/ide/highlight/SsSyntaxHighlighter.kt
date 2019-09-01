@@ -27,6 +27,11 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 
 			in SS_KEYWORDS -> SsColor.KEYWORD
 
+			TAG_NAME -> SsColor.TAG
+			ATTR_NAME -> SsColor.ATTRIBUTE_KEY
+			ATTR_VALUE -> SsColor.ATTRIBUTE_VALUE
+			TEMPLATE_TEXT -> SsColor.TEXT
+
 			else -> null
 		}
 	}
