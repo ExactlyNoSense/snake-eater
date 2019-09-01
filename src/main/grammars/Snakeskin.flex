@@ -303,7 +303,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
 }
 
 <XML_DIRECTIVE> {
-  "<"                   { return LT; }
+  "<"                   { return TAG_START; }
   "="  {
         yybegin(XML_ATTR_VALUE);
         return EQ;
