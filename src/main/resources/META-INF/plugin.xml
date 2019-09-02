@@ -25,6 +25,10 @@
 		<!-- Color Settings -->
 
 		<colorSettingsPage implementation="idea.snakeskin.ide.color.SsColorSettingsPage"/>
+
+		<!-- Folding -->
+
+		<lang.foldingBuilder language="Snakeskin" implementationClass="idea.snakeskin.ide.folding.SsFoldingBuilder"/>
     </extensions>
 
     <actions>
