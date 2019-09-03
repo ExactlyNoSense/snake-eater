@@ -4,11 +4,13 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import idea.snakeskin.lang.psi.SsBlockBody
 
 class SsFoldingBuilder : FoldingBuilderEx() {
-	override fun getPlaceholderText(node: ASTNode) = "{ lol }"
+	override fun getPlaceholderText(node: ASTNode) = "{ ... }"
 
 	override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
 		val descriptors = mutableListOf<FoldingDescriptor>()
@@ -16,7 +18,12 @@ class SsFoldingBuilder : FoldingBuilderEx() {
 		fun findBlockBody(element: PsiElement) {
 			when(element){
 				is SsBlockBody -> {
-					descriptors.add(FoldingDescriptor(element, element.getTextRange()))
+					val rangeStart = PsiTreeUtil.skipWhitespacesBackward(element)?.textRange?.startOffset
+						?: element.textRange.startOffset
+					val rangeEnd = element.lastChild?.prevSibling?.textRange?.endOffset
+						?: element.textRange.endOffset
+					val textRange = TextRange(rangeStart, rangeEnd)
+					descriptors.add(FoldingDescriptor(element, textRange))
 				}
 
 				else -> element.children.forEach(::findBlockBody)
