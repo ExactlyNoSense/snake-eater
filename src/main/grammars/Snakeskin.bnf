@@ -80,13 +80,13 @@
 Snakeskin ::= GlobalStatement*
 GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
 
-GlobalVerboseStatement ::= StatementStart (GlobalVerboseInlineStatement EOS | GlobalVerboseBlockStatement)
+GlobalVerboseStatement ::= StatementStart (GlobalVerboseInlineStatement StatementEnd | GlobalVerboseBlockStatement)
 { pin = 1 }
-GlobalVerboseBlockStatement ::= GlobalBlockHead EOS BlockBody?
+GlobalVerboseBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 
-GlobalShortStatement ::= GlobalShortInlineStatement EOS
+GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd
 
-private Statement_recover ::= !EOS
+private Statement_recover ::= !StatementEnd
 private Body_recover ::= !DEDENT
 
 //////////////////////////////
@@ -116,7 +116,7 @@ GlobalBlockHead ::= HeadOrEvalHeadStatement
 
 BlockBody ::= INDENT BodyStatements DEDENT
 { pin = 1 }
-BodyStatements ::= BodyStatement+
+private BodyStatements ::= BodyStatement+
 { recoverWhile = Body_recover }
 BodyStatement ::= VerboseStatement
 	| ShortStatement
@@ -124,7 +124,7 @@ BodyStatement ::= VerboseStatement
 	| TemplateTextStatement
 	| COMMENT_BLOCK
 
-VerboseStatement ::= StatementStart (VerboseInlineStatement EOS | VerboseBlockStatement)
+VerboseStatement ::= StatementStart (VerboseInlineStatement StatementEnd | VerboseBlockStatement)
 { pin = 1 }
 VerboseInlineStatement ::= VerboseVariableStatement
 	| ConstStatement
@@ -165,7 +165,7 @@ VariableDeclarationsListTail ::= ',' VariableDeclaration
 { pin = 1 }
 VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 { recoverWhile = VariableDeclaration_recover }
-private VariableDeclaration_recover ::= !(',' | EOS)
+private VariableDeclaration_recover ::= !(',' | StatementEnd)
 
 VerboseVariableStatement ::= var VariableDeclarationsList
 { pin = 1 }
@@ -178,7 +178,7 @@ GlobalVariableDeclarationsListTail ::= ',' GlobalVariableDeclaration
 { pin = 1 }
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
 { recoverWhile = GlobalVariableDeclaration_recover }
-private GlobalVariableDeclaration_recover ::= !(',' | EOS)
+private GlobalVariableDeclaration_recover ::= !(',' | StatementEnd)
 GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
 
 // Const
@@ -243,7 +243,7 @@ TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 
 // Blocks
-BlockStatement ::= BlockHeadStatement EOS BlockBody?
+BlockStatement ::= BlockHeadStatement StatementEnd BlockBody?
 BlockHeadStatement ::= block IDENTIFIER BlockHeadTail?
 { pin = 1; recoverWhile = Statement_recover }
 
@@ -257,25 +257,25 @@ HeadOrEvalHeadStatement ::= eval | head
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement*
-MainConditionalStatement ::= MainConditionalHead EOS BlockBody?
+MainConditionalStatement ::= MainConditionalHead StatementEnd BlockBody?
 MainConditionalHead ::= (if | unless) Expression
 { pin = 1; recoverWhile = Statement_recover }
-SecondaryConditionalStatement ::= StatementStart SecondaryConditionalHead EOS BlockBody?
+SecondaryConditionalStatement ::= StatementStart SecondaryConditionalHead StatementEnd BlockBody?
 { pin = 1 }
 SecondaryConditionalHead ::= else SecondaryConditionalHeadTail?
 { pin = 1; recoverWhile = Statement_recover }
 SecondaryConditionalHeadTail ::= (if | unless) Expression
 
 
-SwitchStatement ::= SwitchHead EOS SwitchBlockBody?
+SwitchStatement ::= SwitchHead StatementEnd SwitchBlockBody?
 SwitchHead ::= switch Expression
 { pin = 1; recoverWhile = Statement_recover }
 SwitchBlockBody ::= INDENT SwitchBodyStatements DEDENT
 { pin = 1}
-SwitchBodyStatements ::= SwitchBodyStatement+
+private SwitchBodyStatements ::= SwitchBodyStatement+
 { recoverWhile = Body_recover }
 
-SwitchBodyStatement ::= SwitchCaseStatement EOS BlockBody?
+SwitchBodyStatement ::= SwitchCaseStatement StatementEnd BlockBody?
 SwitchCaseStatement ::= VerboseSwitchCaseStatement | ShortSwitchCaseStatement
 { recoverWhile = Statement_recover }
 
@@ -294,92 +294,92 @@ LoopStatement ::= ForLoopStatement
 	| WhileLoopStatement
 	| DoWhileLoopStatement
 
-ForLoopStatement ::= ForLoopHead EOS LoopBlockBody?
+ForLoopStatement ::= ForLoopHead StatementEnd LoopBlockBody?
 ForLoopHead ::= for (CommonForLoopHead | ForInLoopHead)
 { pin = 1; recoverWhile = Statement_recover }
 CommonForLoopHead ::= Expression ';' Expression ';' Expression
 ForInLoopHead ::= (var | const | global | ':' | '-') IDENTIFIER in Expression
 
-WhileLoopStatement ::= WhileLoopHead EOS LoopBlockBody?
+WhileLoopStatement ::= WhileLoopHead StatementEnd LoopBlockBody?
 WhileLoopHead ::= while Expression
 { pin = 1; recoverWhile = Statement_recover }
-DoWhileLoopStatement ::= do EOS LoopBlockBody? (StatementStart while Expression EOS)?
+DoWhileLoopStatement ::= do StatementEnd LoopBlockBody? (StatementStart while Expression StatementEnd)?
 { pin = 1 }
 
 LoopBlockBody ::= INDENT LoopBodyStatements DEDENT
 { pin = 1 }
-LoopBodyStatements ::= LoopBodyStatement+
+private LoopBodyStatements ::= LoopBodyStatement+
 { recoverWhile = Body_recover }
 LoopBodyStatement ::= LoopControlStatement | BodyStatement
 LoopControlStatement ::= StatementStart (break | continue)
 
 // Iterators
-IteratorStatement ::= IteratorHead EOS LoopBlockBody?
+IteratorStatement ::= IteratorHead StatementEnd LoopBlockBody?
 IteratorHead ::= (FOREACH | FORIN) Expression '=>' Parameters
 { pin = 1; recoverWhile = Statement_recover }
 
 // try/catch/finally
 TryCatchStatement ::= TryStatement CatchFinallyStatement?
-TryStatement ::= TryHead EOS BlockBody?
+TryStatement ::= TryHead StatementEnd BlockBody?
 TryHead ::= try
 { recoverWhile = Statement_recover }
 CatchFinallyStatement ::= CatchStatement FinallyStatement?
-CatchStatement ::= StatementStart CatchHead EOS BlockBody?
+CatchStatement ::= StatementStart CatchHead StatementEnd BlockBody?
 CatchHead ::= catch IDENTIFIER
 { pin = 1; recoverWhile = Statement_recover }
-FinallyStatement ::= StatementStart FinallyHead EOS BlockBody?
+FinallyStatement ::= StatementStart FinallyHead StatementEnd BlockBody?
 FinallyHead ::= finally
 { recoverWhile = Statement_recover }
 
 // Function
-VerboseFuncStatement ::= VerboseFuncHead EOS BlockBody?
+VerboseFuncStatement ::= VerboseFuncHead StatementEnd BlockBody?
 VerboseFuncHead ::= func ArgumentDeclarationsList?
 { pin = 1; recoverWhile = Statement_recover }
 
-ShortFuncStatement ::= ShortFuncHead EOS BlockBody?
+ShortFuncStatement ::= ShortFuncHead StatementEnd BlockBody?
 ShortFuncHead ::= '(' ')' ['=>' ArgumentDeclarationsList?]
 { pin = 1; recoverWhile = Statement_recover }
 
 // Target
-TargetStatement ::= TargetHead EOS CallBlockBody?
+TargetStatement ::= TargetHead StatementEnd CallBlockBody?
 TargetHead ::= target Expression [as IDENTIFIER]
 { pin = 1; recoverWhile = Statement_recover }
 
 // PutIn
-VerbosePutInStatement ::= VerbosePutInHead EOS BlockBody?
+VerbosePutInStatement ::= VerbosePutInHead StatementEnd BlockBody?
 VerbosePutInHead ::= var? PUT_IN QualifiedIdentifier?
 { pin = 2; recoverWhile = Statement_recover }
 
-ShortPutInStatement ::= ShortPutInHead EOS BlockBody?
+ShortPutInStatement ::= ShortPutInHead StatementEnd BlockBody?
 ShortPutInHead ::= ':' PUT_IN QualifiedIdentifier?
 { pin = 1; recoverWhile = Statement_recover }
 
-SuperShortPutInStatement ::= SuperShortPutInHead EOS BlockBody?
+SuperShortPutInStatement ::= SuperShortPutInHead StatementEnd BlockBody?
 SuperShortPutInHead ::= '*' QualifiedIdentifier?
 { pin = 1; recoverWhile = Statement_recover }
 
 // Call
-VerboseCallStatement ::= call Expression EOS CallBlockBody?
-ShortCallStatement ::= '+=' Expression EOS CallBlockBody?
+VerboseCallStatement ::= call Expression StatementEnd CallBlockBody?
+ShortCallStatement ::= '+=' Expression StatementEnd CallBlockBody?
 
 CallBlockBody ::= INDENT CallBodyStatements DEDENT
 { pin = 1 }
-CallBodyStatements ::= CallBodyStatement+
+private CallBodyStatements ::= CallBodyStatement+
 { recoverWhile = Body_recover }
 CallBodyStatement ::= SuperShortPutInStatement | BodyStatement
 
 // Return
-ReturnStatement ::= ReturnHead EOS BlockBody?
+ReturnStatement ::= ReturnHead StatementEnd BlockBody?
 ReturnHead ::= return Expression?
 { pin = 1; recoverWhile = Statement_recover }
 
 // With
-WithStatement ::= WithHead EOS BlockBody?
+WithStatement ::= WithHead StatementEnd BlockBody?
 WithHead ::= with Expression
 { pin = 1; recoverWhile = Statement_recover }
 
 // Tags
-TagStatement ::= TagHead EOS BlockBody?
+TagStatement ::= TagHead StatementEnd BlockBody?
 TagHead ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 
@@ -395,7 +395,7 @@ ArgumentDeclarationsListTail ::= ',' ArgumentDeclaration
 { pin = 1 }
 ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
 { recoverWhile = ArgumentDeclaration_recover }
-private ArgumentDeclaration_recover ::= !(')' | ',' | EOS)
+private ArgumentDeclaration_recover ::= !(')' | ',' | StatementEnd)
 
 // Qualified identifiers
 // For template inheritance
@@ -407,9 +407,10 @@ ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression '
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
 
 StatementStart ::= SHARP | MINUS
+StatementEnd ::= EOS
 
 // XML
-XmlStatement ::= TAG_START XmlHead EOS BlockBody?
+XmlStatement ::= TAG_START XmlHead StatementEnd BlockBody?
 { pin = 1 }
 XmlHead ::= XmlTagDeclaration? XmlSelector? XmlAttrsList?
 { recoverWhile = Statement_recover }
@@ -421,10 +422,10 @@ XmlAttrsListTail ::= '|' XmlAttrDeclaration
 { pin = 1 }
 XmlAttrDeclaration ::= (ATTR_NAME | TAG_NAME) ['=' ATTR_VALUE?]
 { recoverWhile = XmlAttrDeclaration_recover }
-private XmlAttrDeclaration_recover ::= !('|' | EOS)
+private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
 
 // Template text
-TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* EOS
+TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* StatementEnd
 TemplateInclusion ::= TemplateOutputStatement | TemplateInterpolationStatement
 TemplateOutputStatement ::= '{' Expression '}'
 TemplateInterpolationStatement ::= '{{' TEMPLATE_INTERPOLATION '}}'
@@ -518,7 +519,7 @@ ElementsListTail ::= ',' ArrayElement?
 { pin = 1 }
 ArrayElement ::= Expression
 { recoverWhile = ArrayElement_recover }
-private ArrayElement_recover ::= !(',' | ']' | EOS)
+private ArrayElement_recover ::= !(',' | ']' | StatementEnd)
 
 ObjectLiteralExpression ::= '{' PropertiesList? '}'
 { pin = 1 }
@@ -528,7 +529,7 @@ PropertiesListTail ::= ',' PropertyAssignment
 PropertyAssignment ::= PropertyName ':' Expression
 { recoverWhile = PropertyAssignment_recover }
 PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
-private PropertyAssignment_recover ::= !(',' | '}' | EOS)
+private PropertyAssignment_recover ::= !(',' | '}' | StatementEnd)
 
 ParenthesesExpression ::= '(' Expression ')'
 
