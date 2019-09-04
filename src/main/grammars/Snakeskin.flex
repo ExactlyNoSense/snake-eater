@@ -124,7 +124,10 @@ COMMENT_BLOCK = {LINE_COMMENT}
         currentIndent += yylength();
         return WHITE_SPACE;
       }
-  {WS_EOL}  { currentIndent = 0; }
+  {WS_EOL}  {
+        currentIndent = 0;
+        return WHITE_SPACE;
+      }
 
   // '-' and other special characters that start control directives
   "-" | "#" | ":" | "?" | "(" | "*" | "+" | ">"  {
