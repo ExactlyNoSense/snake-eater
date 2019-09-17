@@ -387,7 +387,7 @@ TagHead ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsList?
 IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
 IteratorParametersListTail ::= ',' IteratorParameter
 { pin = 1 }
-IteratorParameter ::= IDENTIFIER
+IteratorParameter ::= IdentifierOrWithIdentifier
 { recoverWhile = IteratorParameter_recover }
 private IteratorParameter_recover ::= !(',' | StatementEnd)
 
