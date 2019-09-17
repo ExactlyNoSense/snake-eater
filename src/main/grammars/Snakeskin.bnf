@@ -238,7 +238,7 @@ DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
 // Template
 TemplateHeadStatement ::= async? TemplateType '*'? DefinitionQualifiedIdentifier TemplateDeclarationTail?
 { pin = 2 }
-TemplateDeclarationTail ::= Arguments TemplateInheritance?
+TemplateDeclarationTail ::= FunctionParameters TemplateInheritance?
 TemplateInheritance ::= extends QualifiedIdentifier
 TemplateType ::= template | interface | placeholder
 
@@ -249,7 +249,7 @@ BlockHeadStatement ::= block IDENTIFIER BlockHeadTail?
 
 ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockHeadTail?
 { pin = 1 }
-BlockHeadTail ::= Arguments BlockSelfCall?
+BlockHeadTail ::= FunctionParameters BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
 // Eval&Head
@@ -333,11 +333,11 @@ FinallyHead ::= finally
 
 // Function
 VerboseFuncStatement ::= VerboseFuncHead StatementEnd BlockBody?
-VerboseFuncHead ::= func ArgumentDeclarationsList?
+VerboseFuncHead ::= func FunctionParametersList?
 { pin = 1; recoverWhile = Statement_recover }
 
 ShortFuncStatement ::= ShortFuncHead StatementEnd BlockBody?
-ShortFuncHead ::= '(' ')' ['=>' ArgumentDeclarationsList?]
+ShortFuncHead ::= '(' ')' ['=>' FunctionParametersList?]
 { pin = 1; recoverWhile = Statement_recover }
 
 // Target
@@ -391,15 +391,14 @@ IteratorParameter ::= IDENTIFIER
 { recoverWhile = IteratorParameter_recover }
 private IteratorParameter_recover ::= !(',' | StatementEnd)
 
-// Arguments
-Arguments ::= '(' ArgumentDeclarationsList? ')'
+FunctionParameters ::= '(' FunctionParametersList? ')'
 { pin = 1 }
-ArgumentDeclarationsList ::= ArgumentDeclaration (ArgumentDeclarationsListTail)*
-ArgumentDeclarationsListTail ::= ',' ArgumentDeclaration
+FunctionParametersList ::= FunctionParameter FunctionParametersListTail*
+FunctionParametersListTail ::= ',' FunctionParameter
 { pin = 1 }
-ArgumentDeclaration ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
-{ recoverWhile = ArgumentDeclaration_recover }
-private ArgumentDeclaration_recover ::= !(')' | ',' | StatementEnd)
+FunctionParameter ::= IdentifierOrWithIdentifier ('?' | '!')? ('=' Expression)?
+{ recoverWhile = FunctionParameter_recover }
+private FunctionParameter_recover ::= !(')' | ',' | StatementEnd)
 
 // Qualified identifiers
 // For template inheritance
