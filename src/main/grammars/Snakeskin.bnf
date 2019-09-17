@@ -384,8 +384,12 @@ TagHead ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 
 // Parameters
-IteratorParametersList ::= IteratorParameter (',' IteratorParameter)*
+IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
+IteratorParametersListTail ::= ',' IteratorParameter
+{ pin = 1 }
 IteratorParameter ::= IDENTIFIER
+{ recoverWhile = IteratorParameter_recover }
+private IteratorParameter_recover ::= !(',' | StatementEnd)
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
