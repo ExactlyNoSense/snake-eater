@@ -315,7 +315,7 @@ LoopControlStatement ::= StatementStart (break | continue)
 
 // Iterators
 IteratorStatement ::= IteratorHead StatementEnd LoopBlockBody?
-IteratorHead ::= (FOREACH | FORIN) Expression '=>' Parameters
+IteratorHead ::= (FOREACH | FORIN) Expression '=>' IteratorParametersList
 { pin = 1; recoverWhile = Statement_recover }
 
 // try/catch/finally
@@ -384,8 +384,8 @@ TagHead ::= tag XmlTagDeclaration? XmlSelector? XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 
 // Parameters
-Parameters ::= ParameterDeclaration (',' ParameterDeclaration)*
-ParameterDeclaration ::= IDENTIFIER
+IteratorParametersList ::= IteratorParameter (',' IteratorParameter)*
+IteratorParameter ::= IDENTIFIER
 
 // Arguments
 Arguments ::= '(' ArgumentDeclarationsList? ')'
