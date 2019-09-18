@@ -95,6 +95,8 @@ CSS_CLASS = \.({CSS_NAME} | "&" {CSS_NAME_CONTINUE}*)
 CSS_CLASS_SELECTOR = {CSS_CLASS} | \[ {CSS_CLASS} \]
 CSS_ID_SELECTOR = #{CSS_NAME}
 
+PLACEHOLDER = "%" ~"%"
+
 // Number literals
 DECIMAL_INTEGER_LITERAL = 0 | [1-9][0-9]*
 EXPONENT = [Ee] [+-]? [0-9]+
@@ -309,6 +311,7 @@ COMMENT_BLOCK = {LINE_COMMENT}
   "null"                { return NULL_LITERAL; }
   "undefined"           { return UNDEFINED_LITERAL; }
   true | false          { return BOOLEAN_LITERAL; }
+  {PLACEHOLDER}         { return PLACEHOLDER; }
   {STRING_LITERAL}      { return STRING_LITERAL; }
   {NUMERIC_LITERAL}     { return NUMERIC_LITERAL; }
   {COMMENT_BLOCK}       { return COMMENT_BLOCK; }

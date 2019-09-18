@@ -404,7 +404,7 @@ private FunctionParameter_recover ::= !(')' | ',' | StatementEnd)
 // For template inheritance
 QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']' | '@[' Expression ']') QualifiedIdentifierTail*
 // For namespace and template definition
-DefinitionQualifiedIdentifier ::= (IDENTIFIER | '[' Expression ']') QualifiedIdentifierTail*
+DefinitionQualifiedIdentifier ::= (IDENTIFIER | PLACEHOLDER | '[' Expression ']') QualifiedIdentifierTail*
 // For template execution
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
