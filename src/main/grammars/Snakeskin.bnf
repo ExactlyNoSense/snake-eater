@@ -407,7 +407,7 @@ QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']' | '@[' 
 DefinitionQualifiedIdentifier ::= (IDENTIFIER | PLACEHOLDER | '[' Expression ']') QualifiedIdentifierTail*
 // For template execution
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
-QualifiedIdentifierTail ::= '.' IDENTIFIER | '[' Expression ']'
+QualifiedIdentifierTail ::= '.' (IDENTIFIER | PLACEHOLDER) | '[' Expression ']'
 
 StatementStart ::= SHARP | MINUS
 StatementEnd ::= EOS
