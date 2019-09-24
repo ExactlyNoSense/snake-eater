@@ -195,6 +195,10 @@ COMMENT_BLOCK = {LINE_COMMENT}
 
 <CONTROL_DIRECTIVE> {
 
+  "|" "!"? {IDENTIFIER} {
+        yypushback(yylength() - 1);
+        return FILTER_PIPE;
+       }
   "{"                   { return BRACE_OPEN; }
   "}"                   {
           if (zzFromTemplate) {

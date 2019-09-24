@@ -446,6 +446,7 @@ Expression ::= AssignmentExpression
 	| PostfixGroup
 	| PrefixGroup
 	| UnaryGroup
+	| FilterExpression
 	| TernaryExpression
 	| MemberExpression
 
@@ -501,6 +502,8 @@ PreDecrementExpression ::= '--' Expression
 
 UnaryPlusExpression ::= '+' Expression
 UnaryMinusExpression ::= '-' Expression
+
+FilterExpression ::= Expression FILTER_PIPE '!'? IDENTIFIER
 
 LiteralExpression ::= NULL_LITERAL
 	| UNDEFINED_LITERAL
