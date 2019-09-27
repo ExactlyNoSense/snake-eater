@@ -541,6 +541,14 @@ ParenthesesExpression ::= '(' Expression ')'
 
 MemberExpression ::= PrimaryGroup MemberExpressionTail?
 MemberExpressionTail ::= ('[' Expression ']' | '.' IDENTIFIER | CallArguments) MemberExpressionTail?
-CallArguments ::= '(' [Expression (',' Expression)*] ')'
+
+CallArguments ::= '(' CallArgumentsList? ')'
+{ pin = 1 }
+CallArgumentsList ::= CallArgument CallArgumentsListTail*
+CallArgumentsListTail ::= ',' CallArgument
+{ pin = 1 }
+CallArgument ::= Expression
+{ recoverWhile = CallArgument_recover }
+private CallArgument_recover ::= !(',' | ')' | StatementEnd)
 
 TernaryExpression ::= Expression '?' Expression ':' Expression
