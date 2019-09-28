@@ -503,7 +503,13 @@ PreDecrementExpression ::= '--' Expression
 UnaryPlusExpression ::= '+' Expression
 UnaryMinusExpression ::= '-' Expression
 
-FilterExpression ::= Expression FILTER_PIPE '!'? IDENTIFIER
+FilterExpression ::= Expression FILTER_PIPE '!'? IDENTIFIER FilterArgumentsList?
+FilterArgumentsList ::= FilterArgument FilterArgumentsListTail*
+FilterArgumentsListTail ::= ',' FilterArgument
+{ pin = 1 }
+FilterArgument ::= Expression
+{ recoverWhile = FilterArgument_recover }
+private FilterArgument_recover ::= !(',' | StatementEnd)
 
 LiteralExpression ::= NULL_LITERAL
 	| UNDEFINED_LITERAL
