@@ -503,7 +503,7 @@ PreDecrementExpression ::= '--' Expression
 UnaryPlusExpression ::= '+' Expression
 UnaryMinusExpression ::= '-' Expression
 
-FilterExpression ::= Expression FILTER_PIPE '!'? IDENTIFIER FilterArgumentsList?
+FilterExpression ::= Expression FILTER_PIPE '!'? MemberExpression FilterArgumentsList?
 FilterArgumentsList ::= FilterArgument FilterArgumentsListTail*
 FilterArgumentsListTail ::= ',' FilterArgument
 { pin = 1 }
