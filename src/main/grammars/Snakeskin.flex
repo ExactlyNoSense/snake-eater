@@ -117,8 +117,9 @@ STRING_LITERAL = {DOUBLE_QUOTED_STRING_LITERAL} | {SINGLE_QUOTED_STRING_LITERAL}
 
 
 // Comments
-LINE_COMMENT = "///"[^\r\n]*{WS_EOL}
-COMMENT_BLOCK = {LINE_COMMENT}
+LINE_COMMENT = "///"~{WS_EOL}
+BLOCK_COMMENT = "/*"~"*/"
+COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
 %%
 <YYINITIAL> {
@@ -143,6 +144,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
         currentDirectiveState = XML_DIRECTIVE;
         yybegin(INDENT_BLOCK);
       }
+
+  {COMMENT}  { return COMMENT_BLOCK; }
+
   . {
       yypushback(yylength());
       currentDirectiveState = TEMPLATE_DIRECTIVE;
@@ -318,10 +322,11 @@ COMMENT_BLOCK = {LINE_COMMENT}
   {PLACEHOLDER}         { return PLACEHOLDER; }
   {STRING_LITERAL}      { return STRING_LITERAL; }
   {NUMERIC_LITERAL}     { return NUMERIC_LITERAL; }
-  {COMMENT_BLOCK}       { return COMMENT_BLOCK; }
   {IDENTIFIER}          { return IDENTIFIER; }
   {WITH_IDENTIFIER}     { return WITH_IDENTIFIER; }
   {GLOBAL_IDENTIFIER}   { return GLOBAL_IDENTIFIER; }
+
+  {COMMENT}        { return COMMENT_BLOCK; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 
@@ -379,6 +384,8 @@ COMMENT_BLOCK = {LINE_COMMENT}
     }
   }
 
+  {COMMENT}  { return COMMENT_BLOCK; }
+
   <<EOF>>  { return endStatement(true); }
 }
 
@@ -409,6 +416,9 @@ COMMENT_BLOCK = {LINE_COMMENT}
       }
   {WS_EOL}              { return endStatement(false); }
   [^{\r\n]+             { return TEMPLATE_TEXT; }
+
+  {COMMENT}  { return COMMENT_BLOCK; }
+
   <<EOF>>               { return endStatement(true); }
 }
 
