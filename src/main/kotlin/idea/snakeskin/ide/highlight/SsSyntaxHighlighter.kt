@@ -32,6 +32,8 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			ATTR_VALUE -> SsColor.ATTRIBUTE_VALUE
 			TEMPLATE_TEXT -> SsColor.TEXT
 
+			COMMENT_BLOCK -> SsColor.COMMENT
+
 			else -> null
 		}
 	}
