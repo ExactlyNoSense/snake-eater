@@ -294,11 +294,14 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "in"                  { return IN; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
+  "link"                { return LINK; }
   "namespace"           { return NAMESPACE; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }
   "return"              { return RETURN; }
+  "script"              { return SCRIPT; }
+  "style"               { return STYLE; }
   "super"               { return SUPER; }
   "switch"              { return SWITCH; }
   "tag"                 {
