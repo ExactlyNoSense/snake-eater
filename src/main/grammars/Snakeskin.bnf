@@ -406,12 +406,12 @@ private FunctionParameter_recover ::= !(')' | ',' | StatementEnd)
 
 // Qualified identifiers
 // For template inheritance
-QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' Expression ']' | '@[' Expression ']') QualifiedIdentifierTail*
+QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' (Expression | PLACEHOLDER) ']' | '@[' (Expression | PLACEHOLDER) ']') QualifiedIdentifierTail*
 // For namespace and template definition
-DefinitionQualifiedIdentifier ::= (IDENTIFIER | PLACEHOLDER | '[' Expression ']') QualifiedIdentifierTail*
+DefinitionQualifiedIdentifier ::= (IDENTIFIER | PLACEHOLDER | '[' (Expression | PLACEHOLDER) ']') QualifiedIdentifierTail*
 // For template execution
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
-QualifiedIdentifierTail ::= '.' (IDENTIFIER | PLACEHOLDER) | '[' Expression ']'
+QualifiedIdentifierTail ::= '.' (IDENTIFIER | PLACEHOLDER) | '[' (Expression | PLACEHOLDER) ']'
 
 StatementStart ::= SHARP | MINUS
 StatementEnd ::= EOS
