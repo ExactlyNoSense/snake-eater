@@ -56,6 +56,12 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
       zzNextDedentState = zzNextDedentState == DEDENT_BLOCK ? DEDENT_BLOCK_2 : DEDENT_BLOCK;
     }
   }
+
+  private IElementType toXmlParsing(IElementType tagType) {
+    currentDirectiveState = XML_DIRECTIVE;
+    yybegin(XML_DIRECTIVE);
+    return tagType;
+  }
 %}
 
 %public
@@ -294,21 +300,17 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "in"                  { return IN; }
   "include"             { return INCLUDE; }
   "interface"           { return INTERFACE; }
-  "link"                { return LINK; }
+  "link"                { return toXmlParsing(LINK); }
   "namespace"           { return NAMESPACE; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }
   "return"              { return RETURN; }
-  "script"              { return SCRIPT; }
-  "style"               { return STYLE; }
+  "script"              { return toXmlParsing(SCRIPT); }
+  "style"               { return toXmlParsing(STYLE); }
   "super"               { return SUPER; }
   "switch"              { return SWITCH; }
-  "tag"                 {
-        currentDirectiveState = XML_DIRECTIVE;
-        yybegin(XML_DIRECTIVE);
-        return TAG;
-      }
+  "tag"                 { return toXmlParsing(TAG); }
   "target"              { return TARGET; }
   "template"            { return TEMPLATE; }
   "throw"               { return THROW; }
