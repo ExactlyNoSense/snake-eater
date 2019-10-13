@@ -145,7 +145,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(INDENT_BLOCK);
       }
   // '<' starts tags
-  "<" {
+  "<" {WS}  {
         yypushback(yylength());
         currentDirectiveState = XML_DIRECTIVE;
         yybegin(INDENT_BLOCK);
