@@ -139,7 +139,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
       }
 
   // '-' and other special characters that start control directives
-  "-" | "#" | ":" | "?" | "(" | "*" | "+" | ">"  {
+  ("-" | "#" | ":" | "?" | "()" | "*" | "+=" | ">") {WS}  {
         yypushback(yylength());
         currentDirectiveState = CONTROL_DIRECTIVE;
         yybegin(INDENT_BLOCK);
