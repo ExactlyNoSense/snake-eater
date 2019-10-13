@@ -380,9 +380,12 @@ WithHead ::= with Expression
 
 // Tags
 TagStatement ::= TagHead StatementEnd BlockBody?
-TagHead ::= Tags XmlSelector? XmlAttrsList?
+TagHead ::= Tags XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
-Tags ::= tag XmlTagDeclaration? | script | style | link
+Tags ::= CommonTag | SpecificTag
+CommonTag ::= tag XmlTagDeclaration? XmlSelector?
+{ pin = 1 }
+SpecificTag ::= (script | style | link) (TAG_NAME | ATTR_NAME)?
 
 // Parameters
 IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
