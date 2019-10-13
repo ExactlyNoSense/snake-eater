@@ -76,9 +76,9 @@ WS_LINE = [ \t]
 WS = {WS_EOL} | {WS_LINE}
 
 // Identifiers
-IDENTIFIER = [_\p{xidstart}][\p{xidcontinue}]*
-WITH_IDENTIFIER = @[_\p{xidstart}][\p{xidcontinue}]*
-GLOBAL_IDENTIFIER = @@[_\p{xidstart}][\p{xidcontinue}]*
+IDENTIFIER = [_\$\p{xidstart}][\$\p{xidcontinue}]*
+WITH_IDENTIFIER = @[_\$\p{xidstart}][\$\p{xidcontinue}]*
+GLOBAL_IDENTIFIER = @@[_\$\p{xidstart}][\$\p{xidcontinue}]*
 
 XML_TAG_START = [_:a-zA-Z]
 XML_TAG_CONTINUE = {XML_TAG_START} | [-\.0-9]
