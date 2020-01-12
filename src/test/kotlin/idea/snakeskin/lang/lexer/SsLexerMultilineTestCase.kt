@@ -5,4 +5,5 @@ class SsLexerMultilineTestCase: SsLexerTestCaseBase() {
 
 	fun testMlCloseOnNewLine() = compare()
 	fun testMlCloseOnNewLineWithSpace() = compare()
+	fun testMlCloseOnTheLastLine() = compare()
 }
