@@ -16,6 +16,8 @@ import idea.snakeskin.lang.lexer.SsLexer
 import idea.snakeskin.lang.psi.SsElementTypes
 import idea.snakeskin.lang.psi.SsElementTypes.COMMENT_BLOCK
 import idea.snakeskin.lang.psi.SsElementTypes.STRING_LITERAL
+import idea.snakeskin.lang.psi.SsElementTypes.ML_OPEN
+import idea.snakeskin.lang.psi.SsElementTypes.ML_CLOSE
 import idea.snakeskin.lang.psi.SsFile
 
 class SnakeskinParserDefinition : ParserDefinition {
@@ -35,7 +37,7 @@ class SnakeskinParserDefinition : ParserDefinition {
 
 	override fun getCommentTokens(): TokenSet = TokenSet.create(COMMENT_BLOCK)
 
-	override fun getWhitespaceTokens(): TokenSet = TokenSet.create(WHITE_SPACE)
+	override fun getWhitespaceTokens(): TokenSet = TokenSet.create(WHITE_SPACE, ML_OPEN, ML_CLOSE)
 
 	override fun createParser(project: Project?): PsiParser = SnakeskinParser()
 }
