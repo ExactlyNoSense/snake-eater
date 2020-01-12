@@ -1,7 +1,7 @@
 package idea.snakeskin.lang.lexer
 
 class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
-	override fun getDirPath() = super.getDirPath() + "/multiline";
+	override fun getDirPath() = super.getDirPath() + "/multiline"
 
 	fun testAmpDoesNotTreatAsMlOpen() = compare()
 	fun testDecimalSeparatorDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
