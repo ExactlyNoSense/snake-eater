@@ -7,4 +7,6 @@ class SsLexerMultilineTestCase: SsLexerTestCaseBase() {
 	fun testMlCloseOnNewLineWithSpace() = compare()
 	fun testMlCloseOnTheLastLine() = compare()
 	fun testMlOpenInTheMiddleOfExpression() = compare()
+	fun testSpacesAfterMlClose() = compare()
+	fun testSpacesAfterMlOpen() = compare()
 }
