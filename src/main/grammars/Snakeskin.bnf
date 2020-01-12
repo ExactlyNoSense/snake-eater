@@ -22,6 +22,8 @@
 		BRACK_CLOSE = ']'
 		PAREN_OPEN  = '('
 		PAREN_CLOSE = ')'
+		ML_OPEN     = '&'
+		ML_CLOSE    = '.'
 		COLON       = ':'
 		SEMICOLON   = ';'
 		COMMA       = ','
@@ -88,6 +90,9 @@ GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd
 
 private Statement_recover ::= !StatementEnd
 private Body_recover ::= !DEDENT
+
+// TODO: Make it better. Just to create needed SsTokenTypes
+private MultiLines ::= ML_CLOSE | ML_OPEN
 
 //////////////////////////////
 // GLOBAL INLINE STATEMENTS //
