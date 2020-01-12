@@ -18,6 +18,7 @@ class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
 	fun testSpacesBeforeMlClose() = compare()
 	fun testSpacesBeforeMlOpen() = compare()
 
+	fun testXmlClassAmpDoesNotTreatAsMlOpen() = compare()
 	fun testXmlClassDotDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
 	fun testXmlClassDotDoesNotTreatAsMlCloseWhileParsingIsNotInMultilineMode() = compare()
 }
