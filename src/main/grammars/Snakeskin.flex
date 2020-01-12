@@ -389,21 +389,9 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS_LINE}             { return WHITE_SPACE; }
 
 // Multiline declaration
-  {WS_LINE} "&"         { yybegin(CHECK_LINE_SPLITTING); }
-  {WS_LINE} "."  {
-        if (!zzIsMultilineMode) {
-          yypushback(1);    // returns DOT to stream
-          return WHITE_SPACE;
-        }
-        yybegin(END_OF_LINE_SPLITTING);
-      }
-  {WS_EOL} "."  {
-        if (!zzIsMultilineMode) {
-          yypushback(1);    // returns DOT to stream
-          return endStatement(false);
-        }
-        yybegin(END_OF_LINE_SPLITTING);
-      }
+  {WS_LINE} "&"         { return toStartOfLineSplitting(); }
+  {WS_LINE} "."         { return toEndOfLineSplitting(false); }
+  {WS_EOL} "."          { return toEndOfLineSplitting(true); }
 
   {WS_EOL}  {
     if (zzIsMultilineMode) {

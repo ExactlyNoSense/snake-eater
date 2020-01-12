@@ -8,6 +8,7 @@ class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
 	fun testDecimalSeparatorDoesNotTreatAsMlCloseWhileParsingIsNotInMultilineMode() = compare()
 	fun testIdentifierSeparatorDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
 	fun testIdentifierSeparatorDoesNotTreatAsMlCloseWhileParsingIsNotInMultilineMode() = compare()
+
 	fun testMlCloseOnNewLine() = compare()
 	fun testMlCloseOnNewLineWithSpace() = compare()
 	fun testMlCloseOnTheLastLine() = compare()
@@ -16,4 +17,7 @@ class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
 	fun testSpacesAfterMlOpen() = compare()
 	fun testSpacesBeforeMlClose() = compare()
 	fun testSpacesBeforeMlOpen() = compare()
+
+	fun testXmlClassDotDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
+	fun testXmlClassDotDoesNotTreatAsMlCloseWhileParsingIsNotInMultilineMode() = compare()
 }
