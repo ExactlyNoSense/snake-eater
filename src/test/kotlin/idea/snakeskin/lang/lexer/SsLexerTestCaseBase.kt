@@ -8,7 +8,7 @@ open class SsLexerTestCaseBase : LexerTestCase() {
 		val BASE_PATH = "src/test/resources"
 	}
 
-	override fun getDirPath() = "lexer"
+	override fun getDirPath() = "idea/snakeskin/lang/lexer"
 
 	override fun createLexer() = SsLexer(false)
 
