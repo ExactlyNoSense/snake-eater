@@ -389,7 +389,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS_LINE}             { return WHITE_SPACE; }
 
 // Multiline declaration
-  {WS_LINE} "&"         { yybegin(LINE_SPLITTING); }
+  {WS_LINE} "&"         { yybegin(CHECK_LINE_SPLITTING); }
   {WS_LINE} "."  {
         if (!zzIsMultilineMode) {
           yypushback(1);    // returns DOT to stream
