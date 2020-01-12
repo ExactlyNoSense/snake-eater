@@ -62,6 +62,29 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
     yybegin(XML_DIRECTIVE);
     return tagType;
   }
+
+  // expects '{WS_LINE} "&"' rule
+  private IElementType toStartOfLineSplitting() {
+    // returns AMP to stream
+    yypushback(1);
+    yybegin(CHECK_LINE_SPLITTING);
+    return WHITE_SPACE;
+  }
+
+  // expects '{WS_LINE} "."' or '{WS_EOL} "."' rules
+  // for prefix '{WS_LINE}' argument isEndOfLine should be false
+  // for prefix '{WS_EOL}' argument isEndOfLine should be true
+  private IElementType toEndOfLineSplitting(boolean isEndOfLine) {
+    // returns DOT to stream
+    yypushback(1);
+
+    if (!zzIsMultilineMode) {
+      return isEndOfLine ? endStatement(false) : WHITE_SPACE;
+    }
+
+    yybegin(CHECK_END_OF_LINE_SPLITTING);
+    return WHITE_SPACE;
+  }
 %}
 
 %public
@@ -72,7 +95,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
 %state XML_ATTR_VALUE, INTERPOLATION
-%state LINE_SPLITTING, END_OF_LINE_SPLITTING
+%state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
 
@@ -336,8 +359,9 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS_LINE}             { return WHITE_SPACE; }
 
 // Multiline declaration
-  {WS_LINE} "&"         { yybegin(LINE_SPLITTING); }
-  {WS} "."              { yybegin(END_OF_LINE_SPLITTING); }
+  {WS_LINE} "&"         { return toStartOfLineSplitting(); }
+  {WS_LINE} "."         { return toEndOfLineSplitting(false); }
+  {WS_EOL} "."          { return toEndOfLineSplitting(true); }
 
   {WS_EOL}  {
     if (zzIsMultilineMode) {
@@ -438,10 +462,23 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   . { return BAD_CHARACTER; }
 }
 
-// Checks that there is no a non WS symbol after substring " &".
-// In this case it's a line splitting sequence.
-// If there is a non WS symbol and "&" is just an AMP token.
-<LINE_SPLITTING> {
+// Checks that there is no a non WS symbol after substring "&".
+// In this case it's a start of line splitting.
+// If there is a non WS symbol after "&", then it's just an AMP token.
+<CHECK_LINE_SPLITTING> {
+  "&" / {WS_LINE}* {WS_EOL}  {
+    yypushback(yylength());
+    yybegin(START_OF_LINE_SPLITTING);
+  }
+
+  <<EOF>>  { return endStatement(true); }
+
+  .  { yybegin(currentDirectiveState); yypushback(1); return AMP; }
+}
+
+// Returns correct token for "&" character and whitespaces
+<START_OF_LINE_SPLITTING> {
+  "&"  { return ML_OPEN; }
   {WS_LINE}+  { return WHITE_SPACE; }
   {WS_EOL}  {
     if (!zzIsMultilineMode) {
@@ -450,16 +487,25 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
     yybegin(currentDirectiveState);
     yypushback(yylength());
   }
+}
+
+// Checks that there is no a non WS symbol after substring ".".
+// In this case it's the end of line splitting.
+// If there is a non WS symbol after ".", then it's just a DOT token.
+<CHECK_END_OF_LINE_SPLITTING> {
+  "." / {WS_LINE}* {WS_EOL}  {
+    yypushback(yylength());
+    yybegin(END_OF_LINE_SPLITTING);
+  }
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(currentDirectiveState); yypushback(1); return AMP; }
+  .  { yybegin(currentDirectiveState); yypushback(1); return DOT; }
 }
 
-// Checks that there is no a non WS symbol after substring " .".
-// In this case it's the end of line splitting sequence.
-// If there is a non WS symbol and "." is just a DOT token.
+// Returns correct token for "." character and whitespaces
 <END_OF_LINE_SPLITTING> {
+  "."  { return ML_CLOSE; }
   {WS_LINE}+  { return WHITE_SPACE; }
   {WS_EOL}  {
     if (zzIsMultilineMode) {
@@ -468,10 +514,6 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
     yybegin(currentDirectiveState);
     yypushback(yylength());
   }
-
-  <<EOF>>  { return endStatement(true); }
-
-  .  { yybegin(currentDirectiveState); yypushback(1); return DOT; }
 }
 
 [^] { return BAD_CHARACTER; }
