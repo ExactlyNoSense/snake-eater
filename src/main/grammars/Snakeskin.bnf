@@ -388,9 +388,9 @@ TagStatement ::= TagHead StatementEnd BlockBody?
 TagHead ::= Tags XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 Tags ::= CommonTag | SpecificTag
-CommonTag ::= tag XmlTagDeclaration? XmlSelector?
+CommonTag ::= tag XmlTagName? XmlSelector?
 { pin = 1 }
-SpecificTag ::= (script | style | link) (TAG_NAME | ATTR_NAME)?
+SpecificTag ::= (script | style | link) XML_IDENTIFIER?
 
 // Parameters
 IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
@@ -424,15 +424,16 @@ StatementEnd ::= EOS
 // XML
 XmlStatement ::= TAG_START XmlHead StatementEnd BlockBody?
 { pin = 1 }
-XmlHead ::= XmlTagDeclaration? XmlSelector? XmlAttrsList?
+XmlHead ::= XmlTagName? XmlSelector? XmlAttrsList?
 { recoverWhile = Statement_recover }
-XmlTagDeclaration ::= TAG_NAME | '?'
+XmlTagName ::= XML_IDENTIFIER | '?'
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
 { pin = 1 }
-XmlAttrDeclaration ::= (ATTR_NAME | TAG_NAME) ['=' ATTR_VALUE?]
+XmlAttrName ::= XML_IDENTIFIER
+XmlAttrDeclaration ::= XmlAttrName ['=' ATTR_VALUE?]
 { recoverWhile = XmlAttrDeclaration_recover }
 private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
 

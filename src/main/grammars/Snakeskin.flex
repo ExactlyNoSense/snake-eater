@@ -109,13 +109,9 @@ IDENTIFIER = [_\$\p{xidstart}][\$\p{xidcontinue}]*
 WITH_IDENTIFIER = @[_\$\p{xidstart}][\$\p{xidcontinue}]*
 GLOBAL_IDENTIFIER = @@[_\$\p{xidstart}][\$\p{xidcontinue}]*
 
-XML_TAG_START = [_:a-zA-Z]
-XML_TAG_CONTINUE = {XML_TAG_START} | [-\.0-9]
-XML_TAG = {XML_TAG_START} {XML_TAG_CONTINUE}*
-
-XML_ATTR_START = [@-_:a-zA-Z]
-XML_ATTR_CONTINUE = [-_:\.a-zA-Z0-9]
-XML_ATTR = {XML_ATTR_START} {XML_ATTR_CONTINUE}*
+XML_ID_START = [@-_:a-zA-Z]
+XML_ID_CONTINUE = [-_:a-zA-Z0-9]
+XML_IDENTIFIER = {XML_ID_START} {XML_ID_CONTINUE}*
 
 CSS_NAME_START = [_a-zA-Z]
 CSS_NAME_CONTINUE = [_a-zA-Z0-9-]
@@ -381,10 +377,9 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return EQ;
       }
   "|"                   { return PIPE; }
-  {XML_TAG}             { return TAG_NAME; }
+  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
   {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
   {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
-  {XML_ATTR}            { return ATTR_NAME; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 
