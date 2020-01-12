@@ -20,6 +20,8 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			BRACE_OPEN, BRACE_CLOSE -> SsColor.BRACES
 			BRACK_OPEN, BRACK_CLOSE -> SsColor.BRACKETS
 			PAREN_OPEN, PAREN_CLOSE -> SsColor.PARENTHESES
+			ML_OPEN, ML_CLOSE -> SsColor.MULTILINE
+
 			DOT -> SsColor.DOT
 			COMMA -> SsColor.COMMA
 			SEMICOLON -> SsColor.SEMICOLON
