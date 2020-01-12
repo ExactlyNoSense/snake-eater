@@ -473,7 +473,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(currentDirectiveState); yypushback(1); return AMP; }
+  .  { yybegin(currentDirectiveState); return AMP; }
 }
 
 // Returns correct token for "&" character and whitespaces
@@ -500,7 +500,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(currentDirectiveState); yypushback(1); return DOT; }
+  .  { yybegin(currentDirectiveState); return DOT; }
 }
 
 // Returns correct token for "." character and whitespaces
