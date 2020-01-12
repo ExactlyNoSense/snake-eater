@@ -1,0 +1,7 @@
+- var &
+ x = obj.name
+.
+
+- var &
+ y = obj .name
+.
