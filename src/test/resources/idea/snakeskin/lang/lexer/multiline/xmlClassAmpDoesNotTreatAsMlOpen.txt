@@ -1,6 +1,5 @@
 SsTokenType.TAG_START ('<')
 WHITE_SPACE (' ')
-SsTokenType.ATTR_NAME ('div.')
-BAD_CHARACTER ('&')
-SsTokenType.TAG_NAME ('__class')
+SsTokenType.XML_IDENTIFIER ('div')
+SsTokenType.CLASS_SELECTOR ('.&__class')
 SsTokenType.EOS ('\n')
