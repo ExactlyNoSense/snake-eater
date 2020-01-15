@@ -321,6 +321,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "interface"           { return INTERFACE; }
   "link"                { return toXmlParsing(LINK); }
   "namespace"           { return NAMESPACE; }
+  "new"                 { return NEW; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }

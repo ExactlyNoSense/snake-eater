@@ -459,6 +459,7 @@ Expression ::= AssignmentExpression
 	| FilterExpression
 	| TernaryExpression
 	| MemberExpression
+	| NewExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
@@ -568,3 +569,6 @@ CallArgument ::= Expression
 private CallArgument_recover ::= !(',' | ')' | StatementEnd)
 
 TernaryExpression ::= Expression '?' Expression ':' Expression
+
+NewExpression ::= NEW Expression
+{ pin = 1; recoverWhile = Statement_recover }
