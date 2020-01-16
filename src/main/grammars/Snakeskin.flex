@@ -336,6 +336,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "template"            { return TEMPLATE; }
   "throw"               { return THROW; }
   "try"                 { return TRY; }
+  "typeof"              { return TYPEOF; }
   "unless"              { return UNLESS; }
   "var"                 { return VAR; }
   "void"                { return VOID; }

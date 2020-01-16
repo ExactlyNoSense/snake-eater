@@ -68,6 +68,7 @@ val SS_KEYWORDS = tokensSet(
 	TEMPLATE,
 	THROW,
 	TRY,
+	TYPEOF,
 	UNLESS,
 	VAR,
 	VOID,
