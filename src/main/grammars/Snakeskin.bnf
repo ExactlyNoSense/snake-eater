@@ -464,6 +464,7 @@ Expression ::= AssignmentExpression
 	| DeleteExpression
 	| TypeofExpression
 	| InExpression
+	| InstanceofExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
@@ -579,3 +580,4 @@ VoidExpression ::= VOID Expression
 DeleteExpression ::= DELETE Expression
 TypeofExpression ::= TYPEOF Expression
 InExpression ::= Expression IN Expression
+InstanceofExpression ::= Expression INSTANCEOF Expression

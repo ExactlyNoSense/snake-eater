@@ -319,6 +319,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "import"              { return IMPORT; }
   "in"                  { return IN; }
   "include"             { return INCLUDE; }
+  "instanceof"          { return INSTANCEOF; }
   "interface"           { return INTERFACE; }
   "link"                { return toXmlParsing(LINK); }
   "namespace"           { return NAMESPACE; }
