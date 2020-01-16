@@ -460,6 +460,7 @@ Expression ::= AssignmentExpression
 	| TernaryExpression
 	| MemberExpression
 	| NewExpression
+	| VoidExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
@@ -571,4 +572,4 @@ private CallArgument_recover ::= !(',' | ')' | StatementEnd)
 TernaryExpression ::= Expression '?' Expression ':' Expression
 
 NewExpression ::= NEW Expression
-{ pin = 1; recoverWhile = Statement_recover }
+VoidExpression ::= VOID Expression
