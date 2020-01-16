@@ -301,6 +301,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "const"               { return CONST; }
   "continue"            { return CONTINUE; }
   "default"             { return DEFAULT; }
+  "delete"              { return DELETE; }
   "do"                  { return DO; }
   "doctype"             { return DOCTYPE; }
   "else"                { return ELSE; }

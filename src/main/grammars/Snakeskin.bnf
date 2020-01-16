@@ -461,6 +461,7 @@ Expression ::= AssignmentExpression
 	| MemberExpression
 	| NewExpression
 	| VoidExpression
+	| DeleteExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
@@ -573,3 +574,4 @@ TernaryExpression ::= Expression '?' Expression ':' Expression
 
 NewExpression ::= NEW Expression
 VoidExpression ::= VOID Expression
+DeleteExpression ::= DELETE Expression

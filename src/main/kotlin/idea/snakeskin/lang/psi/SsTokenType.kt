@@ -33,6 +33,7 @@ val SS_KEYWORDS = tokensSet(
 	CONST,
 	CONTINUE,
 	DEFAULT,
+	DELETE,
 	DO,
 	DOCTYPE,
 	ELSE,
