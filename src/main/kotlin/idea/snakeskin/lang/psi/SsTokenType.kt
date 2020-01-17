@@ -25,6 +25,7 @@ val SS_OPERATORS = tokensSet(
 val SS_KEYWORDS = tokensSet(
 	AS,
 	ASYNC,
+	AWAIT,
 	BLOCK,
 	BREAK,
 	CALL,

@@ -293,6 +293,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   "as"                  { return AS; }
   "async"               { return ASYNC; }
+  "await"               { return AWAIT; }
   "block"               { return BLOCK; }
   "break"               { return BREAK; }
   "call"                { return CALL; }
