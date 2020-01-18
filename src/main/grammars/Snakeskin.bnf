@@ -153,6 +153,7 @@ VerboseBlockStatement ::= BlockStatement
 	| ReturnStatement
 	| WithStatement
 	| TagStatement
+	| AwaitStatement
 
 ShortStatement ::= ShortInlineStatement | ShortBlockStatement
 ShortInlineStatement ::= ShortVariableStatement
@@ -391,6 +392,11 @@ Tags ::= CommonTag | SpecificTag
 CommonTag ::= tag XmlTagName? XmlSelector?
 { pin = 1 }
 SpecificTag ::= (script | style | link) XML_IDENTIFIER?
+
+// Await
+AwaitStatement ::= AwaitHead StatementEnd BlockBody?
+AwaitHead ::= AWAIT Expression?
+{ pin = 1; recoverWhile = Statement_recover }
 
 // Parameters
 IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
