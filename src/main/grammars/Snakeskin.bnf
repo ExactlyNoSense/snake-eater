@@ -84,7 +84,6 @@ GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
 
 GlobalVerboseStatement ::= StatementStart (GlobalVerboseInlineStatement StatementEnd | GlobalVerboseBlockStatement)
 { pin = 1 }
-GlobalVerboseBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 
 GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd
 
@@ -113,6 +112,10 @@ GlobalShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
 /////////////////////////////
 // GLOBAL BLOCK STATEMENTS //
 /////////////////////////////
+GlobalVerboseBlockStatement ::= GlobalBlockStatement
+	| WithStatement
+
+GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| ExternalBlockHeadStatement
 	| TemplateHeadStatement
