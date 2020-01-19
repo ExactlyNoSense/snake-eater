@@ -117,6 +117,7 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| ConditionalStatement
 	| SwitchStatement
 	| LoopStatement
+	| IteratorStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
