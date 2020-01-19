@@ -103,6 +103,7 @@ GlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| IncludeStatement
 	| ImportStatement
 	| VerboseVoidStatement
+	| ThrowStatement
 { recoverWhile = Statement_recover}
 
 GlobalShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
@@ -118,6 +119,7 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| SwitchStatement
 	| LoopStatement
 	| IteratorStatement
+	| TryCatchStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
