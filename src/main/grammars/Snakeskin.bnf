@@ -116,6 +116,7 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| WithStatement
 	| ConditionalStatement
 	| SwitchStatement
+	| LoopStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
