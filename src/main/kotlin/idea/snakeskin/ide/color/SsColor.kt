@@ -8,6 +8,7 @@ enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 	IDENTIFIER("Identifier", Default.IDENTIFIER),
 	STRING("String", Default.STRING),
 	NUMBER("Number", Default.NUMBER),
+	REGEXP("Regular expression", Default.STRING),
 
 	BRACES("Braces and Operators//Braces", Default.BRACES),
 	BRACKETS("Braces and Operators//Brackets", Default.BRACKETS),

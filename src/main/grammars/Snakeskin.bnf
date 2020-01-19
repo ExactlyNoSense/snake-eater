@@ -472,6 +472,7 @@ Expression ::= AssignmentExpression
 	| InExpression
 	| InstanceofExpression
 	| AwaitExpression
+	| RegularExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
@@ -589,3 +590,4 @@ TypeofExpression ::= TYPEOF Expression
 InExpression ::= Expression IN Expression
 InstanceofExpression ::= Expression INSTANCEOF Expression
 AwaitExpression ::= AWAIT Expression
+RegularExpression ::= REGEXP
