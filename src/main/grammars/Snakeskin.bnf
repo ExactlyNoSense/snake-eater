@@ -114,6 +114,7 @@ GlobalShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
 /////////////////////////////
 GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| WithStatement
+	| ConditionalStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
