@@ -85,7 +85,7 @@ GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
 GlobalVerboseStatement ::= StatementStart (GlobalVerboseInlineStatement StatementEnd | GlobalVerboseBlockStatement)
 { pin = 1 }
 
-GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd
+GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd | GlobalShortBlockStatement
 
 private Statement_recover ::= !StatementEnd
 private Body_recover ::= !DEDENT
@@ -120,12 +120,15 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| LoopStatement
 	| IteratorStatement
 	| TryCatchStatement
+	| VerboseFuncStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| ExternalBlockHeadStatement
 	| TemplateHeadStatement
 { recoverWhile = Statement_recover }
+
+GlobalShortBlockStatement ::= ShortFuncStatement
 
 
 BlockBody ::= INDENT BodyStatements DEDENT
