@@ -121,6 +121,8 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| IteratorStatement
 	| TryCatchStatement
 	| VerboseFuncStatement
+	| TargetStatement
+	| VerbosePutInStatement
 
 GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
 GlobalBlockHead ::= HeadOrEvalHeadStatement
@@ -128,7 +130,7 @@ GlobalBlockHead ::= HeadOrEvalHeadStatement
 	| TemplateHeadStatement
 { recoverWhile = Statement_recover }
 
-GlobalShortBlockStatement ::= ShortFuncStatement
+GlobalShortBlockStatement ::= ShortFuncStatement | ShortPutInStatement
 
 
 BlockBody ::= INDENT BodyStatements DEDENT
