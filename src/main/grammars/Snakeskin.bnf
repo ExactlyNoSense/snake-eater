@@ -441,12 +441,17 @@ QualifiedIdentifierTail ::= '.' (IDENTIFIER | PLACEHOLDER) | '[' (Expression | P
 StatementStart ::= SHARP | MINUS
 StatementEnd ::= EOS
 
+// Interpolation
+InterpolationStatement ::= INTERPOLATION_OPEN Expression? INTERPOLATION_CLOSE
+{ pin = 1 }
+
 // XML
 XmlStatement ::= TAG_START XmlHead StatementEnd BlockBody?
 { pin = 1 }
 XmlHead ::= XmlTagName? XmlSelector? XmlAttrsList?
 { recoverWhile = Statement_recover }
-XmlTagName ::= XML_IDENTIFIER | '?'
+XmlTagName ::= XmlIdentifierStatement | '?'
+XmlIdentifierStatement ::= XML_IDENTIFIER? InterpolationStatement | XML_IDENTIFIER
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*

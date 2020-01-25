@@ -39,6 +39,10 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
   private Stack<Integer> indentionStack = new Stack<>();
   private int currentIndent = 0;
 
+  private boolean zzIsInterpolationMode = false;
+  private int zzInterpolationBracesCount = 0;
+  private int zzLastInterpolationDirective = -1;
+
   private IElementType endStatement(boolean isEof) {
     if (isEof) {
       toDedent();
@@ -231,14 +235,28 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yypushback(yylength() - 1);
         return FILTER_PIPE;
        }
-  "{"                   { return BRACE_OPEN; }
-  "}"                   {
-          if (zzFromTemplate) {
-            zzFromTemplate = false;
-            yybegin(TEMPLATE_DIRECTIVE);
-          }
-          return BRACE_CLOSE;
+  "{"                   {
+        if (zzIsInterpolationMode) {
+          zzInterpolationBracesCount++;
         }
+        return BRACE_OPEN;
+      }
+  "}"                   {
+        if (zzIsInterpolationMode) {
+          if(zzInterpolationBracesCount > 0) {
+            zzInterpolationBracesCount--;
+          } else {
+            zzIsInterpolationMode = false;
+            yybegin(zzLastInterpolationDirective);
+            return INTERPOLATION_CLOSE;
+          }
+        }
+        if (zzFromTemplate) {
+          zzFromTemplate = false;
+          yybegin(TEMPLATE_DIRECTIVE);
+        }
+        return BRACE_CLOSE;
+      }
   "["                   { return BRACK_OPEN; }
   "]"                   { return BRACK_CLOSE; }
   "("                   { return PAREN_OPEN; }
@@ -359,7 +377,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WITH_IDENTIFIER}     { return WITH_IDENTIFIER; }
   {GLOBAL_IDENTIFIER}   { return GLOBAL_IDENTIFIER; }
 
-  {COMMENT}        { return COMMENT_BLOCK; }
+  {COMMENT}             { return COMMENT_BLOCK; }
 
   {WS_LINE}             { return WHITE_SPACE; }
 
@@ -391,6 +409,13 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
 
   {WS_LINE}             { return WHITE_SPACE; }
+
+  "${"                  {
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = XML_DIRECTIVE;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
 
 // Multiline declaration
   {WS_LINE} "&"         { return toStartOfLineSplitting(); }
