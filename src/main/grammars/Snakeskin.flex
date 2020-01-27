@@ -40,6 +40,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
   private int currentIndent = 0;
 
   private boolean zzIsInterpolationMode = false;
+  private boolean zzInterpolationJustFinished = false;
   private int zzInterpolationBracesCount = 0;
   private int zzLastInterpolationDirective = -1;
 
@@ -247,6 +248,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
             zzInterpolationBracesCount--;
           } else {
             zzIsInterpolationMode = false;
+            zzInterpolationJustFinished = true;
             yybegin(zzLastInterpolationDirective);
             return INTERPOLATION_CLOSE;
           }
@@ -404,14 +406,28 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return EQ;
       }
   "|"                   { return PIPE; }
-  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
+  {XML_IDENTIFIER}      {
+        if (zzInterpolationJustFinished) {
+          return XML_IDENTIFIER_PART;
+        }
+        return XML_IDENTIFIER;
+      }
   {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
   {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
 
-  {WS_LINE}             { return WHITE_SPACE; }
+  {WS_LINE}             {
+        zzInterpolationJustFinished = false;
+        return WHITE_SPACE;
+      }
+
+  {XML_IDENTIFIER}"${"  {
+        yypushback(2);
+        return XML_IDENTIFIER_PART;
+      }
 
   "${"                  {
         zzIsInterpolationMode = true;
+        zzInterpolationJustFinished = false;
         zzLastInterpolationDirective = XML_DIRECTIVE;
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
