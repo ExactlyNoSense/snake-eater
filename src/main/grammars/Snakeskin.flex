@@ -430,6 +430,11 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         zzInterpolationStart = InterpolationStart.ID;
         return ID_SELECTOR_PART_START;
       }
+  {CSS_CLASS_SELECTOR}"${"  {
+        yypushback(2);
+        zzInterpolationStart = InterpolationStart.CLASS;
+        return CLASS_SELECTOR_PART_START;
+      }
 
   "${"                  {
         if (zzInterpolationStart == InterpolationStart.NONE) {
@@ -513,6 +518,8 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
             return XML_IDENTIFIER_PART_END;
           case ID:
             return ID_SELECTOR_PART_END;
+          case CLASS:
+            return CLASS_SELECTOR_PART_END;
         }
       }
 

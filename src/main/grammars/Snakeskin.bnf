@@ -452,8 +452,9 @@ XmlHead ::= XmlTagName? XmlSelector? XmlAttrsList?
 { recoverWhile = Statement_recover }
 XmlTagName ::= XmlIdentifierStatement | '?'
 XmlIdentifierStatement ::= XML_IDENTIFIER_PART_START? (InterpolationStatement XML_IDENTIFIER_PART_END?)+ | XML_IDENTIFIER
-XmlSelector ::= CLASS_SELECTOR* CssIdSelector? CLASS_SELECTOR*
+XmlSelector ::= CssClassSelector* CssIdSelector? CssClassSelector*
 CssIdSelector ::= ID_SELECTOR_PART_START? (InterpolationStatement ID_SELECTOR_PART_END?)+ | ID_SELECTOR
+CssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CLASS_SELECTOR_PART_END?)+ | CLASS_SELECTOR
 
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
