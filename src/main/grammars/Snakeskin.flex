@@ -40,9 +40,18 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
   private int currentIndent = 0;
 
   private boolean zzIsInterpolationMode = false;
-  private boolean zzInterpolationJustFinished = false;
   private int zzInterpolationBracesCount = 0;
   private int zzLastInterpolationDirective = -1;
+  private InterpolationStart zzInterpolationStart = InterpolationStart.NONE;
+
+  private enum InterpolationStart {
+    NONE,
+    TAG,
+    CLASS,
+    ID,
+    ATTR,
+    LITERAL
+  }
 
   private IElementType endStatement(boolean isEof) {
     if (isEof) {
@@ -99,7 +108,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
-%state XML_ATTR_VALUE, INTERPOLATION
+%state XML_ATTR_VALUE, INTERPOLATION, INTERPOLATION_END
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
@@ -248,8 +257,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
             zzInterpolationBracesCount--;
           } else {
             zzIsInterpolationMode = false;
-            zzInterpolationJustFinished = true;
-            yybegin(zzLastInterpolationDirective);
+            yybegin(INTERPOLATION_END);
             return INTERPOLATION_CLOSE;
           }
         }
@@ -406,28 +414,19 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return EQ;
       }
   "|"                   { return PIPE; }
-  {XML_IDENTIFIER}      {
-        if (zzInterpolationJustFinished) {
-          return XML_IDENTIFIER_PART;
-        }
-        return XML_IDENTIFIER;
-      }
+  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
   {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
   {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
 
-  {WS_LINE}             {
-        zzInterpolationJustFinished = false;
-        return WHITE_SPACE;
-      }
+  {WS_LINE}             { return WHITE_SPACE; }
 
   {XML_IDENTIFIER}"${"  {
         yypushback(2);
-        return XML_IDENTIFIER_PART;
+        return XML_IDENTIFIER_PART_START;
       }
 
   "${"                  {
         zzIsInterpolationMode = true;
-        zzInterpolationJustFinished = false;
         zzLastInterpolationDirective = XML_DIRECTIVE;
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
@@ -493,6 +492,20 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return BRACE_CLOSE_CLOSE;
       }
   . { return BAD_CHARACTER; }
+}
+
+// Finishes an interpolation
+// A separate state is needed because the end of an identifier
+// could be right after the end of an interpolation (without white space).
+<INTERPOLATION_END> {
+  {XML_IDENTIFIER}  { return XML_IDENTIFIER_PART_END; }
+
+  <<EOF>>  { yybegin(zzLastInterpolationDirective); }
+  [^]  {
+        zzInterpolationStart = InterpolationStart.NONE;
+        yybegin(zzLastInterpolationDirective);
+        yypushback(yylength());
+      }
 }
 
 // Checks that there is no a non WS symbol after substring "&".

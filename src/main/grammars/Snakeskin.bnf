@@ -451,7 +451,7 @@ XmlStatement ::= TAG_START XmlHead StatementEnd BlockBody?
 XmlHead ::= XmlTagName? XmlSelector? XmlAttrsList?
 { recoverWhile = Statement_recover }
 XmlTagName ::= XmlIdentifierStatement | '?'
-XmlIdentifierStatement ::= XML_IDENTIFIER_PART? (InterpolationStatement XML_IDENTIFIER_PART?)+ | XML_IDENTIFIER
+XmlIdentifierStatement ::= XML_IDENTIFIER_PART_START? (InterpolationStatement XML_IDENTIFIER_PART_END?)+ | XML_IDENTIFIER
 XmlSelector ::= CLASS_SELECTOR* ID_SELECTOR? CLASS_SELECTOR*
 
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
