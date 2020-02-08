@@ -422,10 +422,19 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   {XML_IDENTIFIER}"${"  {
         yypushback(2);
+        zzInterpolationStart = InterpolationStart.TAG;
         return XML_IDENTIFIER_PART_START;
+      }
+  {CSS_ID_SELECTOR}"${" {
+        yypushback(2);
+        zzInterpolationStart = InterpolationStart.ID;
+        return ID_SELECTOR_PART_START;
       }
 
   "${"                  {
+        if (zzInterpolationStart == InterpolationStart.NONE) {
+          zzInterpolationStart = InterpolationStart.TAG;
+        }
         zzIsInterpolationMode = true;
         zzLastInterpolationDirective = XML_DIRECTIVE;
         yybegin(CONTROL_DIRECTIVE);
@@ -498,7 +507,14 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 // A separate state is needed because the end of an identifier
 // could be right after the end of an interpolation (without white space).
 <INTERPOLATION_END> {
-  {XML_IDENTIFIER}  { return XML_IDENTIFIER_PART_END; }
+  {XML_IDENTIFIER}  {
+        switch (zzInterpolationStart) {
+          case TAG:
+            return XML_IDENTIFIER_PART_END;
+          case ID:
+            return ID_SELECTOR_PART_END;
+        }
+      }
 
   <<EOF>>  { yybegin(zzLastInterpolationDirective); }
   [^]  {
