@@ -466,12 +466,12 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
 <XML_ATTR_VALUE> {
   {WS_LINE}+            { return WHITE_SPACE; }
-  "|"                   |
+  \s\|\s                |
   {WS_EOL}              {
         yypushback(yylength());
         yybegin(XML_DIRECTIVE);
       }
-  [^\|\r\n]+            {
+  [^\r\n\s]!([^]* (\R|\s\|\s) [^]*) / \R|\s\|\s   {
         yybegin(XML_DIRECTIVE);
         return ATTR_VALUE;
       }
