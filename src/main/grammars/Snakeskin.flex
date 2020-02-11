@@ -50,6 +50,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
     CLASS,
     ID,
     ATTR,
+    ATTR_VALUE,
     LITERAL
   }
 
@@ -471,6 +472,13 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yypushback(yylength());
         yybegin(XML_DIRECTIVE);
       }
+  \$\{                  {
+        zzInterpolationStart = InterpolationStart.ATTR_VALUE;
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = XML_ATTR_VALUE;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
   !(![^]|(\R|\s\|\s|\$\{))+ / \R|\s\|\s|\$\{   {
         return ATTR_VALUE;
       }
@@ -519,6 +527,11 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
             return ID_SELECTOR_PART_END;
           case CLASS:
             return CLASS_SELECTOR_PART_END;
+          case ATTR_VALUE:
+            zzInterpolationStart = InterpolationStart.NONE;
+            yybegin(zzLastInterpolationDirective);
+            yypushback(yylength());
+            break;
         }
       }
 

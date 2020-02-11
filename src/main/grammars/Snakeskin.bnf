@@ -460,9 +460,10 @@ XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
 { pin = 1 }
 XmlAttrName ::= XML_IDENTIFIER
-XmlAttrDeclaration ::= XmlAttrName ['=' ATTR_VALUE?]
+XmlAttrDeclaration ::= XmlAttrName ['=' XmlAttrValueStatement?]
 { recoverWhile = XmlAttrDeclaration_recover }
 private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
+XmlAttrValueStatement ::= ATTR_VALUE? (InterpolationStatement ATTR_VALUE?)+ | ATTR_VALUE
 
 // Template text
 TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* StatementEnd
