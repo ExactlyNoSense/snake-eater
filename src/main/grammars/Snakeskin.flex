@@ -471,8 +471,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yypushback(yylength());
         yybegin(XML_DIRECTIVE);
       }
-  [^\r\n\s]!([^]* (\R|\s\|\s) [^]*) / \R|\s\|\s   {
-        yybegin(XML_DIRECTIVE);
+  !(![^]|(\R|\s\|\s|\$\{))+ / \R|\s\|\s|\$\{   {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
