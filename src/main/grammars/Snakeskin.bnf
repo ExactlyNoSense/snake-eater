@@ -459,7 +459,7 @@ CssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CLASS_SE
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
 { pin = 1 }
-XmlAttrName ::= XML_IDENTIFIER
+XmlAttrName ::= XmlIdentifierStatement
 XmlAttrDeclaration ::= XmlAttrName ['=' XmlAttrValueStatement?]
 { recoverWhile = XmlAttrDeclaration_recover }
 private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
