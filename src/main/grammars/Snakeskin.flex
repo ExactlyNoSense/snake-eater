@@ -479,7 +479,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  !(![^]|(\R|\s\|\s|\$\{))+ / \R|\s\|\s|\$\{   {
+  ([^\s\$]|(\s[^\|]|\$[^\{])|\s\|[^\s])+   {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
