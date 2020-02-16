@@ -513,7 +513,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return INTERPOLATION_OPEN;
       }
   ( [^\r\n\}\$] | ( \}[^\r\n\}] | \$[^\{] ) )+ {
-        return TEMPLATE_INTERPOLATION;
+        return TEMPLATE_LITERAL;
       }
   "}}"  {
         yybegin(TEMPLATE_DIRECTIVE);
