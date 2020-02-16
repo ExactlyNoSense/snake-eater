@@ -479,7 +479,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  ( [^ \t\$\r\n] | ( [ \t][^\|] | \$[^\{] ) | [ \t]\|[^ \t] )+   {
+  ( [^ \t\r\n\$] | ( [ \t][^\|\r\n] | \$[^\{] ) | [ \t]\|[^ \t\r\n] )+   {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
