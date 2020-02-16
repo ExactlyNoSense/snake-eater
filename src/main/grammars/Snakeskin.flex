@@ -109,7 +109,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
-%state XML_ATTR_VALUE, INTERPOLATION, INTERPOLATION_END
+%state XML_ATTR_VALUE, LITERAL, INTERPOLATION_END
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
@@ -493,7 +493,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return BRACE_OPEN;
       }
   "{{"                  {
-        yybegin(INTERPOLATION);
+        yybegin(LITERAL);
         return BRACE_OPEN_OPEN;
       }
   {WS_EOL}              { return endStatement(false); }
@@ -504,11 +504,11 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   <<EOF>>               { return endStatement(true); }
 }
 
-<INTERPOLATION> {
+<LITERAL> {
   \$\{                  {
         zzInterpolationStart = InterpolationStart.LITERAL;
         zzIsInterpolationMode = true;
-        zzLastInterpolationDirective = INTERPOLATION;
+        zzLastInterpolationDirective = LITERAL;
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
