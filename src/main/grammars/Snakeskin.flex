@@ -505,7 +505,14 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 }
 
 <INTERPOLATION> {
-  [^\r\n}]!([^]* (\R|}}) [^]*) / \R|}}  {
+  \$\{                  {
+        zzInterpolationStart = InterpolationStart.LITERAL;
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = INTERPOLATION;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
+  ( [^\r\n\}\$] | ( \}[^\r\n\}] | \$[^\{] ) )+ {
         return TEMPLATE_INTERPOLATION;
       }
   "}}"  {
@@ -528,6 +535,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
           case CLASS:
             return CLASS_SELECTOR_PART_END;
           case ATTR_VALUE:
+          case LITERAL:
             zzInterpolationStart = InterpolationStart.NONE;
             yybegin(zzLastInterpolationDirective);
             yypushback(yylength());
