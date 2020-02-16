@@ -505,6 +505,10 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 }
 
 <LITERAL> {
+  {WS_EOL}              {
+        yypushback(yylength());
+        yybegin(TEMPLATE_DIRECTIVE);
+      }
   \$\{                  {
         zzInterpolationStart = InterpolationStart.LITERAL;
         zzIsInterpolationMode = true;
@@ -512,7 +516,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  ( [^\r\n\}\$] | ( \}[^\r\n\}] | \$[^\{] ) )+ {
+  ( [^\r\n\}\$] | ( \}[^\r\n\}] | \$[^\{] ) )+  {
         return TEMPLATE_LITERAL;
       }
   "}}"  {
