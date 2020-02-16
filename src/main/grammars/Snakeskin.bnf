@@ -469,6 +469,7 @@ XmlAttrValueStatement ::= ATTR_VALUE? (InterpolationStatement ATTR_VALUE?)+ | AT
 TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* StatementEnd
 TemplateInclusion ::= TemplateOutputStatement | TemplateInterpolationStatement
 TemplateOutputStatement ::= '{' Expression '}'
+{ pin = 1 }
 TemplateInterpolationStatement ::= '{{' TemplateInterpolationBody '}}'
 TemplateInterpolationBody ::= TEMPLATE_INTERPOLATION? (InterpolationStatement TEMPLATE_INTERPOLATION?)+ | TEMPLATE_INTERPOLATION
 
