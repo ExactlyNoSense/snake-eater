@@ -471,7 +471,10 @@ TemplateInclusion ::= TemplateOutputStatement | TemplateLiteralStatement
 TemplateOutputStatement ::= '{' Expression '}'
 { pin = 1 }
 TemplateLiteralStatement ::= '{{' TemplateLiteralBody '}}'
+{ pin = 1 }
 TemplateLiteralBody ::= TEMPLATE_LITERAL? (InterpolationStatement TEMPLATE_LITERAL?)+ | TEMPLATE_LITERAL
+{ recoverWhile = TemplateLiteralBody_recover }
+private TemplateLiteralBody_recover ::= !('}}' | StatementEnd)
 
 // Expressions
 Expression ::= AssignmentExpression
