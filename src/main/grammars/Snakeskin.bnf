@@ -212,7 +212,7 @@ NamespaceStatement ::= namespace DefinitionQualifiedIdentifier
 // Include
 IncludeStatement ::= include Expression RenderAsExpression?
 { pin = 1 }
-RenderAsExpression ::= as (interface | placeholder)
+RenderAsExpression ::= as TemplateType
 
 // Import
 ImportStatement ::= import (ImportClause FromClause | ModuleSpecifier)
