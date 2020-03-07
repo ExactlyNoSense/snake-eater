@@ -186,7 +186,7 @@ VariableDeclarationsListTail ::= ',' VariableDeclaration
 { pin = 1 }
 VariableDeclaration ::= IDENTIFIER ('=' Expression)?
 { recoverWhile = VariableDeclaration_recover }
-private VariableDeclaration_recover ::= !(',' | StatementEnd)
+private VariableDeclaration_recover ::= !(',' | ';' | StatementEnd)
 
 VerboseVariableStatement ::= var VariableDeclarationsList
 { pin = 1 }
@@ -319,8 +319,11 @@ LoopStatement ::= ForLoopStatement
 ForLoopStatement ::= ForLoopHead StatementEnd LoopBlockBody?
 ForLoopHead ::= for (CommonForLoopHead | ForInLoopHead)
 { pin = 1; recoverWhile = Statement_recover }
-CommonForLoopHead ::= Expression ';' Expression ';' Expression
-ForInLoopHead ::= (var | const | global | ':' | '-') IDENTIFIER in Expression
+CommonForLoopHead ::= CommonForLoopIndexDeclaration ';' Expression ';' Expression
+{ pin = 2 }
+CommonForLoopIndexDeclaration ::= var VariableDeclarationsList
+ForInLoopHead ::= var IDENTIFIER in Expression
+{ pin = 3 }
 
 WhileLoopStatement ::= WhileLoopHead StatementEnd LoopBlockBody?
 WhileLoopHead ::= while Expression
