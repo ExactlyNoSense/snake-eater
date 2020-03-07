@@ -169,10 +169,11 @@ VerboseBlockStatement ::= BlockStatement
 	| TagStatement
 	| AwaitStatement
 
-ShortStatement ::= ShortInlineStatement | ShortBlockStatement
+ShortStatement ::= ShortInlineStatement StatementEnd | ShortBlockStatement
 ShortInlineStatement ::= ShortVariableStatement
 	| ShortOutputStatement
 	| ShortVoidStatement
+{ recoverWhile = Statement_recover }
 
 ShortBlockStatement ::= ShortFuncStatement
 	| ShortPutInStatement
@@ -242,6 +243,7 @@ ShortOutputStatement ::= '{' Expression '}'
 VerboseVoidStatement ::= void Expression
 { pin = 1 }
 ShortVoidStatement ::= '?' Expression
+{ pin = 1 }
 
 // Super
 SuperStatement ::= super
