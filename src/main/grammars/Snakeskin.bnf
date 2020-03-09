@@ -82,7 +82,12 @@
 Snakeskin ::= GlobalStatement*
 GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
 
-GlobalVerboseStatement ::= StatementStart (GlobalVerboseInlineStatement StatementEnd | GlobalVerboseBlockStatement)
+// The order of the rules is important
+GlobalVerboseStatement ::= GlobalVerboseBlockStatementPart | GlobalVerboseInlineStatementPart
+
+// The pin attribute in the next two rules is important for control directive recovering
+private GlobalVerboseBlockStatementPart ::= StatementStart GlobalVerboseBlockStatement
+private GlobalVerboseInlineStatementPart::= StatementStart GlobalVerboseInlineStatement StatementEnd
 { pin = 1 }
 
 GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd | GlobalShortBlockStatement
