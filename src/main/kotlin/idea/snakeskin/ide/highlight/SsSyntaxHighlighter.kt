@@ -31,6 +31,8 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			in SS_KEYWORDS -> SsColor.KEYWORD
 
 			XML_IDENTIFIER -> SsColor.XML_NAME
+			CLASS_SELECTOR -> SsColor.CLASS_NAME
+			ID_SELECTOR -> SsColor.ID_NAME
 			ATTR_VALUE -> SsColor.ATTRIBUTE_VALUE
 			TEMPLATE_TEXT -> SsColor.TEXT
 

@@ -24,6 +24,8 @@ enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 	KEYWORD("Keyword", Default.KEYWORD),
 
 	XML_NAME("Markup//Xml name", XmlHighlighterColors.HTML_TAG_NAME),
+	CLASS_NAME("Markup//Class name", XmlHighlighterColors.XML_ENTITY_REFERENCE),
+	ID_NAME("Markup//Id name", XmlHighlighterColors.XML_ENTITY_REFERENCE),
 	ATTRIBUTE_VALUE("Markup//Attribute value", XmlHighlighterColors.HTML_ATTRIBUTE_VALUE),
 	TEXT("Markup//Text", XmlHighlighterColors.HTML_CODE),
 
