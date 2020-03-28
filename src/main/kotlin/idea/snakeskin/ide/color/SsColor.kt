@@ -16,6 +16,7 @@ enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 	PARENTHESES("Braces and Operators//Parentheses", Default.PARENTHESES),
 	MULTILINE("Braces and Operators//Multiline", Default.BRACES),
 	INTERPOLATION("Braces and Operators//Interpolation braces", Default.BRACES),
+	LITERAL("Braces and Operators//Literal", Default.BRACES),
 
 	DOT("Braces and Operators//Dot", Default.DOT),
 	COMMA("Braces and Operators//Comma", Default.COMMA),
