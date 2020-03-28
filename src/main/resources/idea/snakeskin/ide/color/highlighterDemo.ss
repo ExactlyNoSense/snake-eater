@@ -32,3 +32,6 @@
 					.
 					< span
 						List is empty
+
+		< span
+			Copyright {{ year }}
