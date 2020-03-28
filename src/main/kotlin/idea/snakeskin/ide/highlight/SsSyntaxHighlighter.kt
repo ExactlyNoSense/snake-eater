@@ -22,6 +22,7 @@ class SsSyntaxHighlighter : SyntaxHighlighterBase() {
 			BRACK_OPEN, BRACK_CLOSE -> SsColor.BRACKETS
 			PAREN_OPEN, PAREN_CLOSE -> SsColor.PARENTHESES
 			ML_OPEN, ML_CLOSE -> SsColor.MULTILINE
+			INTERPOLATION_OPEN, INTERPOLATION_CLOSE -> SsColor.INTERPOLATION
 
 			DOT -> SsColor.DOT
 			COMMA -> SsColor.COMMA
