@@ -2,6 +2,7 @@ package idea.snakeskin.ide.color
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import com.intellij.openapi.editor.XmlHighlighterColors
 import com.intellij.openapi.options.colors.AttributesDescriptor
 
 enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
@@ -22,10 +23,9 @@ enum class SsColor(uiName: String, val fallback: TextAttributesKey? = null) {
 
 	KEYWORD("Keyword", Default.KEYWORD),
 
-	TAG("Markup//Tag", Default.MARKUP_TAG),
-	ATTRIBUTE_KEY("Markup//Attribute key", Default.MARKUP_ATTRIBUTE),
-	ATTRIBUTE_VALUE("Markup//Attribute value", Default.STRING),
-	TEXT("Markup//Text", Default.TEMPLATE_LANGUAGE_COLOR),
+	XML_NAME("Markup//Xml name", XmlHighlighterColors.HTML_TAG_NAME),
+	ATTRIBUTE_VALUE("Markup//Attribute value", XmlHighlighterColors.HTML_ATTRIBUTE_VALUE),
+	TEXT("Markup//Text", XmlHighlighterColors.HTML_CODE),
 
 	COMMENT("Comment", Default.BLOCK_COMMENT)
 	;
