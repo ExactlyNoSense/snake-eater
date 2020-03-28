@@ -10,11 +10,15 @@
 		< .&__description
 			{description|trim}
 
+/*
+ * Just index template
+ */
 - template index(rootTag, @params = {}) extends base.index
 	- block root
 		- super
 
 		< ${rootTag}#cards.cards
+			/// block of cards
 			- block list
 				- if @list
 					- for var i = 0; i < @list.length; ++i
