@@ -220,8 +220,26 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
     yypushback(yylength());
     if (indentionStack.peek() > currentIndent) {
       indentionStack.pop();
-      toDedent();
-      return DEDENT;
+
+      // Snakeskin allow blocks inside one parent block to start with different amount of spaces.
+      //
+      // Example:
+      // ('>' - space)
+      // >block parent
+      // >>>block childOne
+      // >>block childTwo
+      // >>>block grandChild
+      //
+      // In this case it's necessery to push current indention into indention stack,
+      // since childOne and childTwo actually have the same indention and grandChild's
+      // indention should be treated correctly (because it starts with the same amount of spaces as childOne).
+      if (indentionStack.peek() < currentIndent) {
+        indentionStack.push(currentIndent);
+        yybegin(currentDirectiveState);
+      } else {
+        toDedent();
+        return DEDENT;
+      }
     }
     else {
       yybegin(currentDirectiveState);

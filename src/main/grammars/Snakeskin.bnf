@@ -79,8 +79,13 @@
 	]
 }
 
-Snakeskin ::= GlobalStatement*
+Snakeskin ::= GlobalIndent*
 GlobalStatement ::= GlobalVerboseStatement | GlobalShortStatement
+// Snakeskin allows global statements to start with different amount of spaces,
+// e.g. the first one's without any spaces, the second one's with two spaces, the third one's with one space
+GlobalIndent ::= GlobalStatement | GlobalBody
+GlobalBody ::= INDENT GlobalStatement+ DEDENT
+{ pin = 1 }
 
 // The order of the rules is important
 GlobalVerboseStatement ::= GlobalVerboseBlockStatementPart | GlobalVerboseInlineStatementPart
