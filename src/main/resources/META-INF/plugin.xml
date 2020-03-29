@@ -29,6 +29,10 @@
 		<!-- Folding -->
 
 		<lang.foldingBuilder language="Snakeskin" implementationClass="idea.snakeskin.ide.folding.SsFoldingBuilder"/>
+
+		<!-- Commenter -->
+
+		<lang.commenter language="Snakeskin" implementationClass="idea.snakeskin.ide.commenter.SsCommenter"/>
     </extensions>
 
     <actions>
