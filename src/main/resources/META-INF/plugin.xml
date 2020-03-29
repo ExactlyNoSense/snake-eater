@@ -33,6 +33,10 @@
 		<!-- Commenter -->
 
 		<lang.commenter language="Snakeskin" implementationClass="idea.snakeskin.ide.commenter.SsCommenter"/>
+
+		<!-- Matchers -->
+
+		<lang.braceMatcher language="Snakeskin" implementationClass="idea.snakeskin.ide.typing.SsBraceMatcher"/>
     </extensions>
 
     <actions>
