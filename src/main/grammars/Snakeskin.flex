@@ -109,7 +109,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
-%state XML_ATTR_VALUE, LITERAL, INTERPOLATION_END
+%state XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL, INTERPOLATION_END
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
@@ -429,7 +429,11 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 <XML_DIRECTIVE> {
   "<"                   { return TAG_START; }
   "="  {
-        yybegin(XML_ATTR_VALUE);
+        if (zzIsMultilineMode) {
+          yybegin(XML_ATTR_MULTILINE_VALUE);
+        } else {
+          yybegin(XML_ATTR_VALUE);
+        }
         return EQ;
       }
   "|"                   { return PIPE; }
@@ -498,6 +502,26 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return INTERPOLATION_OPEN;
       }
   ( [^ \t\r\n\$] | ( [ \t][^\|\r\n] | \$[^\{] ) | [ \t]\|[^ \t\r\n] )+   {
+        return ATTR_VALUE;
+      }
+  <<EOF>>               { return endStatement(true); }
+}
+
+<XML_ATTR_MULTILINE_VALUE> {
+  {WS_LINE}             { return WHITE_SPACE; }
+  {WS}\|{WS}            |
+  {WS} "."              {
+        yypushback(yylength());
+        yybegin(XML_DIRECTIVE);
+      }
+  \$\{                  {
+        zzInterpolationStart = InterpolationStart.ATTR_VALUE;
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = XML_ATTR_MULTILINE_VALUE;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
+  ([^ \t\r\n\|\$\.]|\|[^ \t\r\n]|\$[^\{])([^ \t\r\n\$]|(\$|[ \t\r\n]+\$)[^\{]|[ \t\r\n]+([^ \t\r\n\|\.\$]|\|[^ \t\r\n]|\.[ \t]*[^ \t\r\n]))* {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
