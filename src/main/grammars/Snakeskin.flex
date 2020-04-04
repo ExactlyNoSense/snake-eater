@@ -508,7 +508,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 }
 
 <XML_ATTR_MULTILINE_VALUE> {
-  {WS_LINE}             { return WHITE_SPACE; }
+  {WS}                  { return WHITE_SPACE; }
   {WS}\|{WS}            |
   {WS} "."              {
         yypushback(yylength());
