@@ -124,7 +124,7 @@ IDENTIFIER = [_\$\p{xidstart}][\$\p{xidcontinue}]*
 WITH_IDENTIFIER = @[_\$\p{xidstart}][\$\p{xidcontinue}]*
 GLOBAL_IDENTIFIER = @@[_\$\p{xidstart}][\$\p{xidcontinue}]*
 
-XML_ID_START = [@-_:a-zA-Z]
+XML_ID_START = [-@_:a-zA-Z]
 XML_ID_CONTINUE = [-_:a-zA-Z0-9]
 XML_IDENTIFIER = {XML_ID_START} {XML_ID_CONTINUE}*
 
