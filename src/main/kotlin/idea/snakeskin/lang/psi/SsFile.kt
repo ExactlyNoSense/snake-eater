@@ -7,5 +7,5 @@ import idea.snakeskin.lang.SsFileType
 import idea.snakeskin.lang.SsLanguage
 
 class SsFile(fileViewProvider: FileViewProvider) : PsiFileBase(fileViewProvider, SsLanguage.INSTANCE) {
-	override fun getFileType(): FileType = SsFileType.INSTANCE
+	override fun getFileType(): FileType = SsFileType
 }
