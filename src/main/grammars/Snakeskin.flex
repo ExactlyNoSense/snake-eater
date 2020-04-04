@@ -488,8 +488,8 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 }
 
 <XML_ATTR_VALUE> {
-  {WS_LINE}+            { return WHITE_SPACE; }
-  \s\|\s                |
+  {WS_LINE}            { return WHITE_SPACE; }
+  {WS_LINE}\|{WS_LINE}  |
   {WS_EOL}              {
         yypushback(yylength());
         yybegin(XML_DIRECTIVE);
@@ -501,7 +501,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  ( [^ \t\r\n\$] | ( [ \t][^\|\r\n] | \$[^\{] ) | [ \t]\|[^ \t\r\n] )+   {
+  ([^ \t\r\n\|\$]|\$[^\r\n\{]|\|[^ \t\r\n])([^ \t\r\n\$]|[ \t]+[^ \t\r\n\|\$]|[ \t]+\|[^ \t\r\n]|(\$|[ \t]+\$)[^\r\n\{])*  {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
@@ -521,7 +521,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  ([^ \t\r\n\|\$\.]|\|[^ \t\r\n]|\$[^\{])([^ \t\r\n\$]|(\$|[ \t\r\n]+\$)[^\{]|[ \t\r\n]+([^ \t\r\n\|\.\$]|\|[^ \t\r\n]|\.[ \t]*[^ \t\r\n]))* {
+  ([^ \t\r\n\|\$\.]|\|[^ \t\r\n]|\$[^\{])([^ \t\r\n\$]|(\$|[ \t\r\n]+\$)[^\{]|[ \t\r\n]+([^ \t\r\n\|\.\$]|\|[^ \t\r\n]|\.[ \t]*[^ \t\r\n]))*  {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
