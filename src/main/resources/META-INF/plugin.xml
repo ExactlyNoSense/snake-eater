@@ -3,6 +3,8 @@
     <name>Snake Eater</name>
     <vendor>ExactlyNoSense</vendor>
 
+    <idea-version since-build="192"/>
+
     <description><![CDATA[
     Snakeskin template language support
     ]]></description>
