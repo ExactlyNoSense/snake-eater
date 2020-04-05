@@ -132,8 +132,7 @@ XML_IDENTIFIER = {XML_ID_START} {XML_ID_CONTINUE}*
 CSS_NAME_START = [_a-zA-Z]
 CSS_NAME_CONTINUE = [_a-zA-Z0-9-]
 CSS_NAME = -? {CSS_NAME_START} {CSS_NAME_CONTINUE}*
-CSS_CLASS = \.({CSS_NAME} | "&" {CSS_NAME_CONTINUE}*)?
-CSS_CLASS_SELECTOR = {CSS_CLASS} | \[ {CSS_CLASS} \]
+CSS_CLASS_SELECTOR = \.({CSS_NAME} | "&" {CSS_NAME_CONTINUE}*)?
 CSS_ID_SELECTOR = #{CSS_NAME}
 
 PLACEHOLDER = "%" ~"%"
@@ -474,6 +473,8 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 // For classes and ids only.
 // Spaces cannot match any rule here.
 <CSS_SELECTORS> {
+  "["                   { return BRACK_OPEN; }
+  "]"                   { return BRACK_CLOSE; }
   {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
   {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
 

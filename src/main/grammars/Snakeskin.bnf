@@ -469,7 +469,14 @@ XmlTagName ::= XmlIdentifierStatement
 XmlIdentifierStatement ::= XML_IDENTIFIER_PART_START? (InterpolationStatement XML_IDENTIFIER_PART_END?)+ | XML_IDENTIFIER
 XmlSelector ::= CssClassSelector* CssIdSelector? CssClassSelector*
 CssIdSelector ::= ID_SELECTOR_PART_START? (InterpolationStatement ID_SELECTOR_PART_END?)+ | ID_SELECTOR
-CssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CLASS_SELECTOR_PART_END?)+ | CLASS_SELECTOR
+
+CssClassSelector ::= MainCssClassSelector | LocalCssClassSelector
+MainCssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CLASS_SELECTOR_PART_END?)+ | CLASS_SELECTOR
+LocalCssClassSelector ::= '[' LocalCssClassSelectorsList? ']'
+{ pin = 1 }
+LocalCssClassSelectorsList ::= CssClassSelector+
+{ recoverWhile = LocalCssClassSelectorContent_recover }
+private LocalCssClassSelectorContent_recover ::= !(']' | StatementEnd)
 
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
