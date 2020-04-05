@@ -109,7 +109,8 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
-%state XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL, INTERPOLATION_END
+%state CSS_SELECTORS, CSS_SELECTORS_INTERPOLATION_START
+%state XML_ATTRS, XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL, INTERPOLATION_END
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
@@ -426,8 +427,89 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   <<EOF>>  { return endStatement(true); }
 }
 
+// For tag name only
 <XML_DIRECTIVE> {
   "<"                   { return TAG_START; }
+  "." | "#"             {
+        yypushback(1);
+        yybegin(CSS_SELECTORS);
+      }
+  {XML_IDENTIFIER}      {
+        yybegin(CSS_SELECTORS);
+        return XML_IDENTIFIER;
+      }
+  {XML_IDENTIFIER}"${"  {
+        yypushback(2);
+        return XML_IDENTIFIER_PART_START;
+      }
+  "${"                  {
+        zzInterpolationStart = InterpolationStart.TAG;
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = XML_DIRECTIVE;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
+
+  {WS_LINE}             { return WHITE_SPACE; }
+
+// Multiline declaration
+  {WS_LINE} "&"         { return toStartOfLineSplitting(); }
+  {WS_LINE} "."         { return toEndOfLineSplitting(false); }
+  {WS_EOL} "."          { return toEndOfLineSplitting(true); }
+
+  {WS_EOL}  {
+    if (zzIsMultilineMode) {
+      return WHITE_SPACE;
+    } else {
+      return endStatement(false);
+    }
+  }
+
+  {COMMENT}  { return COMMENT_BLOCK; }
+
+  <<EOF>>  { return endStatement(true); }
+}
+
+// For classes and ids only.
+// Spaces cannot match any rule here.
+<CSS_SELECTORS> {
+  {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
+  {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
+
+  {CSS_ID_SELECTOR}"${" {
+        yypushback(2);
+        yybegin(CSS_SELECTORS_INTERPOLATION_START);
+        zzInterpolationStart = InterpolationStart.ID;
+        return ID_SELECTOR_PART_START;
+      }
+  {CSS_CLASS_SELECTOR}"${"  {
+        yypushback(2);
+        yybegin(CSS_SELECTORS_INTERPOLATION_START);
+        zzInterpolationStart = InterpolationStart.CLASS;
+        return CLASS_SELECTOR_PART_START;
+      }
+
+  <<EOF>>  { return endStatement(true); }
+
+  [^]  {
+        yypushback(yylength());
+        yybegin(XML_ATTRS);
+      }
+}
+
+// A rule from CSS_SELECTORS is not able to start with "${" - only "." and "#" or brackets,
+// so put interpolation rule for css selectors here
+<CSS_SELECTORS_INTERPOLATION_START> {
+  "${"  {
+        zzIsInterpolationMode = true;
+        zzLastInterpolationDirective = CSS_SELECTORS;
+        yybegin(CONTROL_DIRECTIVE);
+        return INTERPOLATION_OPEN;
+      }
+}
+
+// For attributes only
+<XML_ATTRS> {
   "="  {
         if (zzIsMultilineMode) {
           yybegin(XML_ATTR_MULTILINE_VALUE);
@@ -437,39 +519,25 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return EQ;
       }
   "|"                   { return PIPE; }
-  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
-  {CSS_ID_SELECTOR}     { return ID_SELECTOR; }
-  {CSS_CLASS_SELECTOR}  { return CLASS_SELECTOR; }
 
-  {WS_LINE}             { return WHITE_SPACE; }
+  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
 
   {XML_IDENTIFIER}"${"  {
         yypushback(2);
-        zzInterpolationStart = InterpolationStart.TAG;
         return XML_IDENTIFIER_PART_START;
       }
-  {CSS_ID_SELECTOR}"${" {
-        yypushback(2);
-        zzInterpolationStart = InterpolationStart.ID;
-        return ID_SELECTOR_PART_START;
-      }
-  {CSS_CLASS_SELECTOR}"${"  {
-        yypushback(2);
-        zzInterpolationStart = InterpolationStart.CLASS;
-        return CLASS_SELECTOR_PART_START;
-      }
 
-  "${"                  {
-        if (zzInterpolationStart == InterpolationStart.NONE) {
-          zzInterpolationStart = InterpolationStart.TAG;
-        }
+  "${"  {
+        zzInterpolationStart = InterpolationStart.ATTR;
         zzIsInterpolationMode = true;
-        zzLastInterpolationDirective = XML_DIRECTIVE;
+        zzLastInterpolationDirective = XML_ATTRS;
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
 
-// Multiline declaration
+  {WS_LINE}             { return WHITE_SPACE; }
+
+  // Multiline declaration
   {WS_LINE} "&"         { return toStartOfLineSplitting(); }
   {WS_LINE} "."         { return toEndOfLineSplitting(false); }
   {WS_EOL} "."          { return toEndOfLineSplitting(true); }
@@ -492,7 +560,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS_LINE}\|{WS_LINE}  |
   {WS_EOL}              {
         yypushback(yylength());
-        yybegin(XML_DIRECTIVE);
+        yybegin(XML_ATTRS);
       }
   \$\{                  {
         zzInterpolationStart = InterpolationStart.ATTR_VALUE;
@@ -512,7 +580,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS}\|{WS}            |
   {WS} "."              {
         yypushback(yylength());
-        yybegin(XML_DIRECTIVE);
+        yybegin(XML_ATTRS);
       }
   \$\{                  {
         zzInterpolationStart = InterpolationStart.ATTR_VALUE;
@@ -575,6 +643,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {XML_IDENTIFIER}  {
         switch (zzInterpolationStart) {
           case TAG:
+          case ATTR:
             return XML_IDENTIFIER_PART_END;
           case ID:
             return ID_SELECTOR_PART_END;
