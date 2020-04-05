@@ -434,6 +434,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yypushback(1);
         yybegin(CSS_SELECTORS);
       }
+  "?"                   |
   {XML_IDENTIFIER}      {
         yybegin(CSS_SELECTORS);
         return XML_IDENTIFIER;
