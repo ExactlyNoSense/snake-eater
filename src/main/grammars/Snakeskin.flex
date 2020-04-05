@@ -135,6 +135,8 @@ CSS_NAME = -? {CSS_NAME_START} {CSS_NAME_CONTINUE}*
 CSS_CLASS_SELECTOR = \.({CSS_NAME} | "&" {CSS_NAME_CONTINUE}*)?
 CSS_ID_SELECTOR = #{CSS_NAME}
 
+ATTR_NAME = \$|([^ \t\r\n\$]|\$[^ \t\r\n\{])([^ \t\n\r\$]|\$[^ \t\n\r\{])*\$?
+
 PLACEHOLDER = "%" ~"%"
 
 // Number literals
@@ -495,6 +497,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   [^]  {
         yypushback(yylength());
+        currentDirectiveState = XML_ATTRS;
         yybegin(XML_ATTRS);
       }
 }
@@ -520,13 +523,13 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         }
         return EQ;
       }
-  "|"                   { return PIPE; }
+  "|"  { return PIPE; }
 
-  {XML_IDENTIFIER}      { return XML_IDENTIFIER; }
+  {ATTR_NAME}  { return ATTR_NAME; }
 
-  {XML_IDENTIFIER}"${"  {
+  {ATTR_NAME}"${"  {
         yypushback(2);
-        return XML_IDENTIFIER_PART_START;
+        return ATTR_NAME_PART;
       }
 
   "${"  {
@@ -645,12 +648,13 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {XML_IDENTIFIER}  {
         switch (zzInterpolationStart) {
           case TAG:
-          case ATTR:
             return XML_IDENTIFIER_PART_END;
           case ID:
             return ID_SELECTOR_PART_END;
           case CLASS:
             return CLASS_SELECTOR_PART_END;
+          case ATTR:
+            return ATTR_NAME_PART;
           case ATTR_VALUE:
           case LITERAL:
             zzInterpolationStart = InterpolationStart.NONE;
@@ -659,6 +663,22 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
             break;
         }
       }
+
+  {ATTR_NAME}  {
+        if (zzInterpolationStart == InterpolationStart.ATTR) {
+          zzInterpolationStart = InterpolationStart.NONE;
+          yybegin(zzLastInterpolationDirective);
+          return ATTR_NAME_PART;
+        }
+      }
+  {ATTR_NAME}"${" {
+        if (zzInterpolationStart == InterpolationStart.ATTR) {
+          zzInterpolationStart = InterpolationStart.NONE;
+          yybegin(zzLastInterpolationDirective);
+          yypushback(2);
+          return ATTR_NAME_PART;
+        }
+  }
 
   <<EOF>>  { yybegin(zzLastInterpolationDirective); }
   [^]  {
