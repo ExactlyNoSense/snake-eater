@@ -22,6 +22,7 @@ val SS_OPERATORS = tokensSet(
 	LT, LT_LT, LT_EQ, LT_LT_EQ, GT, GT_GT, GT_GT_GT, GT_EQ, GT_GT_EQ, GT_GT_GT_EQ
 )
 
+// Also there is `keyword` rule in Snakeskin.bnf
 val SS_KEYWORDS = tokensSet(
 	AS,
 	ASYNC,

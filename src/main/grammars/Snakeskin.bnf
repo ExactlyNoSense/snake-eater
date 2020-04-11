@@ -108,12 +108,13 @@ private MultiLines ::= ML_CLOSE | ML_OPEN
 //////////////////////////////
 GlobalVerboseInlineStatement ::= VerboseVariableStatement
 	| DecoratorStatement
-	| GlobalVariableStatement
 	| NamespaceStatement
 	| IncludeStatement
 	| ImportStatement
 	| VerboseVoidStatement
 	| ThrowStatement
+// The global variables rule should be here since it's name could be any keyword
+	| GlobalVariableStatement
 { recoverWhile = Statement_recover}
 
 GlobalShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
@@ -194,7 +195,7 @@ ShortBlockStatement ::= ShortFuncStatement
 VariableDeclarationsList ::= VariableDeclaration (VariableDeclarationsListTail)*
 VariableDeclarationsListTail ::= ',' VariableDeclaration
 { pin = 1 }
-VariableDeclaration ::= IDENTIFIER ('=' Expression)?
+VariableDeclaration ::= IdentifierName ('=' Expression)?
 { recoverWhile = VariableDeclaration_recover }
 private VariableDeclaration_recover ::= !(',' | ';' | StatementEnd)
 
@@ -210,11 +211,11 @@ GlobalVariableDeclarationsListTail ::= ',' GlobalVariableDeclaration
 GlobalVariableDeclaration ::= GlobalDeclarationIdentifier ('=' Expression)?
 { recoverWhile = GlobalVariableDeclaration_recover }
 private GlobalVariableDeclaration_recover ::= !(',' | StatementEnd)
-GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IDENTIFIER | '[' Expression ']' | '@@[' Expression ']'
+GlobalDeclarationIdentifier ::= GLOBAL_IDENTIFIER | IdentifierName | '[' Expression ']' | '@@[' Expression ']'
 
 // Const
 ConstStatement ::= const? ConstDeclaration '?'?
-ConstDeclaration ::= IDENTIFIER '=' Expression
+ConstDeclaration ::= IdentifierName '=' Expression
 
 // Namespace
 NamespaceStatement ::= namespace DefinitionQualifiedIdentifier
@@ -233,12 +234,12 @@ ImportClause ::= CombinedImport
 	| NamespaceImport
 	| NamedImportsList
 CombinedImport ::= DefaultImport ',' (NamespaceImport | NamedImportsList)
-DefaultImport ::= IDENTIFIER
-NamespaceImport ::= '*' as IDENTIFIER
+DefaultImport ::= IdentifierName
+NamespaceImport ::= '*' as IdentifierName
 NamedImportsList ::= '{' NamedImport (NamedImportsListTail)* '}'
 NamedImportsListTail ::= ',' NamedImport
 { pin = 1 }
-NamedImport ::= IDENTIFIER (as IDENTIFIER)?
+NamedImport ::= IdentifierName (as IdentifierName)?
 { recoverWhile = NamedImport_recover }
 private NamedImport_recover ::= !(',' | '}')
 FromClause ::= from ModuleSpecifier
@@ -262,7 +263,7 @@ SuperStatement ::= super
 ThrowStatement ::= throw Expression
 
 // Doctype
-DoctypeStatement ::= doctype IDENTIFIER?
+DoctypeStatement ::= doctype IdentifierName?
 
 // Decorator
 DecoratorStatement ::= ExecutionQualifiedIdentifier '(' ')'
@@ -276,10 +277,10 @@ TemplateType ::= template | interface | placeholder
 
 // Blocks
 BlockStatement ::= BlockHeadStatement StatementEnd BlockBody?
-BlockHeadStatement ::= block IDENTIFIER BlockHeadTail?
+BlockHeadStatement ::= block IdentifierName BlockHeadTail?
 { pin = 1; recoverWhile = Statement_recover }
 
-ExternalBlockHeadStatement ::= block IDENTIFIER '->' IDENTIFIER BlockHeadTail?
+ExternalBlockHeadStatement ::= block IdentifierName '->' IdentifierName BlockHeadTail?
 { pin = 1 }
 BlockHeadTail ::= FunctionParameters BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
@@ -332,7 +333,7 @@ ForLoopHead ::= for (CommonForLoopHead | ForInLoopHead)
 CommonForLoopHead ::= CommonForLoopIndexDeclaration ';' Expression ';' Expression
 { pin = 2 }
 CommonForLoopIndexDeclaration ::= var VariableDeclarationsList
-ForInLoopHead ::= var IDENTIFIER in Expression
+ForInLoopHead ::= var IdentifierName in Expression
 { pin = 3 }
 
 WhileLoopStatement ::= WhileLoopHead StatementEnd LoopBlockBody?
@@ -360,7 +361,7 @@ TryHead ::= try
 { recoverWhile = Statement_recover }
 CatchFinallyStatement ::= CatchStatement FinallyStatement?
 CatchStatement ::= StatementStart CatchHead StatementEnd BlockBody?
-CatchHead ::= catch IDENTIFIER
+CatchHead ::= catch IdentifierName
 { pin = 1; recoverWhile = Statement_recover }
 FinallyStatement ::= StatementStart FinallyHead StatementEnd BlockBody?
 FinallyHead ::= finally
@@ -377,7 +378,7 @@ ShortFuncHead ::= '(' ')' ['=>' FunctionParametersList?]
 
 // Target
 TargetStatement ::= TargetHead StatementEnd CallBlockBody?
-TargetHead ::= target Expression [as IDENTIFIER]
+TargetHead ::= target Expression [as IdentifierName]
 { pin = 1; recoverWhile = Statement_recover }
 
 // PutIn
@@ -448,10 +449,10 @@ private FunctionParameter_recover ::= !(')' | ',' | StatementEnd)
 // For template inheritance
 QualifiedIdentifier ::= (IdentifierOrWithIdentifier | '[' (Expression | PLACEHOLDER) ']' | '@[' (Expression | PLACEHOLDER) ']') QualifiedIdentifierTail*
 // For namespace and template definition
-DefinitionQualifiedIdentifier ::= (IDENTIFIER | PLACEHOLDER | '[' (Expression | PLACEHOLDER) ']') QualifiedIdentifierTail*
+DefinitionQualifiedIdentifier ::= (IdentifierName | PLACEHOLDER | '[' (Expression | PLACEHOLDER) ']') QualifiedIdentifierTail*
 // For template execution
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
-QualifiedIdentifierTail ::= '.' (IDENTIFIER | PLACEHOLDER) | '[' (Expression | PLACEHOLDER) ']'
+QualifiedIdentifierTail ::= '.' (IdentifierName | PLACEHOLDER) | '[' (Expression | PLACEHOLDER) ']'
 
 StatementStart ::= SHARP | MINUS
 StatementEnd ::= EOS
@@ -594,8 +595,9 @@ IdentifierGroup ::= GLOBAL_IDENTIFIER
  | '@@[' Expression ']'
  | WITH_IDENTIFIER
  | '@[' Expression ']'
- | IDENTIFIER
-IdentifierOrWithIdentifier ::= IDENTIFIER | WITH_IDENTIFIER
+ | IdentifierName
+IdentifierName ::= IDENTIFIER | Keywords
+IdentifierOrWithIdentifier ::= IdentifierName | WITH_IDENTIFIER
 
 ArrayLiteralExpression ::= '[' ArrayElementsList? ']'
 { pin = 1 }
@@ -613,13 +615,13 @@ PropertiesListTail ::= ',' PropertyAssignment
 { pin = 1 }
 PropertyAssignment ::= PropertyName ':' Expression
 { recoverWhile = PropertyAssignment_recover }
-PropertyName ::= IDENTIFIER | STRING_LITERAL | NUMERIC_LITERAL
+PropertyName ::= IdentifierName | STRING_LITERAL | NUMERIC_LITERAL
 private PropertyAssignment_recover ::= !(',' | '}' | StatementEnd)
 
 ParenthesesExpression ::= '(' Expression ')'
 
 MemberExpression ::= PrimaryGroup MemberExpressionTail?
-MemberExpressionTail ::= ('[' Expression ']' | '.' IDENTIFIER | CallArguments) MemberExpressionTail?
+MemberExpressionTail ::= ('[' Expression ']' | '.' IdentifierName | CallArguments) MemberExpressionTail?
 
 CallArguments ::= '(' CallArgumentsList? ')'
 { pin = 1 }
@@ -640,3 +642,64 @@ InExpression ::= Expression IN Expression
 InstanceofExpression ::= Expression INSTANCEOF Expression
 AwaitExpression ::= AWAIT Expression
 RegularExpression ::= REGEXP
+
+// Snakeskin's keywords could be identifiers
+// Also there is `SS_KEYWORDS` tokens set in SsTokenType.kt
+Keywords ::= AS
+	| ASYNC
+	| AWAIT
+	| BLOCK
+	| BREAK
+	| CALL
+	| CASE
+	| CATCH
+	| CONST
+	| CONTINUE
+	| DEFAULT
+	| DELETE
+	| DO
+	| DOCTYPE
+	| ELSE
+	| EXTENDS
+	| EVAL
+	| FROM
+	| FINALLY
+	| FOR
+	| FOREACH
+	| FORIN
+	| FUNC
+	| GLOBAL
+	| HEAD
+	| IF
+	| IMPORT
+	| IN
+	| INCLUDE
+	| INSTANCEOF
+	| INTERFACE
+	| LINK
+	| NAMESPACE
+	| NEW
+	| OUTPUT
+	| PLACEHOLDER
+	| PUT_IN
+	| RETURN
+	| SCRIPT
+	| STYLE
+	| SUPER
+	| SWITCH
+	| TAG
+	| TARGET
+	| TEMPLATE
+	| THROW
+	| TRY
+	| TYPEOF
+	| UNLESS
+	| VAR
+	| VOID
+	| WHILE
+	| WITH
+
+	| NULL_LITERAL
+	| UNDEFINED_LITERAL
+	| TRUE
+	| FALSE
