@@ -109,6 +109,7 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %type IElementType
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
+%state START_CONTROL_DIRECTIVE
 %state CSS_SELECTORS, CSS_SELECTORS_INTERPOLATION_START
 %state XML_ATTRS, XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL, INTERPOLATION_END
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
@@ -177,8 +178,14 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return WHITE_SPACE;
       }
 
-  // '-' and other special characters that start control directives
-  ("-" | "#" | ":" | "?" | "()" | "*" | "+=" | ">") {WS}  {
+  // Main special characters that start control directives
+  ("-" | "#") {WS}  {
+          yypushback(yylength());
+          currentDirectiveState = START_CONTROL_DIRECTIVE;
+          yybegin(INDENT_BLOCK);
+      }
+  // Other special characters that start control directives
+  (":" | "?" | "()" | "*" | "+=" | ">") {WS}  {
         yypushback(yylength());
         currentDirectiveState = CONTROL_DIRECTIVE;
         yybegin(INDENT_BLOCK);
@@ -258,6 +265,24 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         return null;
       }
     }
+}
+
+<START_CONTROL_DIRECTIVE> {
+  "-"                   { return MINUS_START; }
+  "#"                   { return SHARP_START; }
+
+  "link"                { return toXmlParsing(LINK); }
+  "script"              { return toXmlParsing(SCRIPT); }
+  "style"               { return toXmlParsing(STYLE); }
+  "tag"                 { return toXmlParsing(TAG); }
+
+  {WS_LINE}             { return WHITE_SPACE; }
+
+  [^]  {
+        yypushback(yylength());
+        currentDirectiveState = CONTROL_DIRECTIVE;
+        yybegin(CONTROL_DIRECTIVE);
+      }
 }
 
 <CONTROL_DIRECTIVE> {
@@ -374,18 +399,18 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "include"             { return INCLUDE; }
   "instanceof"          { return INSTANCEOF; }
   "interface"           { return INTERFACE; }
-  "link"                { return toXmlParsing(LINK); }
+  "link"                { return LINK; }
   "namespace"           { return NAMESPACE; }
   "new"                 { return NEW; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }
   "return"              { return RETURN; }
-  "script"              { return toXmlParsing(SCRIPT); }
-  "style"               { return toXmlParsing(STYLE); }
+  "script"              { return SCRIPT; }
+  "style"               { return STYLE; }
   "super"               { return SUPER; }
   "switch"              { return SWITCH; }
-  "tag"                 { return toXmlParsing(TAG); }
+  "tag"                 { return TAG; }
   "target"              { return TARGET; }
   "template"            { return TEMPLATE; }
   "throw"               { return THROW; }

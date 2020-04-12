@@ -419,7 +419,7 @@ TagStatement ::= TagHead StatementEnd BlockBody?
 TagHead ::= Tags XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 Tags ::= CommonTag | SpecificTag
-CommonTag ::= tag XmlTagName? XmlSelector?
+CommonTag ::= tag (XmlTagName XmlSelector? | XmlSelector)
 { pin = 1 }
 SpecificTag ::= (script | style | link) XML_IDENTIFIER?
 
@@ -454,7 +454,7 @@ DefinitionQualifiedIdentifier ::= (IdentifierName | PLACEHOLDER | '[' (Expressio
 ExecutionQualifiedIdentifier ::= (IdentifierOrWithIdentifier | '@[' Expression ']') QualifiedIdentifierTail*
 QualifiedIdentifierTail ::= '.' (IdentifierName | PLACEHOLDER) | '[' (Expression | PLACEHOLDER) ']'
 
-StatementStart ::= SHARP | MINUS
+StatementStart ::= SHARP_START | MINUS_START
 StatementEnd ::= EOS
 
 // Interpolation
