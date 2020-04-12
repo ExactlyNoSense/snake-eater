@@ -469,10 +469,10 @@ XmlHead ::= XmlTagName? XmlSelector? XmlAttrsList?
 XmlTagName ::= XmlIdentifierStatement
 XmlIdentifierStatement ::= XML_IDENTIFIER_PART_START? (InterpolationStatement XML_IDENTIFIER_PART_END?)+ | XML_IDENTIFIER
 XmlSelector ::= CssClassSelector* CssIdSelector? CssClassSelector*
-CssIdSelector ::= ID_SELECTOR_PART_START? (InterpolationStatement ID_SELECTOR_PART_END?)+ | ID_SELECTOR
+CssIdSelector ::= ID_SELECTOR_PART_START? (InterpolationStatement CSS_SELECTOR_PART_END?)+ | ID_SELECTOR
 
 CssClassSelector ::= MainCssClassSelector | LocalCssClassSelector
-MainCssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CLASS_SELECTOR_PART_END?)+ | CLASS_SELECTOR
+MainCssClassSelector ::= CLASS_SELECTOR_PART_START? (InterpolationStatement CSS_SELECTOR_PART_END?)+ | CLASS_SELECTOR
 LocalCssClassSelector ::= '[' LocalCssClassSelectorsList? ']'
 { pin = 1 }
 LocalCssClassSelectorsList ::= CssClassSelector+

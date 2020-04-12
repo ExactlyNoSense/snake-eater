@@ -110,8 +110,9 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
 %unicode
 %state CONTROL_DIRECTIVE, XML_DIRECTIVE, TEMPLATE_DIRECTIVE
 %state START_CONTROL_DIRECTIVE
+%state TAG_INTERPOLATION_END, CSS_SELECTORS_INTERPOLATION_END, ATTR_INTERPOLATION_END
 %state CSS_SELECTORS, CSS_SELECTORS_INTERPOLATION_START
-%state XML_ATTRS, XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL, INTERPOLATION_END
+%state XML_ATTRS, XML_ATTR_VALUE, XML_ATTR_MULTILINE_VALUE, LITERAL
 %state CHECK_LINE_SPLITTING, START_OF_LINE_SPLITTING, CHECK_END_OF_LINE_SPLITTING, END_OF_LINE_SPLITTING
 %state INDENT_BLOCK, DEDENT_BLOCK, DEDENT_BLOCK_2
 
@@ -130,11 +131,9 @@ XML_ID_START = [-@_:a-zA-Z]
 XML_ID_CONTINUE = [-_:a-zA-Z0-9]
 XML_IDENTIFIER = {XML_ID_START} {XML_ID_CONTINUE}*
 
-CSS_NAME_START = [_a-zA-Z]
-CSS_NAME_CONTINUE = [_a-zA-Z0-9-]
-CSS_NAME = -? {CSS_NAME_START} {CSS_NAME_CONTINUE}*
-CSS_CLASS_SELECTOR = \.({CSS_NAME} | "&" {CSS_NAME_CONTINUE}*)?
-CSS_ID_SELECTOR = #{CSS_NAME}
+CSS_NAME_CONTINUE = \$|([^ \t\r\n\$\#\.\[\]\\]|\$[^ \t\r\n\{\#\.\[\]\\])([^ \t\n\r\$\#\.\[\]\\]|\$[^ \t\n\r\{\#\.\[\]\\])*\$?
+CSS_CLASS_SELECTOR = \.{CSS_NAME_CONTINUE}?
+CSS_ID_SELECTOR = #{CSS_NAME_CONTINUE}
 
 ATTR_NAME = \$|([^ \t\r\n\$]|\$[^ \t\r\n\{])([^ \t\n\r\$]|\$[^ \t\n\r\{])*\$?
 
@@ -302,8 +301,27 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
           if(zzInterpolationBracesCount > 0) {
             zzInterpolationBracesCount--;
           } else {
+            int interpolationEndState = -1;
+
+            switch(zzInterpolationStart) {
+              case TAG:
+                interpolationEndState = TAG_INTERPOLATION_END;
+                break;
+              case ID:
+              case CLASS:
+                interpolationEndState = CSS_SELECTORS_INTERPOLATION_END;
+                break;
+              case ATTR:
+                interpolationEndState = ATTR_INTERPOLATION_END;
+                break;
+              case ATTR_VALUE:
+              case LITERAL:
+                interpolationEndState = zzLastInterpolationDirective;
+                break;
+            }
             zzIsInterpolationMode = false;
-            yybegin(INTERPOLATION_END);
+            yybegin(interpolationEndState);
+
             return INTERPOLATION_CLOSE;
           }
         }
@@ -666,45 +684,47 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   . { return BAD_CHARACTER; }
 }
 
-// Finishes an interpolation
+// Finishes of an interpolation
 // A separate state is needed because the end of an identifier
 // could be right after the end of an interpolation (without white space).
-<INTERPOLATION_END> {
+<TAG_INTERPOLATION_END>  {
   {XML_IDENTIFIER}  {
-        switch (zzInterpolationStart) {
-          case TAG:
-            return XML_IDENTIFIER_PART_END;
-          case ID:
-            return ID_SELECTOR_PART_END;
-          case CLASS:
-            return CLASS_SELECTOR_PART_END;
-          case ATTR:
-            return ATTR_NAME_PART;
-          case ATTR_VALUE:
-          case LITERAL:
-            zzInterpolationStart = InterpolationStart.NONE;
-            yybegin(zzLastInterpolationDirective);
-            yypushback(yylength());
-            break;
-        }
+        yybegin(zzLastInterpolationDirective);
+        zzInterpolationStart = InterpolationStart.NONE;
+        return XML_IDENTIFIER_PART_END;
       }
+}
 
+<CSS_SELECTORS_INTERPOLATION_END>  {
+  {CSS_NAME_CONTINUE}  {
+        yybegin(zzLastInterpolationDirective);
+        zzInterpolationStart = InterpolationStart.NONE;
+        return CSS_SELECTOR_PART_END;
+      }
+  {CSS_NAME_CONTINUE}"${"  {
+        // Can't return to CSS_SELECTORS since there is no rule "${"
+        // No need to reset zzInterpolationStart
+        yybegin(CSS_SELECTORS_INTERPOLATION_START);
+        yypushback(2);
+        return CSS_SELECTOR_PART_END;
+      }
+}
+
+<ATTR_INTERPOLATION_END>  {
   {ATTR_NAME}  {
-        if (zzInterpolationStart == InterpolationStart.ATTR) {
-          zzInterpolationStart = InterpolationStart.NONE;
-          yybegin(zzLastInterpolationDirective);
-          return ATTR_NAME_PART;
-        }
+        yybegin(zzLastInterpolationDirective);
+        zzInterpolationStart = InterpolationStart.NONE;
+        return ATTR_NAME_PART;
       }
   {ATTR_NAME}"${" {
-        if (zzInterpolationStart == InterpolationStart.ATTR) {
-          zzInterpolationStart = InterpolationStart.NONE;
-          yybegin(zzLastInterpolationDirective);
-          yypushback(2);
-          return ATTR_NAME_PART;
-        }
-  }
+        yybegin(zzLastInterpolationDirective);
+        zzInterpolationStart = InterpolationStart.NONE;
+        yypushback(2);
+        return ATTR_NAME_PART;
+      }
+}
 
+<TAG_INTERPOLATION_END, CSS_SELECTORS_INTERPOLATION_END, ATTR_INTERPOLATION_END>  {
   <<EOF>>  { yybegin(zzLastInterpolationDirective); }
   [^]  {
         zzInterpolationStart = InterpolationStart.NONE;
