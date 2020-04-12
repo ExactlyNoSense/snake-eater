@@ -474,7 +474,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 // For tag name only
 <XML_DIRECTIVE> {
   "<"                   { return TAG_START; }
-  "." | "#"             {
+  "." | "#" | "["       {
         yypushback(1);
         yybegin(CSS_SELECTORS);
       }
