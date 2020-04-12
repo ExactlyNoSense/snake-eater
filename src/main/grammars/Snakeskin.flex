@@ -610,6 +610,11 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yypushback(yylength());
         yybegin(XML_ATTRS);
       }
+
+  {WS_LINE} "&"         {
+        currentDirectiveState = XML_ATTR_MULTILINE_VALUE;
+        return toStartOfLineSplitting();
+      }
   \$\{                  {
         zzInterpolationStart = InterpolationStart.ATTR_VALUE;
         zzIsInterpolationMode = true;
@@ -617,7 +622,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
         yybegin(CONTROL_DIRECTIVE);
         return INTERPOLATION_OPEN;
       }
-  ([^ \t\r\n\|\$]|\$[^\r\n\{]|\|[^ \t\r\n])([^ \t\r\n\$]|[ \t]+[^ \t\r\n\|\$]|[ \t]+\|[^ \t\r\n]|(\$|[ \t]+\$)[^\r\n\{])*  {
+  ([^ \t\r\n\|\$\&]|\$[^\r\n\{]|\|[^ \t\r\n])([^ \t\r\n\$]|(\$|[ \t]+\$)[^\r\n\{]|[ \t]+([^ \t\r\n\|\&\$]|\|[^ \t\r\n]|\&[ \t]*[^ \t\r\n]))*  {
         return ATTR_VALUE;
       }
   <<EOF>>               { return endStatement(true); }
@@ -629,6 +634,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   {WS} "."              {
         yypushback(yylength());
         yybegin(XML_ATTRS);
+        currentDirectiveState = XML_ATTRS;
       }
   \$\{                  {
         zzInterpolationStart = InterpolationStart.ATTR_VALUE;

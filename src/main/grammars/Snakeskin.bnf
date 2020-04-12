@@ -486,7 +486,7 @@ XmlAttrDeclaration ::= XmlAttrName ['=' XmlAttrValueStatement?]
 { recoverWhile = XmlAttrDeclaration_recover }
 private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
 XmlAttrName ::= ATTR_NAME_PART? (InterpolationStatement ATTR_NAME_PART?)+ | ATTR_NAME
-XmlAttrValueStatement ::= ATTR_VALUE? (InterpolationStatement ATTR_VALUE?)+ | ATTR_VALUE
+XmlAttrValueStatement ::= ATTR_VALUE* (InterpolationStatement ATTR_VALUE*)+ | ATTR_VALUE+
 
 // Template text
 TemplateTextStatement ::= TEMPLATE_TEXT? (TemplateInclusion TEMPLATE_TEXT?)* StatementEnd
