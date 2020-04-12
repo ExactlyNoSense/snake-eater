@@ -581,7 +581,7 @@ FilterExpression ::= Expression FILTER_PIPE '!'? MemberExpression FilterArgument
 FilterArgumentsList ::= FilterArgument FilterArgumentsListTail*
 FilterArgumentsListTail ::= ',' FilterArgument
 { pin = 1 }
-FilterArgument ::= Expression
+FilterArgument ::= !(AS | INSTANCEOF) Expression
 { recoverWhile = FilterArgument_recover }
 private FilterArgument_recover ::= !(',' | StatementEnd)
 
