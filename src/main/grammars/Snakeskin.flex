@@ -698,15 +698,16 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 <CSS_SELECTORS_INTERPOLATION_END>  {
   {CSS_NAME_CONTINUE}  {
         yybegin(zzLastInterpolationDirective);
+        IElementType token = zzInterpolationStart == InterpolationStart.ID ? ID_SELECTOR_PART_END : CLASS_SELECTOR_PART_END;
         zzInterpolationStart = InterpolationStart.NONE;
-        return CSS_SELECTOR_PART_END;
+        return token;
       }
   {CSS_NAME_CONTINUE}"${"  {
         // Can't return to CSS_SELECTORS since there is no rule "${"
         // No need to reset zzInterpolationStart
         yybegin(CSS_SELECTORS_INTERPOLATION_START);
         yypushback(2);
-        return CSS_SELECTOR_PART_END;
+        return zzInterpolationStart == InterpolationStart.ID ? ID_SELECTOR_PART_END : CLASS_SELECTOR_PART_END;
       }
 }
 
