@@ -95,7 +95,7 @@ private GlobalVerboseBlockStatementPart ::= StatementStart GlobalVerboseBlockSta
 private GlobalVerboseInlineStatementPart::= StatementStart GlobalVerboseInlineStatement StatementEnd
 { pin = 1 }
 
-GlobalShortStatement ::= GlobalShortInlineStatement StatementEnd | GlobalShortBlockStatement
+GlobalShortStatement ::= GlobalShortBlockStatement | GlobalShortInlineStatement StatementEnd
 
 private Statement_recover ::= !StatementEnd
 private Body_recover ::= !DEDENT
@@ -179,7 +179,7 @@ VerboseBlockStatement ::= BlockStatement
 	| AwaitStatement
 	| OpStatement
 
-ShortStatement ::= ShortInlineStatement StatementEnd | ShortBlockStatement
+ShortStatement ::= ShortBlockStatement | ShortInlineStatement StatementEnd
 ShortInlineStatement ::= ShortVariableStatement
 	| ShortOutputStatement
 	| ShortVoidStatement
@@ -416,7 +416,7 @@ VerbosePutInHead ::= var? PUT_IN QualifiedIdentifier?
 
 ShortPutInStatement ::= ShortPutInHead StatementEnd BlockBody?
 ShortPutInHead ::= ':' PUT_IN QualifiedIdentifier?
-{ pin = 1; recoverWhile = Statement_recover }
+{ pin = 2; recoverWhile = Statement_recover }
 
 SuperShortPutInStatement ::= SuperShortPutInHead StatementEnd BlockBody?
 SuperShortPutInHead ::= '*' QualifiedIdentifier?
