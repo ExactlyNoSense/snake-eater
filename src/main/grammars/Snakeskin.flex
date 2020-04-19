@@ -421,6 +421,7 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "link"                { return LINK; }
   "namespace"           { return NAMESPACE; }
   "new"                 { return NEW; }
+  "op"                  { return OP; }
   "output"              { return OUTPUT; }
   "placeholder"         { return PLACEHOLDER; }
   "putIn"               { return PUT_IN; }

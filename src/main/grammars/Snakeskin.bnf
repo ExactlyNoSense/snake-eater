@@ -177,6 +177,7 @@ VerboseBlockStatement ::= BlockStatement
 	| WithStatement
 	| TagStatement
 	| AwaitStatement
+	| OpStatement
 
 ShortStatement ::= ShortInlineStatement StatementEnd | ShortBlockStatement
 ShortInlineStatement ::= ShortVariableStatement
@@ -455,6 +456,11 @@ AwaitStatement ::= AwaitHead StatementEnd BlockBody?
 AwaitHead ::= AWAIT Expression?
 { pin = 1; recoverWhile = Statement_recover }
 
+// Op
+OpStatement ::= OpHead StatementEnd BlockBody?
+OpHead ::= OP
+{ pin = 1; recoverWhile = Statement_recover }
+
 // Parameters
 IteratorParametersList ::= IteratorParameter IteratorParametersListTail*
 IteratorParametersListTail ::= ',' IteratorParameter
@@ -707,6 +713,7 @@ Keywords ::= AS
 	| LINK
 	| NAMESPACE
 	| NEW
+	| OP
 	| OUTPUT
 	| PLACEHOLDER
 	| PUT_IN

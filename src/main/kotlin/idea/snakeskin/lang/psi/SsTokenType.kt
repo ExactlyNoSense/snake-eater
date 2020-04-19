@@ -58,6 +58,7 @@ val SS_KEYWORDS = tokensSet(
 	LINK,
 	NAMESPACE,
 	NEW,
+	OP,
 	OUTPUT,
 	PLACEHOLDER,
 	PUT_IN,
