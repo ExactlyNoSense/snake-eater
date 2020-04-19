@@ -419,9 +419,9 @@ TagStatement ::= TagHead StatementEnd BlockBody?
 TagHead ::= Tags XmlAttrsList?
 { pin = 1; recoverWhile = Statement_recover }
 Tags ::= CommonTag | SpecificTag
-CommonTag ::= tag (XmlTagName XmlSelector? | XmlSelector)
+CommonTag ::= tag (XmlTagName XmlSelector? | XmlSelector)?
 { pin = 1 }
-SpecificTag ::= (script | style | link) XML_IDENTIFIER?
+SpecificTag ::= script | style | link
 
 // Await
 AwaitStatement ::= AwaitHead StatementEnd BlockBody?

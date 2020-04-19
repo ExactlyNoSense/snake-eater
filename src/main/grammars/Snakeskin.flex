@@ -72,9 +72,10 @@ import static idea.snakeskin.lang.psi.SsElementTypes.*;
     }
   }
 
-  private IElementType toXmlParsing(IElementType tagType) {
-    currentDirectiveState = XML_DIRECTIVE;
-    yybegin(XML_DIRECTIVE);
+  private IElementType toXmlParsing(IElementType tagType, boolean attrsOnly) {
+    int state = attrsOnly ? XML_ATTRS : XML_DIRECTIVE;
+    currentDirectiveState = state;
+    yybegin(state);
     return tagType;
   }
 
@@ -270,10 +271,10 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
   "-"                   { return MINUS_START; }
   "#"                   { return SHARP_START; }
 
-  "link"                { return toXmlParsing(LINK); }
-  "script"              { return toXmlParsing(SCRIPT); }
-  "style"               { return toXmlParsing(STYLE); }
-  "tag"                 { return toXmlParsing(TAG); }
+  "link" {WS_LINE}      { return toXmlParsing(LINK, true); }
+  "script" {WS_LINE}    { return toXmlParsing(SCRIPT, true); }
+  "style" {WS_LINE}     { return toXmlParsing(STYLE, true); }
+  "tag" {WS_LINE}       { return toXmlParsing(TAG, false); }
 
   {WS_LINE}             { return WHITE_SPACE; }
 
