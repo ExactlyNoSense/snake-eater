@@ -482,9 +482,10 @@ private LocalCssClassSelectorContent_recover ::= !(']' | StatementEnd)
 XmlAttrsList ::= XmlAttrDeclaration XmlAttrsListTail*
 XmlAttrsListTail ::= '|' XmlAttrDeclaration
 { pin = 1 }
-XmlAttrDeclaration ::= XmlAttrName ['=' XmlAttrValueStatement?]
+XmlAttrDeclaration ::= XmlAttrName+ XmlAttrAssignment?
 { recoverWhile = XmlAttrDeclaration_recover }
 private XmlAttrDeclaration_recover ::= !('|' | StatementEnd)
+XmlAttrAssignment ::= '=' XmlAttrValueStatement?
 XmlAttrName ::= ATTR_NAME_PART? (InterpolationStatement ATTR_NAME_PART?)+ | ATTR_NAME
 XmlAttrValueStatement ::= ATTR_VALUE* (InterpolationStatement ATTR_VALUE*)+ | ATTR_VALUE+
 
