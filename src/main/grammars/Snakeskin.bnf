@@ -515,7 +515,6 @@ Expression ::= AssignmentExpression
 	| UnaryGroup
 	| FilterExpression
 	| TernaryExpression
-	| MemberExpression
 	| NewExpression
 	| VoidExpression
 	| DeleteExpression
@@ -524,6 +523,7 @@ Expression ::= AssignmentExpression
 	| InstanceofExpression
 	| AwaitExpression
 	| RegularExpression
+	| MemberExpression
 
 AssignmentExpression ::= Expression '=' Expression { rightAssociative = true }
 
