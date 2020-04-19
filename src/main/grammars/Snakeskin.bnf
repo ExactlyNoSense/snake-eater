@@ -321,10 +321,9 @@ ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement*
 MainConditionalStatement ::= MainConditionalHead StatementEnd BlockBody?
 MainConditionalHead ::= (if | unless) Expression
 { pin = 1; recoverWhile = Statement_recover }
-SecondaryConditionalStatement ::= StatementStart SecondaryConditionalHead StatementEnd BlockBody?
-{ pin = 1 }
-SecondaryConditionalHead ::= else SecondaryConditionalHeadTail?
-{ pin = 1; recoverWhile = Statement_recover }
+SecondaryConditionalStatement ::= SecondaryConditionalHead StatementEnd BlockBody?
+SecondaryConditionalHead ::= StatementStart else SecondaryConditionalHeadTail?
+{ pin = 2; recoverWhile = Statement_recover }
 SecondaryConditionalHeadTail ::= (if | unless) Expression
 
 
