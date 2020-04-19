@@ -135,10 +135,8 @@ GlobalVerboseBlockStatement ::= GlobalBlockStatement
 	| TargetStatement
 	| VerbosePutInStatement
 
-GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody?
-GlobalBlockHead ::= HeadOrEvalHeadStatement
-	| ExternalBlockHeadStatement
-	| TemplateHeadStatement
+GlobalBlockStatement ::= GlobalBlockHead StatementEnd BlockBody? | SpecialBlockStatement
+GlobalBlockHead ::= ExternalBlockHeadStatement | TemplateHeadStatement
 { recoverWhile = Statement_recover }
 
 GlobalShortBlockStatement ::= ShortFuncStatement | ShortPutInStatement
@@ -285,8 +283,38 @@ ExternalBlockHeadStatement ::= block IdentifierName '->' IdentifierName BlockHea
 BlockHeadTail ::= FunctionParameters BlockSelfCall?
 BlockSelfCall ::=  ('=>' Expression)
 
-// Eval&Head
-HeadOrEvalHeadStatement ::= eval | head
+// Eval & Head special blocks
+SpecialBlockStatement ::= SpecialBlockHead StatementEnd SpecialBlockBody?
+SpecialBlockHead ::= (head | eval)
+{ pin = 1; recoverWhile = Statement_recover }
+SpecialBlockBody ::= INDENT SpecialBodyStatements DEDENT
+{ pin = 1}
+SpecialBodyStatements ::= SpecialBodyStatement+
+{ recoverWhile = Body_recover }
+SpecialBodyStatement ::= SpecialBlockVerboseStatement
+	| SpecialBlockShortStatement
+	| COMMENT_BLOCK
+
+SpecialBlockVerboseStatement ::= StatementStart (SpecialBlockVerboseInlineStatement StatementEnd | SpecialBlockVerboseBlockStatement)
+{ pin = 1 }
+SpecialBlockVerboseInlineStatement ::= ImportStatement
+	| VerboseVariableStatement
+	| ConstStatement
+	| VerboseVoidStatement
+	| ThrowStatement
+{ recoverWhile = Statement_recover }
+
+SpecialBlockVerboseBlockStatement ::= ConditionalStatement
+	| SwitchStatement
+	| LoopStatement
+	| IteratorStatement
+	| TryCatchStatement
+	| WithStatement
+	| AwaitStatement
+
+SpecialBlockShortStatement ::= SpecialBlockShortInlineStatement StatementEnd
+SpecialBlockShortInlineStatement ::= ShortVariableStatement | ShortVoidStatement
+{ recoverWhile = Statement_recover }
 
 // Conditionals
 ConditionalStatement ::= MainConditionalStatement SecondaryConditionalStatement*
