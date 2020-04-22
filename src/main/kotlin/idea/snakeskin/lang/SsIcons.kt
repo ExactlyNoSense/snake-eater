@@ -4,6 +4,6 @@ import com.intellij.openapi.util.IconLoader
 
 class SsIcons {
 	companion object {
-		val FILE = IconLoader.getIcon("/icons/icon.svg")
+		val FILE = IconLoader.getIcon("/icons/snakeskin-file.svg")
 	}
 }
