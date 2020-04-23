@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'idea.snakeskin'
-version '0.0.1'
+version '0.1.0-192'
 
 sourceCompatibility = 1.8
 
