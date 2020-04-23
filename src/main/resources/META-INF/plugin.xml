@@ -1,13 +1,12 @@
-<idea-plugin>
-    <id>idea.snakeskin.snake-eater</id>
-    <name>Snake Eater</name>
-    <vendor>ExactlyNoSense</vendor>
+<idea-plugin url="http://snakeskintpl.github.io/docs/">
+    <id>snake-eater</id>
+    <name>Snakeskin</name>
+	<category>Languages</category>
+	<vendor email="whois.ard@gmail.com" url="https://edadeal.ru">Yandex.Edadeal</vendor>
 
     <idea-version since-build="192"/>
 
-    <description><![CDATA[
-    Snakeskin template language support
-    ]]></description>
+    <description>Provides Snakeskin language support for the IntelliJ platform.</description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
