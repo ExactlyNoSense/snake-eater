@@ -13,7 +13,7 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-		<fileType name="Snakeskin file" implementationClass="idea.snakeskin.lang.SsFileType"
+		<fileType name="Snakeskin" implementationClass="idea.snakeskin.lang.SsFileType"
 				  language="Snakeskin" extensions="ss;ess"/>
 
 		<!-- Parser -->
