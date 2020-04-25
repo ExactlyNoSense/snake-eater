@@ -1,18 +1,35 @@
 <idea-plugin url="http://snakeskintpl.github.io/docs/">
-    <id>snake-eater</id>
-    <name>Snakeskin</name>
+	<id>snake-eater</id>
+	<name>Snakeskin</name>
 	<category>Languages</category>
 	<vendor email="whois.ard@gmail.com" url="https://edadeal.ru">Yandex.Edadeal</vendor>
 
-    <idea-version since-build="192"/>
+	<idea-version since-build="192"/>
 
-    <description>Provides Snakeskin language support for the IntelliJ platform.</description>
+	<description>Provides Snakeskin language support for the IntelliJ platform.</description>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
-    <depends>com.intellij.modules.lang</depends>
+	<change-notes><![CDATA[
+		<h2>Version 0.1.1-192</h2><hr>
+		<h3>Fixes:</h3>
+		<ul>
+			<li>Fix PluginException</li>
+		</ul><br/>
+		<h2>Version 0.1.0-192</h2><hr>
+		<h3>Features:</h3>
+		<ul>
+			<li>Support jade-like syntax (extended syntax is not supported yet)</li>
+			<li>Highlighting</li>
+			<li>Highlighting colors settings</li>
+			<li>Blocks folding</li>
+		</ul><br/>
+	]]>
+	</change-notes>
 
-    <extensions defaultExtensionNs="com.intellij">
+	<!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+		 on how to target different products -->
+	<depends>com.intellij.modules.lang</depends>
+
+	<extensions defaultExtensionNs="com.intellij">
 		<fileType name="Snakeskin" implementationClass="idea.snakeskin.lang.SsFileType"
 				  language="Snakeskin" extensions="ss;ess"/>
 
@@ -39,9 +56,9 @@
 		<!-- Matchers -->
 
 		<lang.braceMatcher language="Snakeskin" implementationClass="idea.snakeskin.ide.typing.SsBraceMatcher"/>
-    </extensions>
+	</extensions>
 
-    <actions>
-        <!-- Add your actions here -->
-    </actions>
+	<actions>
+		<!-- Add your actions here -->
+	</actions>
 </idea-plugin>
