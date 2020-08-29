@@ -1,4 +1,4 @@
-SsTokenType.- ('-')
+SsTokenType.MINUS_START ('-')
 WHITE_SPACE (' ')
 SsTokenType.if ('if')
 WHITE_SPACE (' ')

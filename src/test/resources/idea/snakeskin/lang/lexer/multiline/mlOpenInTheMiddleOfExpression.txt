@@ -1,6 +1,6 @@
-SsTokenType.- ('-')
+SsTokenType.MINUS_START ('-')
 WHITE_SPACE (' ')
-SsTokenType.var ('var')
+SsTokenType.VAR ('var')
 WHITE_SPACE (' ')
 SsTokenType.IDENTIFIER ('x')
 WHITE_SPACE (' ')
