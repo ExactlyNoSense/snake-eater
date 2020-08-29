@@ -742,7 +742,8 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
 // Checks that there is no a non WS symbol after substring "&".
 // In this case it's a start of line splitting.
-// If there is a non WS symbol after "&", then it's just an AMP token.
+// If there is a non WS symbol after "&", then "&" should be returend to a stream
+// since it could be "&&" or name of a tag or an attribute
 <CHECK_LINE_SPLITTING> {
   "&" / {WS_LINE}* {WS_EOL}  {
     yypushback(yylength());
@@ -751,7 +752,10 @@ COMMENT = {LINE_COMMENT} | {BLOCK_COMMENT}
 
   <<EOF>>  { return endStatement(true); }
 
-  .  { yybegin(currentDirectiveState); return AMP; }
+  .  {
+        yypushback(1);
+        yybegin(currentDirectiveState);
+  }
 }
 
 // Returns correct token for "&" character and whitespaces
