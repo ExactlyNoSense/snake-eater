@@ -128,9 +128,7 @@ IDENTIFIER = [_\$\p{xidstart}][\$\p{xidcontinue}]*
 WITH_IDENTIFIER = @[_\$\p{xidstart}][\$\p{xidcontinue}]*
 GLOBAL_IDENTIFIER = @@[_\$\p{xidstart}][\$\p{xidcontinue}]*
 
-XML_ID_START = [-@_:a-zA-Z]
-XML_ID_CONTINUE = [-_:a-zA-Z0-9]
-XML_IDENTIFIER = {XML_ID_START} {XML_ID_CONTINUE}*
+XML_IDENTIFIER = [-_@&:a-zA-Z0-9]+
 
 CSS_NAME_CONTINUE = \$|([^ \t\r\n\$\#\.\[\]\\]|\$[^ \t\r\n\{\#\.\[\]\\])([^ \t\n\r\$\#\.\[\]\\]|\$[^ \t\n\r\{\#\.\[\]\\])*\$?
 CSS_CLASS_SELECTOR = \.{CSS_NAME_CONTINUE}?
