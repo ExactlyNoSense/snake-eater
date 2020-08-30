@@ -4,6 +4,9 @@ class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
 	override fun getDirPath() = super.getDirPath() + "/multiline"
 
 	fun testAmpDoesNotTreatAsMlOpen() = compare()
+	fun testAttrNameWithAmpDoesNotTreatAsMlOpen() = compare()
+	fun testBooleanAndDoesNotTreatAsMlOpen() = compare()
+
 	fun testDecimalSeparatorDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
 	fun testDecimalSeparatorDoesNotTreatAsMlCloseWhileParsingIsNotInMultilineMode() = compare()
 	fun testIdentifierSeparatorDoesNotTreatAsMlCloseWhileParsingIsInMultilineMode() = compare()
@@ -12,6 +15,7 @@ class SsLexerMultilineTestCase : SsLexerTestCaseBase() {
 	fun testMlCloseOnNewLine() = compare()
 	fun testMlCloseOnNewLineWithSpace() = compare()
 	fun testMlCloseOnTheLastLine() = compare()
+	fun testMlOpenInAttrValue() = compare()
 	fun testMlOpenInTheMiddleOfExpression() = compare()
 	fun testSpacesAfterMlClose() = compare()
 	fun testSpacesAfterMlOpen() = compare()
